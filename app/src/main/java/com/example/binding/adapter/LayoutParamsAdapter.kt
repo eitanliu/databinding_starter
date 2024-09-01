@@ -40,7 +40,9 @@ fun View.setConstraintLayoutParams(
     if (endToStart != null) lp.endToStart = endToStart
     if (endToEnd != null) lp.endToEnd = endToEnd
 
-    if (!lp.equalsOther(old)) this.layoutParams = lp
+    if (!lp.equalsSize(old) || !lp.equalsMargin(old) || !lp.equalsConstraint(old)) {
+        this.layoutParams = lp
+    }
 }
 
 @BindingAdapter("layout_constraintDimensionRatio")
@@ -48,7 +50,9 @@ fun View.setDimensionRatio(ratio: Float) {
     val lp = (layoutParams as? ConstraintLayout.LayoutParams) ?: return
     val old = ConstraintLayout.LayoutParams(lp)
     lp.dimensionRatio = ratio.toString()
-    if (!lp.equalsOther(old)) this.layoutParams = lp
+    if (!lp.equalsSize(old) || !lp.equalsMargin(old) || !lp.equalsConstraint(old)) {
+        this.layoutParams = lp
+    }
 }
 
 @BindingAdapter("layout_constraintDimensionRatio")
@@ -56,7 +60,9 @@ fun View.setDimensionRatio(ratio: String) {
     val lp = (layoutParams as? ConstraintLayout.LayoutParams) ?: return
     val old = ConstraintLayout.LayoutParams(lp)
     lp.dimensionRatio = ratio
-    if (!lp.equalsOther(old)) this.layoutParams = lp
+    if (!lp.equalsSize(old) || !lp.equalsMargin(old) || !lp.equalsConstraint(old)) {
+        this.layoutParams = lp
+    }
 }
 
 /**
@@ -84,7 +90,9 @@ fun View.setGoneMargin(
     if (goneMarginStart != null) lp.goneStartMargin = goneMarginStart
     if (goneMarginEnd != null) lp.goneEndMargin = goneMarginEnd
     if (goneMarginBaseline != null) lp.goneBaselineMargin = goneMarginBaseline
-    if (!lp.equalsOther(old)) this.layoutParams = lp
+    if (!lp.equalsSize(old) || !lp.equalsMargin(old) || !lp.equalsConstraint(old)) {
+        this.layoutParams = lp
+    }
 }
 
 /**
@@ -113,11 +121,14 @@ fun View.setMargin(
     if (marginEnd != null) lp.marginEnd = marginEnd
     if (layoutDirection != null) lp.layoutDirection = layoutDirection
 
-    if (!lp.equalsOther(old)) this.layoutParams = lp
+    if (!lp.equalsSize(old) || !lp.equalsMargin(old)) this.layoutParams = lp
 }
 
-fun (ViewGroup.LayoutParams).equalsOther(other: ViewGroup.LayoutParams): Boolean {
-    if (this.width != other.width || this.height != other.height) return false
+fun (ViewGroup.LayoutParams).equalsSize(other: ViewGroup.LayoutParams): Boolean {
+    return !(this.width != other.width || this.height != other.height)
+}
+
+fun (ViewGroup.LayoutParams).equalsMargin(other: ViewGroup.LayoutParams): Boolean {
     if (this is ViewGroup.MarginLayoutParams && other is ViewGroup.MarginLayoutParams) {
         if (
             this.leftMargin != other.leftMargin ||
@@ -129,6 +140,10 @@ fun (ViewGroup.LayoutParams).equalsOther(other: ViewGroup.LayoutParams): Boolean
             this.layoutDirection != other.layoutDirection
         ) return false
     }
+    return true
+}
+
+fun (ViewGroup.LayoutParams).equalsConstraint(other: ViewGroup.LayoutParams): Boolean {
     if (this is ConstraintLayout.LayoutParams && other is ConstraintLayout.LayoutParams) {
         if (
             this.leftToLeft != other.leftToLeft ||
