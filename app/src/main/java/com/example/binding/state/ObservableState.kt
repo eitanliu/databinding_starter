@@ -32,7 +32,7 @@ open class SingleObservableState<T> : MultipleObservableState<T> {
         callback: OnPropertyChangedCallback
     ) = object : OnPropertyChangedCallback() {
         init {
-            observers.putIfAbsent(callback, this)
+            observers[callback] = this
         }
 
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {

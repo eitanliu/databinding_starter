@@ -11,9 +11,13 @@ inline fun <T> singleObservable() = SingleObservableState<T?>()
 
 inline fun <T> singleObservable(value: T) = SingleObservableState(value)
 
+inline fun <T> lateSingleObservable() = SingleObservableState<T>()
+
 /**
  * 状态可消费多次
  */
 inline fun <T> multipleObservable() = MultipleObservableState<T?>()
 
 inline fun <T> multipleObservable(value: T) = MultipleObservableState(value)
+
+inline fun <T> lateMultipleObservable() = MultipleObservableState<T>()

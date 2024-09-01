@@ -12,3 +12,5 @@ interface UiState<T> : JvmValue<T> {
 
     operator fun invoke(value: T)
 }
+
+operator fun UiState<Unit>.invoke() = invoke(Unit)

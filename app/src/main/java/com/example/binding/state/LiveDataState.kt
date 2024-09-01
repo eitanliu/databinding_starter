@@ -50,7 +50,7 @@ open class SingleLiveState<T> : MultipleLiveState<T> {
             observer.onChanged(it)
         }
     }.also {
-        observers.putIfAbsent(observer, it)
+        observers[observer] = it
     }
 
     override fun removeObserver(observer: Observer<in T>) {
