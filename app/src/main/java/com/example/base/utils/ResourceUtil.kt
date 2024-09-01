@@ -1,5 +1,6 @@
 package com.example.utils
 
+import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
@@ -29,6 +30,10 @@ object ResourceUtil {
 
     fun getColor(@ColorRes resId: Int): Int {
         return ContextCompat.getColor(BaseApplication.instance, resId)
+    }
+
+    fun getColorStateList(@ColorRes resId: Int): ColorStateList? {
+        return ContextCompat.getColorStateList(BaseApplication.instance, resId)
     }
 
     fun getDrawable(@DrawableRes resId: Int): Drawable? {
