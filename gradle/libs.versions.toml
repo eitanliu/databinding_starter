@@ -4,8 +4,6 @@ kotlin = "1.9.23"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-common-build-debug = "1.0-debug"
-common-build-release = "1.0-release"
 
 ### plugin
 imgCompress-plugin = "1.2.1"
@@ -51,9 +49,6 @@ google-ump = "3.0.0"
 google-scanning = "17.2.0"
 billing = "6.2.0"
 
-### ad
-omad = "1.7.7.3"
-
 ### framework
 mmkv = "1.3.3"
 gson = "2.10.1"
@@ -80,12 +75,6 @@ imgCompress-plugin = { group = "io.github.duking666", name = "ImgCompressPlugin"
 aabresguard-plugin = { module = "com.bytedance.android:aabresguard-plugin", version.ref = "aabresguard-plugin" }
 google-services-plugin = { module = "com.google.gms:google-services", version.ref = "google-services-plugin" }
 firebase-crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-plugin" }
-
-### build
-#noinspection SimilarGradleDependency
-common-build-debug = { group = "com.android.common", name = "build", version.ref = "common-build-debug" }
-#noinspection SimilarGradleDependency
-common-build-release = { group = "com.android.common", name = "build", version.ref = "common-build-release" }
 
 ### jetpack
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
@@ -158,9 +147,6 @@ play-review-ktx = { group = "com.google.android.play", name = "review-ktx", vers
 google-ump = { group = "com.google.android.ump", name = "user-messaging-platform", version.ref = "google-ump" }
 google-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "google-scanning" }
 billing = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
-
-### ad
-omad = { group = "com.openmediation", name = "om-android-sdk", version.ref = "omad" }
 
 ### framework
 mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }

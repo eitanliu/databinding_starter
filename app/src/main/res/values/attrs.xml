@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="View">
+        <attr name="fitStatusMode" format="enum">
+            <enum name="margin" value="0" />
+            <enum name="padding" value="1" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="CheckableView">
+        <attr name="android:checked" />
+        <attr name="android:checkable" />
+        <attr name="android:enabled" />
+    </declare-styleable>
+
+</resources>
