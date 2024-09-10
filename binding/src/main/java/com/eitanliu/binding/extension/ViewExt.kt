@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.eitanliu.binding.R
 
 class ViewExt
@@ -138,6 +139,9 @@ inline val View.visibleOnSelf get() = Rect().also { getLocalVisibleRect(it) }
 fun View.findLifecycleOwner(): LifecycleOwner? {
     val binding = DataBindingUtil.findBinding<ViewDataBinding>(this)
     var lifecycleOwner = binding?.lifecycleOwner
+    if (lifecycleOwner == null) {
+        lifecycleOwner = findViewTreeLifecycleOwner()
+    }
     if (lifecycleOwner == null) {
         lifecycleOwner = context.takeIf { it is LifecycleOwner } as? LifecycleOwner
     }
