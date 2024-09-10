@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.base"
+    namespace = "com.example.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        // applicationId = "com.example.myapplication"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -64,6 +64,8 @@ configurations.all {
 
 dependencies {
 
+    implementation(project(":binding"))
+    implementation(project(":starter"))
     ////// jetpack //////
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
