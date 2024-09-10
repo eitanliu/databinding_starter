@@ -5,6 +5,7 @@
     <item name="fitSystemInsets" type="id" />
     <item name="gestureDetector" type="id" />
     <item name="softwareKeyboardController" type="id" />
-    <item name="rootWindowInsetsCompat" type="id" />
+    <item name="cacheWindowInsetsCompat" type="id" />
+    <item name="viewWindowInsetsCompat" type="id" />
     <item name="windowInsetsController" type="id" />
 </resources>

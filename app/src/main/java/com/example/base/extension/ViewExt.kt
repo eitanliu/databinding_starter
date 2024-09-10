@@ -162,6 +162,18 @@ inline val View.navigationBarsInsets
 val View.rootWindowInsetsCompat
     get() = ViewCompat.getRootWindowInsets(this)
 
+var View.cacheWindowInsetsCompat
+    get() = getBindingTag(R.id.cacheWindowInsetsCompat) as? WindowInsetsCompat
+    set(value) {
+        setBindingTag(R.id.cacheWindowInsetsCompat, value)
+    }
+
+var View.viewWindowInsetsCompat
+    get() = getBindingTag(R.id.viewWindowInsetsCompat) as? WindowInsetsCompat
+    set(value) {
+        setBindingTag(R.id.viewWindowInsetsCompat, value)
+    }
+
 fun View.getWindowInsetsController(
     window: Window
 ) = getBindingTag(R.id.windowInsetsController) as? WindowInsetsControllerCompat

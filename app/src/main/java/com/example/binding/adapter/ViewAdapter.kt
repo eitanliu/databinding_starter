@@ -8,7 +8,9 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.Insets
 import androidx.core.util.putAll
+import androidx.core.view.OnApplyWindowInsetsListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsCompat.Type.InsetsType
@@ -16,9 +18,10 @@ import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import com.example.base.R
 import com.example.base.extension.bindingTags
+import com.example.base.extension.cacheWindowInsetsCompat
 import com.example.base.extension.getBindingTag
-import com.example.base.extension.rootWindowInsetsCompat
 import com.example.base.extension.setBindingTag
+import com.example.base.extension.viewWindowInsetsCompat
 import com.example.binding.annotation.FitInsetsMode
 import com.example.binding.event.UiEvent
 import com.example.binding.event.UiEventConsumer
@@ -59,50 +62,64 @@ fun View.setBackgroundResource(@DrawableRes resId: Int?) {
  * @param type [WindowInsetsCompat.Type]
  */
 @BindingAdapter(
-    "fitSystemBar", "fitStatusBars", "fitNavigationBars",
-    "fitCaptionBar", "fitDisplayCutout",
-    "fitMergeType", "fitInsetsType", "fitInsetsMode", requireAll = false
+    "fitSystemBars", "fitStatusBars", "fitNavigationBars",
+    "fitCaptionBar", "fitDisplayCutout", "fitHorizontal",
+    "fitMergeType", "fitInsetsType", "fitInsetsMode",
+    "applyWindowInsets", "onApplyWindowInsetsListener",
+    requireAll = false
 )
-fun View.fitSystemInsets(
-    fitSystemBar: Boolean? = null,
+fun View.fitWindowInsets(
+    fitSystemBars: Boolean? = null,
     fitStatusBars: Boolean? = null,
     fitNavigationBars: Boolean? = null,
     fitCaptionBar: Boolean? = null,
     fitDisplayCutout: Boolean? = null,
+    fitHorizontal: Boolean? = null,
     fitMergeType: Boolean? = null,
     @InsetsType type: Int? = null,
     @FitInsetsMode mode: Int? = null,
+    windowInsets: WindowInsetsCompat? = null,
+    listener: OnApplyWindowInsetsListener? = null,
 ) {
-    val status = type != null || fitSystemBar == true
+    val status = type != null || fitSystemBars == true
             || fitStatusBars == true || fitNavigationBars == true
             || fitCaptionBar == true || fitDisplayCutout == true
+            || fitHorizontal == true
 
-    rootWindowInsetsCompat?.also {
-        applyWindowInsets(
-            it, fitSystemBar, fitStatusBars, fitNavigationBars,
-            fitCaptionBar, fitDisplayCutout,
+    val hasWindowInsets = windowInsets != null || listener != null
+
+    cacheWindowInsetsCompat?.also {
+        fitWindowInsets(
+            it, fitSystemBars, fitStatusBars, fitNavigationBars,
+            fitCaptionBar, fitDisplayCutout, fitHorizontal,
             fitMergeType, type, mode,
         )
     }
 
     ViewCompat.setOnApplyWindowInsetsListener(this, { _: View, wInsets: WindowInsetsCompat ->
-        applyWindowInsets(
-            wInsets, fitSystemBar, fitStatusBars, fitNavigationBars,
-            fitCaptionBar, fitDisplayCutout,
+        viewWindowInsetsCompat = wInsets
+        val insets = listener?.onApplyWindowInsets(
+            this, windowInsets ?: wInsets
+        ) ?: windowInsets ?: wInsets
+        fitWindowInsets(
+            insets, fitSystemBars, fitStatusBars, fitNavigationBars,
+            fitCaptionBar, fitDisplayCutout, fitHorizontal,
             fitMergeType, type, mode,
         )
-        wInsets
-    }.takeIf { status })
+        cacheWindowInsetsCompat = insets
+        insets
+    }.takeIf { status || hasWindowInsets })
 }
 
-
-fun View.applyWindowInsets(
+@JvmOverloads
+fun View.fitWindowInsets(
     windowInsets: WindowInsetsCompat,
     fitSystemBar: Boolean? = null,
     fitStatusBars: Boolean? = null,
     fitNavigationBars: Boolean? = null,
     fitCaptionBar: Boolean? = null,
     fitDisplayCutout: Boolean? = null,
+    fitHorizontal: Boolean? = null,
     fitMergeType: Boolean? = null,
     @InsetsType type: Int? = null,
     @FitInsetsMode mode: Int? = null,
@@ -110,6 +127,7 @@ fun View.applyWindowInsets(
     val status = type != null || fitSystemBar == true
             || fitStatusBars == true || fitNavigationBars == true
             || fitCaptionBar == true || fitDisplayCutout == true
+            || fitHorizontal == true
 
     var insetsType: Int? = null
     if (fitStatusBars == true) {
@@ -140,10 +158,17 @@ fun View.applyWindowInsets(
     val cacheInsets = cacheModel?.insets
     val fitMode = mode ?: cacheMode ?: FitInsetsMode.MARGIN
     val fitType = insetsType ?: cacheType ?: WindowInsetsCompat.Type.systemBars()
-    val insets = windowInsets.getInsets(fitType)
+    val fitInsets = windowInsets.getInsets(fitType)
+    val insets = if (fitHorizontal == true) {
+        val horizontalInsets = windowInsets.getInsets(
+            WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+        )
+        Insets.max(horizontalInsets, fitInsets)
+    } else fitInsets
     // Log.e("fitSystemBar", "$status $cacheStatus, $fitMode $cacheMode, $insetsType $cacheType")
     // Log.e("fitSystemBarInsets", "apply: $insets, \ncache: $cacheInsets")
-    if (status == cacheStatus && cacheInsets == insets) return
+    if (cacheStatus == null && !status) return // 跳过未设置
+    if (status == cacheStatus && cacheInsets == insets) return // 跳过未变化
     val model = FitSystemInsets(status, fitMode, fitType, insets)
     updateLayoutParams {
         if (fitMode == FitInsetsMode.MARGIN && this is ViewGroup.MarginLayoutParams) {

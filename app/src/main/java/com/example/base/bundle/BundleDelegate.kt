@@ -17,6 +17,10 @@ inline fun <reified T : BundleDelegate, reified R : BundleDelegate> T.toBundleDe
 inline fun <reified T : BundleDelegate> newBundleDelegate(bundle: Bundle = Bundle()) =
     T::class.java.getConstructor(Bundle::class.java).newInstance(bundle)
 
+@Suppress("HasPlatformType")
+inline fun <T : BundleDelegate> Class<T>.newBundleDelegate(bundle: Bundle = Bundle()) =
+    getConstructor(Bundle::class.java).newInstance(bundle)
+
 inline fun <reified T> BundleDelegate.propertyOrNull(
     default: T? = null, key: String? = null
 ) = property(default, key)

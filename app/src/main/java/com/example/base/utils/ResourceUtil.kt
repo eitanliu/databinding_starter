@@ -1,10 +1,18 @@
-package com.example.utils
+package com.example.base.utils
 
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
-import androidx.annotation.*
+import androidx.annotation.ArrayRes
+import androidx.annotation.BoolRes
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.example.base.BaseApplication
+import com.example.base.extension.dp2px
+import com.example.base.extension.px2dp
+import com.example.base.extension.px2sp
+import com.example.base.extension.sp2px
 import com.example.binding.annotation.ResourcesId
 
 /**
@@ -41,13 +49,23 @@ object ResourceUtil {
         return ContextCompat.getDrawable(BaseApplication.instance, resId)
     }
 
-    fun Int.string() = getString(this)
+    fun @receiver:StringRes Int.string() = getString(this)
 
-    fun Int.string(vararg args: Any?) = getString(this).format(*args)
+    fun @receiver:StringRes Int.string(vararg args: Any?) = getString(this).format(*args)
 
-    fun Int.color() = getColor(this)
+    fun @receiver:ColorRes Int.color() = getColor(this)
 
-    fun Int.drawable() = getDrawable(this)
+    fun @receiver:ColorRes Int.colorStateList() = getColorStateList(this)
+
+    fun @receiver:DrawableRes Int.drawable() = getDrawable(this)
+
+    fun Float.dp2px() = BaseApplication.instance.dp2px(this)
+
+    fun Float.sp2px() = BaseApplication.instance.sp2px(this)
+
+    fun Float.px2dp() = BaseApplication.instance.px2dp(this)
+
+    fun Float.px2sp() = BaseApplication.instance.px2sp(this)
 
 }
 

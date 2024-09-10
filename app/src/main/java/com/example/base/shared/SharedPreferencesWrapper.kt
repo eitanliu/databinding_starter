@@ -18,11 +18,11 @@ internal val defaultIgnorePredicate = block@{ name: String? ->
 
 /**
  * MMKV 替换系统 SharedPreferences
- * @receiver Context
- * @param name String?
- * @param mode Int
- * @param ignorePredicate 使用系统SharedPreferences条件
- * @return SharedPreferences
+ * @receiver [Context]
+ * @param name [String]?
+ * @param mode [Int]
+ * @param ignorePredicate [kotlin.jvm.functions.Function1]<String, Boolean> 使用系统 [SharedPreferences] 条件
+ * @return [SharedPreferences]
  */
 @JvmOverloads
 fun Context.wrapperPreferences(
@@ -79,4 +79,3 @@ open class SharedPreferencesWrapper(
         editor: SharedPreferences.Editor
     ) : SharedPreferences.Editor by editor
 }
-

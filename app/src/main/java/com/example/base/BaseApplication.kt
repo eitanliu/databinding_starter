@@ -2,7 +2,6 @@ package com.example.base
 
 import android.app.Application
 import android.content.Context
-import com.example.base.shared.wrapperPreferences
 import com.tencent.mmkv.MMKV
 
 open class BaseApplication : Application() {
@@ -28,5 +27,4 @@ open class BaseApplication : Application() {
         MMKV.initialize(this)
     }
 
-    override fun getSharedPreferences(name: String?, mode: Int) = wrapperPreferences(name, mode)
 }

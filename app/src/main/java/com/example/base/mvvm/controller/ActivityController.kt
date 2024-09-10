@@ -3,10 +3,11 @@ package com.example.base.mvvm.controller
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
+import com.example.base.bundle.BundleDelegate
 import com.example.base.mvvm.model.ActivityLaunchModel
 import com.example.binding.event.UiEvent
 import com.example.binding.event.bindingEvent
-import com.example.binding.state.UiState
+import com.example.binding.state.MultipleUiState
 import com.example.binding.state.invoke
 import com.example.binding.state.lateSingleState
 
@@ -34,18 +35,24 @@ class ActivityController : IActivity {
             onBackPressed()
         }
 
+        override val finishActivity = bindingEvent {
+            finish()
+        }
     }
 
     inner class State : IActivity.State {
 
-        override val startActivity: UiState<ActivityLaunchModel> = lateSingleState()
+        override val startActivity = lateSingleState<ActivityLaunchModel>()
 
-        override val finish: UiState<Unit> = lateSingleState()
+        override val finish = lateSingleState<Unit>()
 
-        override val onBackPressed: UiState<Unit> = lateSingleState()
+        override val onBackPressed = lateSingleState<Unit>()
     }
 }
 
+/**
+ * Activity 操作
+ */
 interface IActivity {
     val activityEvent: Event
     val activityState: State
@@ -62,16 +69,23 @@ interface IActivity {
 
     interface Event {
         val onBackClick: UiEvent
+
+        val finishActivity: UiEvent
     }
 
     interface State {
-        val startActivity: UiState<ActivityLaunchModel>
+        val startActivity: MultipleUiState<ActivityLaunchModel>
 
-        val finish: UiState<Unit>
+        val finish: MultipleUiState<Unit>
 
-        val onBackPressed: UiState<Unit>
+        val onBackPressed: MultipleUiState<Unit>
     }
 }
+
+inline fun <reified T> IActivity.startActivity(
+    bundle: BundleDelegate? = null,
+    callback: ActivityResultCallback<ActivityResult>? = null,
+) = startActivity<T>(bundle?.bundle, callback)
 
 inline fun <reified T> IActivity.startActivity(
     bundle: Bundle? = null,

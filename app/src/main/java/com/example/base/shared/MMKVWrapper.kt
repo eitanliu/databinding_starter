@@ -139,14 +139,14 @@ open class MMKVWrapper @JvmOverloads constructor(
     override fun edit(): SafetyPreferences.Editor = this
 
     override fun putBytes(key: String, value: ByteArray?): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.putBytes(key.toKeyType(Type.BYTE_ARRAY), value)
+        notifyListeners(key)
         return this
     }
 
     override fun putString(key: String, value: String?): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.putString(key.toKeyType(Type.STRING), value)
+        notifyListeners(key)
         return this
     }
 
@@ -154,61 +154,60 @@ open class MMKVWrapper @JvmOverloads constructor(
         key: String,
         values: MutableSet<String>?
     ): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.putStringSet(key.toKeyType(Type.STRING_SET), values)
+        notifyListeners(key)
         return this
     }
 
     override fun putInt(key: String, value: Int): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.putInt(key.toKeyType(Type.INT), value)
+        notifyListeners(key)
         return this
     }
 
     override fun putLong(key: String, value: Long): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.putLong(key.toKeyType(Type.LONG), value)
+        notifyListeners(key)
         return this
     }
 
     override fun putFloat(key: String, value: Float): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.putFloat(key.toKeyType(Type.FLOAT), value)
+        notifyListeners(key)
         return this
     }
 
     override fun putDouble(key: String, value: Double): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.encode(key.toKeyType(Type.DOUBLE), value)
+        notifyListeners(key)
         return this
     }
 
     override fun putBoolean(key: String, value: Boolean): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.putBoolean(key.toKeyType(Type.BOOLEAN), value)
+        notifyListeners(key)
         return this
     }
 
     override fun remove(key: String): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.removeValuesForKeys(allKeyType(key).toList().toTypedArray())
+        notifyListeners(key)
         return this
     }
 
     override fun removeForType(key: String, @Type type: String): SafetyPreferences.Editor {
-        notifyListeners(key)
         base.remove(key.toKeyType(type))
+        notifyListeners(key)
         return this
     }
 
     override fun clear(): SafetyPreferences.Editor {
-        notifyListeners()
         base.clear()
+        notifyListeners()
         return this
     }
 
     override fun commit(): Boolean {
-        notifyListeners()
         return base.commit()
     }
 

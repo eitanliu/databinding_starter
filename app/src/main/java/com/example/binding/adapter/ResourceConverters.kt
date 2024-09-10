@@ -4,16 +4,12 @@ package com.example.binding.adapter
 
 import androidx.annotation.ArrayRes
 import androidx.annotation.BoolRes
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.databinding.BindingConversion
-import com.example.utils.ResourceUtil
+import com.example.base.utils.ResourceUtil
 
 class ResourceConverters
-
-@BindingConversion
-fun convertIdColorStateList(@ColorRes id: Int) = ResourceUtil.getColorStateList(id)
 
 @BindingConversion
 fun convertIdDrawable(@DrawableRes id: Int) = ResourceUtil.getDrawable(id)

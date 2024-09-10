@@ -11,8 +11,25 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 
-typealias ObservableString = ObservableField<String>
-typealias ObservableEnum<T> = ObservableField<Enum<T>>
+typealias SingleObservableStateBoolean = SingleObservableState<Boolean>
+typealias SingleObservableStateByte = SingleObservableState<Byte>
+typealias SingleObservableStateChart = SingleObservableState<Char>
+typealias SingleObservableStateShort = SingleObservableState<Short>
+typealias SingleObservableStateInt = SingleObservableState<Int>
+typealias SingleObservableStateLong = SingleObservableState<Long>
+typealias SingleObservableStateFloat = SingleObservableState<Float>
+typealias SingleObservableStateDouble = SingleObservableState<Double>
+typealias SingleObservableStateEnum<T> = SingleObservableState<T>
+
+typealias MultipleObservableStateBoolean = MultipleObservableState<Boolean>
+typealias MultipleObservableStateByte = MultipleObservableState<Byte>
+typealias MultipleObservableStateChart = MultipleObservableState<Char>
+typealias MultipleObservableStateShort = MultipleObservableState<Short>
+typealias MultipleObservableStateInt = MultipleObservableState<Int>
+typealias MultipleObservableStateLong = MultipleObservableState<Long>
+typealias MultipleObservableStateFloat = MultipleObservableState<Float>
+typealias MultipleObservableStateDouble = MultipleObservableState<Double>
+typealias MultipleObservableStateEnum<T> = MultipleObservableState<T>
 
 open class SingleObservableState<T> : MultipleObservableState<T> {
 
@@ -78,6 +95,10 @@ open class MultipleObservableState<T> : ObservableField<T>, UiState<T> {
 
     override fun invoke(value: T) {
         set(value)
+    }
+
+    override fun notifyChange() {
+        super<ObservableField>.notifyChange()
     }
 
     override fun getValue(): T = get()

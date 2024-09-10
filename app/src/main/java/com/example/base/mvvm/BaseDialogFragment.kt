@@ -1,0 +1,108 @@
+package com.example.base.mvvm
+
+import android.os.Bundle
+import android.util.SparseArray
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.base.extension.asTypeOrNull
+import com.example.base.extension.isAppearanceLightStatusBars
+import com.example.base.utils.ReflectionUtil
+import com.example.binding.adapter.fitWindowInsets
+import java.lang.ref.Reference
+import java.util.Random
+
+abstract class BaseDialogFragment<VB : ViewDataBinding, VM : BaseViewModel>() : DialogFragment(),
+    IBaseView {
+
+    protected lateinit var binding: VB
+
+    protected lateinit var viewModel: VM
+
+    open val viewModelFactory: ViewModelProvider.Factory get() = defaultViewModelProviderFactory
+
+    @Suppress("UNCHECKED_CAST")
+    private val viewModelType: Class<VM> by lazy {
+        ReflectionUtil.getViewModelGenericType(this) as Class<VM>
+    }
+
+    private val codeRandom = Random()
+    private val requestCallbacks = SparseArray<Reference<ActivityResultCallback<ActivityResult>>>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        initParams(savedInstanceState)
+        initViewDataBinding()
+        registerUiStateChange()
+        initData()
+        initView()
+        initObserve()
+        return binding.root
+    }
+
+    private fun initViewDataBinding(parent: ViewGroup? = null) {
+        binding = DataBindingUtil.inflate(layoutInflater, initContentView, parent, false)
+        viewModel = createViewModel()
+        binding.setVariable(initVariableId, viewModel)
+        binding.lifecycleOwner = this
+    }
+
+    open fun createViewModel() = ViewModelProvider(this, viewModelFactory)[viewModelType]
+
+    private fun registerUiStateChange() {
+        viewModel.activityState.startActivity.observe(viewLifecycleOwner) {
+            activity.asTypeOrNull<BaseActivity<*, *>>()?.startActivity(it)
+        }
+        viewModel.activityState.finish.observe(viewLifecycleOwner) {
+            activity?.finish()
+        }
+        viewModel.activityState.onBackPressed.observe(viewLifecycleOwner) {
+            activity?.onBackPressedDispatcher?.onBackPressed()
+        }
+        // 系统栏显示控制
+        viewModel.lightStatusBars.observe(viewLifecycleOwner) {
+            activity?.isAppearanceLightStatusBars = it == true
+        }
+        viewModel.fitSystemBars.observe(viewLifecycleOwner, fixWindowInsets)
+        viewModel.fitStatusBars.observe(viewLifecycleOwner, fixWindowInsets)
+        viewModel.fitNavigationBars.observe(viewLifecycleOwner, fixWindowInsets)
+        viewModel.fitCaptionBar.observe(viewLifecycleOwner, fixWindowInsets)
+        viewModel.fitDisplayCutout.observe(viewLifecycleOwner, fixWindowInsets)
+        viewModel.fitHorizontal.observe(viewLifecycleOwner, fixWindowInsets)
+        viewModel.fitMergeType.observe(viewLifecycleOwner, fixWindowInsets)
+        viewModel.fitInsetsType.observe(viewLifecycleOwner) { fitWindowInsets() }
+        viewModel.fitInsetsMode.observe(viewLifecycleOwner) { fitWindowInsets() }
+    }
+
+    private val fixWindowInsets = Observer<Boolean?> {
+        fitWindowInsets()
+    }
+
+    private fun fitWindowInsets() {
+        binding.root.fitWindowInsets(
+            viewModel.fitSystemBars.value,
+            viewModel.fitStatusBars.value,
+            viewModel.fitNavigationBars.value,
+            viewModel.fitCaptionBar.value,
+            viewModel.fitDisplayCutout.value,
+            viewModel.fitHorizontal.value,
+            viewModel.fitMergeType.value,
+            viewModel.fitInsetsType.value,
+            viewModel.fitInsetsMode.value,
+        )
+    }
+}

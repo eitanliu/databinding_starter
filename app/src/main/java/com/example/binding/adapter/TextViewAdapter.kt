@@ -6,9 +6,9 @@ import android.graphics.Typeface
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.databinding.BindingAdapter
+import com.example.base.utils.ResourceUtil
 import com.example.binding.annotation.TextStyle
 import com.example.binding.annotation.TypefaceStyle
-import com.example.utils.ResourceUtil
 
 class TextViewAdapter
 

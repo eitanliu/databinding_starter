@@ -36,6 +36,7 @@ object EventBus {
         owner: LifecycleOwner, key: String, observer: Observer<T>,
     ) = get<T>(key).observe(owner, observer)
 
+    @JvmStatic
     fun <T> observe(
         owner: LifecycleOwner, type: Class<T>, key: String, observer: Observer<T>
     ) = get(type, key).observe(owner, observer)

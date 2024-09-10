@@ -6,6 +6,7 @@ import kotlin.reflect.KProperty
 
 open class BundleProperty<T>(val default: T, val bundle: Bundle, val key: String? = null)
 
+@Suppress("DEPRECATION")
 inline operator fun <reified T> BundleProperty<T>.getValue(
     thisRef: Any?, property: KProperty<*>,
 ): T = with(bundle) {

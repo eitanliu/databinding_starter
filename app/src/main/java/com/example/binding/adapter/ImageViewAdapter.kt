@@ -16,8 +16,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.example.base.extension.then
+import com.example.base.utils.ResourceUtil
 import com.example.binding.annotation.ResourcesId
-import com.example.utils.ResourceUtil
 
 class ImageViewAdapter
 

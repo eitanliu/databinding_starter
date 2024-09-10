@@ -3,7 +3,15 @@
 package com.example.base.extension
 
 import android.app.Application
-import androidx.databinding.*
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableByte
+import androidx.databinding.ObservableChar
+import androidx.databinding.ObservableDouble
+import androidx.databinding.ObservableField
+import androidx.databinding.ObservableFloat
+import androidx.databinding.ObservableInt
+import androidx.databinding.ObservableLong
+import androidx.databinding.ObservableShort
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
@@ -65,7 +73,7 @@ class InjectAndroidViewModelFactory<VM : ViewModel> @Inject constructor(
         }
 }
 
-inline val <T : ViewModel> T.viewModel get() = this
+inline val <T : ViewModel> T.selfViewModel get() = this
 
 inline var <T> ObservableField<T>.value
     get() = get()

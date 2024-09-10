@@ -26,7 +26,7 @@ typealias MultipleLiveStateFloat = MultipleLiveState<Float>
 typealias MultipleLiveStateDouble = MultipleLiveState<Double>
 typealias MultipleLiveStateEnum<T> = MultipleLiveState<T>
 
-open class SingleLiveState<T> : MultipleLiveState<T> {
+open class SingleLiveState<T> : MultipleUiState<T> {
 
     private val pending = AtomicBoolean(false)
     private val observers = linkedMapOf<Observer<in T>, Observer<in T>>()
