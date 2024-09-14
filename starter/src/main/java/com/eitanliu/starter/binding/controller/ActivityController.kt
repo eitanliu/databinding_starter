@@ -12,21 +12,21 @@ import com.eitanliu.starter.bundle.BundleDelegate
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 
 class ActivityController : IActivity {
-    override val activityEvent = Event()
-    override val activityState = State()
+    override val event = Event()
+    override val state = State()
 
     override fun startActivity(
         clz: Class<*>, bundle: Bundle?, callback: ActivityResultCallback<ActivityResult>?
     ) {
-        activityState.startActivity(ActivityLaunchModel(clz, bundle, callback))
+        state.startActivity(ActivityLaunchModel(clz, bundle, callback))
     }
 
     override fun finish() {
-        activityState.finish()
+        state.finish()
     }
 
     override fun onBackPressed() {
-        activityState.onBackPressed()
+        state.onBackPressed()
     }
 
     inner class Event : IActivity.Event {
@@ -54,8 +54,9 @@ class ActivityController : IActivity {
  * Activity 操作
  */
 interface IActivity {
-    val activityEvent: Event
-    val activityState: State
+    val activity: IActivity get() = this
+    val event: Event
+    val state: State
 
     fun startActivity(
         clz: Class<*>,

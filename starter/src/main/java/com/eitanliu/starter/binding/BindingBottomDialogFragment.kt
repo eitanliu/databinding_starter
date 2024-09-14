@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.lang.ref.Reference
 import java.util.Random
 
-abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BaseViewModel> :
+abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingViewModel> :
     BottomSheetDialogFragment(),
     InitView {
 
@@ -61,13 +61,13 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BaseViewMo
     open fun createViewModel() = ViewModelProvider(this, viewModelFactory)[viewModelType]
 
     private fun registerUiStateChange() {
-        viewModel.activityState.startActivity.observe(viewLifecycleOwner) {
+        viewModel.state.startActivity.observe(viewLifecycleOwner) {
             activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(it)
         }
-        viewModel.activityState.finish.observe(viewLifecycleOwner) {
+        viewModel.state.finish.observe(viewLifecycleOwner) {
             activity?.finish()
         }
-        viewModel.activityState.onBackPressed.observe(viewLifecycleOwner) {
+        viewModel.state.onBackPressed.observe(viewLifecycleOwner) {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
         // 系统栏显示控制

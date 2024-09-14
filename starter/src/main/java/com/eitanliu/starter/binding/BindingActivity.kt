@@ -20,7 +20,7 @@ import com.eitanliu.starter.utils.ReflectionUtil
 import java.lang.ref.Reference
 import java.util.Random
 
-abstract class BindingActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity(),
+abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : AppCompatActivity(),
     InitView {
 
     protected lateinit var binding: VB
@@ -58,13 +58,13 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCo
     open fun createViewModel() = ViewModelProvider(this, viewModelFactory)[viewModelType]
 
     private fun registerUiStateChange() {
-        viewModel.activityState.startActivity.observe(this) {
+        viewModel.state.startActivity.observe(this) {
             startActivity(it)
         }
-        viewModel.activityState.finish.observe(this) {
+        viewModel.state.finish.observe(this) {
             finish()
         }
-        viewModel.activityState.onBackPressed.observe(this) {
+        viewModel.state.onBackPressed.observe(this) {
             onBackPressedDispatcher.onBackPressed()
         }
         // 系统栏显示控制
