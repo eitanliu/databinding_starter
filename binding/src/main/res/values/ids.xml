@@ -8,4 +8,5 @@
     <item name="cacheWindowInsetsCompat" type="id" />
     <item name="viewWindowInsetsCompat" type="id" />
     <item name="windowInsetsController" type="id" />
+    <item name="cacheImage" type="id" />
 </resources>
