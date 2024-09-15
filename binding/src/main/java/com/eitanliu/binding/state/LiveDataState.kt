@@ -68,9 +68,9 @@ open class SingleLiveState<T> : MultipleUiState<T> {
     }
 
     @MainThread
-    override fun setValue(t: T) {
+    override fun setValue(value: T) {
         pending.set(true)
-        super.setValue(t)
+        super.setValue(value)
     }
 
 
@@ -97,9 +97,23 @@ open class MultipleLiveState<T> : MutableLiveData<T>, UiState<T> {
         setValue(value)
     }
 
+    override fun notifyChange() {
+        super.setValue(value)
+    }
+
     @Suppress("UNCHECKED_CAST")
     override fun getValue(): T {
         return super.getValue() as T
+    }
+
+    override fun setValue(value: T) {
+        when (value) {
+            is Boolean, Byte, Char, Short, Int, Float, Long, Float, Double, Enum -> {
+                if (value != getValue()) super.setValue(value)
+            }
+
+            else -> super.setValue(value)
+        }
     }
 
     override fun get(): T {

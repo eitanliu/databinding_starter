@@ -28,6 +28,7 @@ typealias MultipleUiStateDouble = MultipleUiState<Double>
 typealias MultipleUiStateEnum<T> = MultipleLiveState<T>
 
 interface UiState<T> : JvmValue<T> {
+
     //fun observe(owner: LifecycleOwner, observer: (T) -> Unit)
     fun observe(owner: LifecycleOwner, observer: Observer<in T>)
 
@@ -35,9 +36,15 @@ interface UiState<T> : JvmValue<T> {
 
     operator fun invoke(value: T)
 
-    fun notifyChange() {
-        value = value
-    }
+    fun notifyChange()
+
+    override fun getValue(): T
+
+    override fun setValue(value: T)
+
+    override fun get(): T
+
+    override fun set(value: T)
 }
 
 operator fun UiState<Unit>.invoke() = invoke(Unit)

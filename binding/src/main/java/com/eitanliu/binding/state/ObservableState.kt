@@ -98,7 +98,7 @@ open class MultipleObservableState<T> : ObservableField<T>, UiState<T> {
     }
 
     override fun notifyChange() {
-        super<ObservableField>.notifyChange()
+        super.notifyChange()
     }
 
     override fun getValue(): T = get()

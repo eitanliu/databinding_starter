@@ -1,9 +1,9 @@
 package com.eitanliu.binding.event
 
-typealias UiEvent = () -> Unit
+fun interface UiEvent : () -> Unit
 
-typealias UiEventResult<R> = () -> R
+fun interface UiEventResult<R> : () -> R
 
-typealias UiEventConsumer<T> = (T) -> Unit
+fun interface UiEventConsumer<T> : (T) -> Unit
 
-typealias UiEventConsumerResult<T, R> = (T) -> R
+fun interface UiEventConsumerResult<T, R> : (T) -> R

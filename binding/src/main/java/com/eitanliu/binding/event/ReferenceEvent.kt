@@ -26,7 +26,7 @@ interface ReferenceConsumerAndResult<T, R> : UiEventConsumerResult<T, R>,
     ReferenceValue<T>, ReferenceResult<R>
 
 inline fun <reified R> weakEventResult(
-    noinline event: UiEventResult<R>,
+    event: UiEventResult<R>,
 ): ReferenceEventResult<R> =
     object : ReferenceEventResult<R> {
 
@@ -40,7 +40,7 @@ inline fun <reified R> weakEventResult(
     }
 
 inline fun <reified T> weakConsumer(
-    noinline consumer: UiEventConsumer<T>,
+    consumer: UiEventConsumer<T>,
 ): ReferenceConsumer<T> =
     object : ReferenceConsumer<T> {
         private var weak: Reference<T> = emptyWeakReference()
@@ -54,7 +54,7 @@ inline fun <reified T> weakConsumer(
     }
 
 inline fun <reified T, reified R> weakConsumerResult(
-    noinline consumer: UiEventConsumerResult<T, R>,
+    consumer: UiEventConsumerResult<T, R>,
 ): ReferenceConsumerResult<T, R> =
     object : ReferenceConsumerResult<T, R> {
         private var weak: Reference<T> = emptyWeakReference()
@@ -66,7 +66,7 @@ inline fun <reified T, reified R> weakConsumerResult(
     }
 
 inline fun <reified T, reified R> weakConsumerAndResult(
-    noinline consumer: UiEventConsumerResult<T, R>,
+    consumer: UiEventConsumerResult<T, R>,
 ): ReferenceConsumerAndResult<T, R> =
     object : ReferenceConsumerAndResult<T, R> {
         private var weak: Reference<T> = emptyWeakReference()
