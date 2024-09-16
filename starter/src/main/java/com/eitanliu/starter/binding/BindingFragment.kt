@@ -19,7 +19,7 @@ import com.eitanliu.starter.utils.ReflectionUtil
 import java.lang.ref.Reference
 import java.util.Random
 
-abstract class BindingFragment<VB : ViewDataBinding, VM : BaseViewModel> : Fragment(),
+abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fragment(),
     InitView {
 
     protected lateinit var binding: VB
@@ -60,13 +60,13 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BaseViewModel> : Fragm
     open fun createViewModel() = ViewModelProvider(this, viewModelFactory)[viewModelType]
 
     private fun registerUiStateChange() {
-        viewModel.activityState.startActivity.observe(viewLifecycleOwner) {
+        viewModel.state.startActivity.observe(viewLifecycleOwner) {
             activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(it)
         }
-        viewModel.activityState.finish.observe(viewLifecycleOwner) {
+        viewModel.state.finish.observe(viewLifecycleOwner) {
             activity?.finish()
         }
-        viewModel.activityState.onBackPressed.observe(viewLifecycleOwner) {
+        viewModel.state.onBackPressed.observe(viewLifecycleOwner) {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
         // 系统栏显示控制

@@ -1,6 +1,6 @@
 package com.eitanliu.starter.utils
 
-import com.eitanliu.starter.binding.BaseViewModel
+import com.eitanliu.starter.binding.BindingViewModel
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -20,7 +20,7 @@ object ReflectionUtil {
         return if (type is ParameterizedType) {
             type.actualTypeArguments[1] as Class<*>
         } else {
-            BaseViewModel::class.java
+            BindingViewModel::class.java
         }
     }
 
