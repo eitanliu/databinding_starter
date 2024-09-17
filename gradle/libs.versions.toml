@@ -1,6 +1,6 @@
 [versions]
 agp = "8.5.1"
-kotlin = "1.9.23"
+kotlin = "2.0.10"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -11,6 +11,7 @@ aabresguard-plugin = "0.1.10"
 google-services-plugin = "4.3.13"
 firebase-perf-plugin = "1.4.2"
 firebase-crashlytics-plugin = "2.9.9"
+javapoet = "1.13.0"
 
 ### jetpack
 core = "1.13.1"
@@ -75,6 +76,7 @@ imgCompress-plugin = { group = "io.github.duking666", name = "ImgCompressPlugin"
 aabresguard-plugin = { module = "com.bytedance.android:aabresguard-plugin", version.ref = "aabresguard-plugin" }
 google-services-plugin = { module = "com.google.gms:google-services", version.ref = "google-services-plugin" }
 firebase-crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-plugin" }
+javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 
 ### jetpack
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }

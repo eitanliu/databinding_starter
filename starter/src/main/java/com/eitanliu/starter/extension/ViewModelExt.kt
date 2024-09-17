@@ -12,6 +12,8 @@ import androidx.databinding.ObservableFloat
 import androidx.databinding.ObservableInt
 import androidx.databinding.ObservableLong
 import androidx.databinding.ObservableShort
+import androidx.lifecycle.AbstractSavedStateViewModelFactory
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
@@ -40,7 +42,7 @@ class AndroidViewModelFactory constructor(
 
 class InjectViewModelFactory<VM : ViewModel> @Inject constructor(
     val viewModel: VM,
-) : ViewModelProvider.NewInstanceFactory() {
+) : AbstractSavedStateViewModelFactory() {
     private var created: (InjectViewModelFactory<VM>.(VM) -> Unit)? = null
 
     fun onCreate(created: (InjectViewModelFactory<VM>.(VM) -> Unit)) = apply {
@@ -52,6 +54,14 @@ class InjectViewModelFactory<VM : ViewModel> @Inject constructor(
         (viewModel as? T ?: super.create(modelClass)).also {
             created?.invoke(this, it as VM)
         }
+
+    override fun <T : ViewModel> create(
+        key: String,
+        modelClass: Class<T>,
+        handle: SavedStateHandle
+    ): T {
+        TODO("Not yet implemented")
+    }
 }
 
 class InjectAndroidViewModelFactory<VM : ViewModel> @Inject constructor(

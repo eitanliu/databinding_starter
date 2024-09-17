@@ -86,6 +86,7 @@ interface SharedPreferencesDelegate : SharedPreferences {
 )
 annotation class PreferencesMode {
     companion object {
+        @Suppress("DEPRECATION")
         const val MODE_MULTI_PROCESS = Context.MODE_MULTI_PROCESS
         const val MODE_PRIVATE = Context.MODE_PRIVATE
     }

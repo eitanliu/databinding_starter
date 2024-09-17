@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.app.MainVM" />
+            type="com.example.app.ui.ExampleVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,8 +52,16 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Example"
-                    app:onClickEvent="@{viewModel.event.exampleClick}" />
+                    android:text="SystemBars"
+                    app:debounce="@{false}"
+                    app:onClickEvent="@{viewModel.event.changeSystemBars}" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LightStatus"
+                    app:debounce="@{false}"
+                    app:onClickEvent="@{viewModel.event.changeLightStatus}" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>
 

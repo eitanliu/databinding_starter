@@ -4,7 +4,9 @@ import android.app.Application
 import android.content.Context
 import com.eitanliu.starter.ApplicationProvider
 import com.tencent.mmkv.MMKV
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 open class BaseApplication : Application() {
 
     companion object {

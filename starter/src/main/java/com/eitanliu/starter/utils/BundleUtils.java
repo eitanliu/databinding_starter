@@ -81,8 +81,4 @@ public class BundleUtils {
 
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
 }

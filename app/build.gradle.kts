@@ -131,6 +131,7 @@ dependencies {
 
     ////// third party //////
     implementation(libs.xxPermissions)
+    implementation(libs.blankjUtils)
     implementation(libs.binding.collection.adapter)
     implementation(libs.binding.collection.adapter.recyclerview)
     implementation(libs.binding.collection.adapter.viewpager2)
