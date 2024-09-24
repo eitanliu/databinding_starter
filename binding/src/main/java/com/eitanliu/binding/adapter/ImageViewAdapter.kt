@@ -181,7 +181,7 @@ fun ImageView.loadImageBuilder(
     @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
     crossFade: Int? = null,
     isCrossFade: Boolean? = null,
-    listener: ((Result<Drawable>) -> Boolean)? = null,
+    listener: ((Result<Drawable>) -> Boolean?)? = null,
 ): RequestBuilder<Drawable>? {
     fun checkEmpty(image: Any?): Boolean {
         return image == null || (image as? String) == ""
@@ -218,50 +218,24 @@ fun ImageView.loadImageBuilder(
             } ?: 300).setCrossFadeEnabled(true)
         )) else this
     }.run {
-        listener(object : RequestListener<Drawable> {
+        if (listener != null) listener(object : RequestListener<Drawable> {
             override fun onLoadFailed(
                 e: GlideException?, model: Any?, target: Target<Drawable>, isFirstResource: Boolean
             ): Boolean {
-                return listener?.invoke(
-                    Result.failure(
-                        e ?: NullPointerException("Glide LoadFailed")
-                    )
-                )
-                    ?: false
+                return listener.invoke(
+                    Result.failure(e ?: NullPointerException("Glide LoadFailed"))
+                ) ?: false
             }
 
             override fun onResourceReady(
                 resource: Drawable, model: Any, target: Target<Drawable>?,
                 dataSource: DataSource, isFirstResource: Boolean
             ): Boolean {
-                return listener?.invoke(Result.success(resource)) ?: false
+                return listener.invoke(Result.success(resource)) ?: false
             }
-        })
+        }) else this
     }
     return builder
-}
-
-fun ImageView.loadGif(
-    image: Any?,
-    placeholder: Drawable? = null,
-    priority: Priority? = null,
-    skipMemoryCache: Boolean? = null,
-    @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
-    crossFade: Int? = null,
-    isCrossFade: Boolean? = null,
-    clearOnDetach: Boolean? = null,
-    listener: ((Result<Drawable>) -> Boolean)? = null,
-): ImageViewTarget<GifDrawable>? {
-    val builder = loadGifBuilder(
-        image, placeholder, priority,
-        skipMemoryCache, diskCacheStrategy,
-        crossFade, isCrossFade, listener
-    )
-    val imageTarget = builder?.into(this) as? ImageViewTarget<GifDrawable>
-    if (clearOnDetach == true) {
-        imageTarget?.clearOnDetach()
-    }
-    return imageTarget
 }
 
 fun ImageView.loadGifBuilder(
@@ -272,7 +246,7 @@ fun ImageView.loadGifBuilder(
     @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
     crossFade: Int? = null,
     isCrossFade: Boolean? = null,
-    listener: ((Result<GifDrawable>) -> Boolean)? = null,
+    listener: ((Result<GifDrawable>) -> Boolean?)? = null,
 ): RequestBuilder<GifDrawable>? {
     fun checkEmpty(image: Any?): Boolean {
         return image == null || (image as? String) == ""
@@ -309,28 +283,25 @@ fun ImageView.loadGifBuilder(
             } ?: 300).setCrossFadeEnabled(true)
         )) else this
     }.run {
-        listener(object : RequestListener<GifDrawable> {
+        if (listener != null) listener(object : RequestListener<GifDrawable> {
             override fun onLoadFailed(
                 e: GlideException?,
                 model: Any?,
                 target: Target<GifDrawable>,
                 isFirstResource: Boolean
             ): Boolean {
-                return listener?.invoke(
-                    Result.failure(
-                        e ?: NullPointerException("Glide LoadFailed")
-                    )
-                )
-                    ?: false
+                return listener.invoke(
+                    Result.failure(e ?: NullPointerException("Glide LoadFailed"))
+                ) ?: false
             }
 
             override fun onResourceReady(
                 resource: GifDrawable, model: Any, target: Target<GifDrawable>?,
                 dataSource: DataSource, isFirstResource: Boolean
             ): Boolean {
-                return listener?.invoke(Result.success(resource)) ?: false
+                return listener.invoke(Result.success(resource)) ?: false
             }
-        })
+        }) else this
     }
     return builder
 }
