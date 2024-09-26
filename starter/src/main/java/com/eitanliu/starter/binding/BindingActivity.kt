@@ -13,6 +13,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
+import com.eitanliu.binding.adapter.onClickListener
+import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.binding.extension.refWeak
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
@@ -26,8 +28,6 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
     protected lateinit var binding: VB
 
     protected lateinit var viewModel: VM
-
-    open val viewModelFactory: ViewModelProvider.Factory get() = defaultViewModelProviderFactory
 
     @Suppress("UNCHECKED_CAST")
     private val viewModelType: Class<VM> by lazy {
@@ -55,7 +55,7 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
         binding.lifecycleOwner = this
     }
 
-    open fun createViewModel() = ViewModelProvider(this, viewModelFactory)[viewModelType]
+    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
     private fun registerUiStateChange() {
         viewModel.state.startActivity.observe(this) {

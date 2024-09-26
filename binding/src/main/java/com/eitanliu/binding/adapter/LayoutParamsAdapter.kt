@@ -5,8 +5,84 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
+import com.eitanliu.binding.extension.then
 
 class LayoutParamsAdapter
+
+@BindingAdapter(
+    // ViewGroup
+    "layout_marginLeft", "layout_marginTop",
+    "layout_marginRight", "layout_marginBottom",
+    "layout_marginStart", "layout_marginEnd",
+    "layout_width", "layout_height",
+    "layoutDirection",
+    // ConstraintLayout
+    "layout_goneMarginLeft", "layout_goneMarginTop",
+    "layout_goneMarginRight", "layout_goneMarginBottom",
+    "layout_goneMarginStart", "layout_goneMarginEnd",
+    "layout_goneMarginBaseline",
+    "layout_constraintDimensionRatio",
+    "layout_constraintLeft_toLeftOf", "layout_constraintLeft_toRightOf",
+    "layout_constraintRight_toLeftOf", "layout_constraintRight_toRightOf",
+    "layout_constraintTop_toTopOf", "layout_constraintTop_toBottomOf",
+    "layout_constraintBottom_toTopOf", "layout_constraintBottom_toBottomOf",
+    "layout_constraintStart_toStartOf", "layout_constraintStart_toEndOf",
+    "layout_constraintEnd_toStartOf", "layout_constraintEnd_toEndOf",
+    "layout_update",
+    requireAll = false
+)
+fun View.setLayoutParams(
+    // ViewGroup
+    marginLeft: Int? = null, marginTop: Int? = null,
+    marginRight: Int? = null, marginBottom: Int? = null,
+    marginStart: Int? = null, marginEnd: Int? = null,
+    width: Int? = null, height: Int? = null,
+    layoutDirection: Int? = null,
+    // ConstraintLayout
+    goneMarginLeft: Int? = null, goneMarginTop: Int? = null,
+    goneMarginRight: Int? = null, goneMarginBottom: Int? = null,
+    goneMarginStart: Int? = null, goneMarginEnd: Int? = null,
+    goneMarginBaseline: Int? = null,
+    ratio: String? = null,
+    leftToLeft: Int? = null, leftToRight: Int? = null,
+    rightToLeft: Int? = null, rightToRight: Int? = null,
+    topToTop: Int? = null, topToBottom: Int? = null,
+    bottomToTop: Int? = null, bottomToBottom: Int? = null,
+    startToStart: Int? = null, startToEnd: Int? = null,
+    endToStart: Int? = null, endToEnd: Int? = null,
+    updateLayout: Boolean? = null,
+): Boolean {
+    var isChanged = false
+
+    setMargin(
+        marginLeft, marginTop, marginRight,
+        marginBottom, marginStart, marginEnd,
+        width, height, layoutDirection,
+        false
+    ).then { isChanged = true }
+
+    setGoneMargin(
+        goneMarginLeft, goneMarginTop,
+        goneMarginRight, goneMarginBottom,
+        goneMarginStart, goneMarginEnd,
+        goneMarginBaseline,
+        false
+    ).then { isChanged = true }
+
+    setDimensionRatio(ratio, false).then { isChanged = true }
+
+    setConstraintLayoutParams(
+        leftToLeft, leftToRight, rightToLeft, rightToRight,
+        topToTop, topToBottom, bottomToTop, bottomToBottom,
+        startToStart, startToEnd, endToStart, endToEnd,
+        false
+    ).then { isChanged = true }
+
+    if (updateLayout != false && isChanged) {
+        layoutParams = layoutParams
+    }
+    return isChanged
+}
 
 @BindingAdapter(
     "layout_constraintLeft_toLeftOf", "layout_constraintLeft_toRightOf",
@@ -15,6 +91,7 @@ class LayoutParamsAdapter
     "layout_constraintBottom_toTopOf", "layout_constraintBottom_toBottomOf",
     "layout_constraintStart_toStartOf", "layout_constraintStart_toEndOf",
     "layout_constraintEnd_toStartOf", "layout_constraintEnd_toEndOf",
+    "layout_update",
     requireAll = false
 )
 fun View.setConstraintLayoutParams(
@@ -24,8 +101,9 @@ fun View.setConstraintLayoutParams(
     bottomToTop: Int? = null, bottomToBottom: Int? = null,
     startToStart: Int? = null, startToEnd: Int? = null,
     endToStart: Int? = null, endToEnd: Int? = null,
-) {
-    val lp = (layoutParams as? ConstraintLayout.LayoutParams) ?: return
+    updateLayout: Boolean? = null,
+): Boolean {
+    val lp = (layoutParams as? ConstraintLayout.LayoutParams) ?: return false
     val old = ConstraintLayout.LayoutParams(lp)
     if (leftToLeft != null) lp.leftToLeft = leftToLeft
     if (leftToRight != null) lp.leftToRight = leftToRight
@@ -40,29 +118,50 @@ fun View.setConstraintLayoutParams(
     if (endToStart != null) lp.endToStart = endToStart
     if (endToEnd != null) lp.endToEnd = endToEnd
 
-    if (!lp.equalsConstraint(old)) {
+    val isChanged = !lp.equalsConstraint(old)
+    if (updateLayout != false && isChanged) {
         this.layoutParams = lp
     }
+    return isChanged
 }
 
-@BindingAdapter("layout_constraintDimensionRatio")
-fun View.setDimensionRatio(ratio: Float) {
-    val lp = (layoutParams as? ConstraintLayout.LayoutParams) ?: return
+@BindingAdapter(
+    "layout_constraintDimensionRatio",
+    "layout_update",
+    requireAll = false
+)
+fun View.setDimensionRatio(
+    ratio: Float,
+    updateLayout: Boolean? = null,
+): Boolean {
+    val lp = (layoutParams as? ConstraintLayout.LayoutParams) ?: return false
     val old = ConstraintLayout.LayoutParams(lp)
     lp.dimensionRatio = ratio.toString()
-    if (!lp.equalsConstraint(old)) {
+
+    val isChanged = !lp.equalsConstraint(old)
+    if (updateLayout != false && isChanged) {
         this.layoutParams = lp
     }
+    return isChanged
 }
 
-@BindingAdapter("layout_constraintDimensionRatio")
-fun View.setDimensionRatio(ratio: String) {
-    val lp = (layoutParams as? ConstraintLayout.LayoutParams) ?: return
+@BindingAdapter(
+    "layout_constraintDimensionRatio",
+    "layout_update",
+    requireAll = false
+)
+fun View.setDimensionRatio(
+    ratio: String? = null,
+    updateLayout: Boolean? = null,
+): Boolean {
+    val lp = (layoutParams as? ConstraintLayout.LayoutParams) ?: return false
     val old = ConstraintLayout.LayoutParams(lp)
     lp.dimensionRatio = ratio
-    if (!lp.equalsConstraint(old)) {
+    val isChanged = !lp.equalsConstraint(old)
+    if (updateLayout != false && isChanged) {
         this.layoutParams = lp
     }
+    return isChanged
 }
 
 /**
@@ -73,6 +172,7 @@ fun View.setDimensionRatio(ratio: String) {
     "layout_goneMarginRight", "layout_goneMarginBottom",
     "layout_goneMarginStart", "layout_goneMarginEnd",
     "layout_goneMarginBaseline",
+    "layout_update",
     requireAll = false
 )
 fun View.setGoneMargin(
@@ -80,8 +180,9 @@ fun View.setGoneMargin(
     goneMarginRight: Int? = null, goneMarginBottom: Int? = null,
     goneMarginStart: Int? = null, goneMarginEnd: Int? = null,
     goneMarginBaseline: Int? = null,
-) {
-    val lp = this.layoutParams as? ConstraintLayout.LayoutParams ?: return
+    updateLayout: Boolean? = null,
+): Boolean {
+    val lp = this.layoutParams as? ConstraintLayout.LayoutParams ?: return false
     val old = ConstraintLayout.LayoutParams(lp)
     if (goneMarginLeft != null) lp.goneLeftMargin = goneMarginLeft
     if (goneMarginTop != null) lp.goneTopMargin = goneMarginTop
@@ -90,9 +191,11 @@ fun View.setGoneMargin(
     if (goneMarginStart != null) lp.goneStartMargin = goneMarginStart
     if (goneMarginEnd != null) lp.goneEndMargin = goneMarginEnd
     if (goneMarginBaseline != null) lp.goneBaselineMargin = goneMarginBaseline
-    if (!lp.equalsConstraint(old)) {
+    val isChanged = !lp.equalsConstraint(old)
+    if (updateLayout != false && isChanged) {
         this.layoutParams = lp
     }
+    return isChanged
 }
 
 /**
@@ -104,7 +207,8 @@ fun View.setGoneMargin(
     "layout_marginStart", "layout_marginEnd",
     "layout_width", "layout_height",
     "layoutDirection",
-    requireAll = false,
+    "layout_update",
+    requireAll = false
 )
 fun View.setMargin(
     marginLeft: Int? = null, marginTop: Int? = null,
@@ -112,8 +216,9 @@ fun View.setMargin(
     marginStart: Int? = null, marginEnd: Int? = null,
     width: Int? = null, height: Int? = null,
     layoutDirection: Int? = null,
-) {
-    val lp = this.layoutParams as? ViewGroup.MarginLayoutParams ?: return
+    updateLayout: Boolean? = null,
+): Boolean {
+    val lp = this.layoutParams as? ViewGroup.MarginLayoutParams ?: return false
     val old = ViewGroup.MarginLayoutParams(lp)
     if (marginLeft != null) lp.leftMargin = marginLeft
     if (marginTop != null) lp.topMargin = marginTop
@@ -125,7 +230,11 @@ fun View.setMargin(
     if (height != null) lp.height = height
     if (layoutDirection != null) lp.layoutDirection = layoutDirection
 
-    if (!lp.equalsSize(old) || !lp.equalsMargin(old)) this.layoutParams = lp
+    val isChanged = !lp.equalsSize(old) || !lp.equalsMargin(old)
+    if (updateLayout != false && isChanged) {
+        this.layoutParams = lp
+    }
+    return isChanged
 }
 
 fun (ViewGroup.LayoutParams).equalsSize(other: ViewGroup.LayoutParams): Boolean {

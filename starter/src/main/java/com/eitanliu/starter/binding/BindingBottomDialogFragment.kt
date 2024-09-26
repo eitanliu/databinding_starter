@@ -27,8 +27,6 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
 
     protected lateinit var viewModel: VM
 
-    open val viewModelFactory: ViewModelProvider.Factory get() = defaultViewModelProviderFactory
-
     @Suppress("UNCHECKED_CAST")
     private val viewModelType: Class<VM> by lazy {
         ReflectionUtil.getViewModelGenericType(this) as Class<VM>
@@ -58,7 +56,7 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
         binding.lifecycleOwner = this
     }
 
-    open fun createViewModel() = ViewModelProvider(this, viewModelFactory)[viewModelType]
+    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
     private fun registerUiStateChange() {
         viewModel.state.startActivity.observe(viewLifecycleOwner) {

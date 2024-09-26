@@ -1,5 +1,7 @@
 package com.eitanliu.starter.utils
 
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 import com.eitanliu.starter.binding.BindingViewModel
 import java.lang.reflect.ParameterizedType
 
@@ -9,19 +11,32 @@ import java.lang.reflect.ParameterizedType
 object ReflectionUtil {
 
     /**
-     * 获取ViewModel的类型
+     * 获取[ViewModel]的类型
      */
-    fun getViewModelGenericType(any: Any): Class<*> {
-        val type = if (any is Class<*>) {
+    fun getViewModelGenericType(any: Any): Class<out ViewModel> =
+        findGenericType(any, ViewModel::class.java) ?: BindingViewModel::class.java
+
+    /**
+     * 获取[ViewDataBinding]的类型
+     */
+    fun getDataBindingGenericType(any: Any): Class<out ViewDataBinding> =
+        findGenericType(any, ViewDataBinding::class.java) ?: ViewDataBinding::class.java
+
+    fun <T> findGenericType(any: Any, clazz: Class<T>): Class<T>? {
+        val genericType = if (any is Class<*>) {
             any.genericSuperclass
         } else {
             any.javaClass.genericSuperclass
+        } as? ParameterizedType
+        if (genericType == null) return null
+        val outClazz = genericType.actualTypeArguments.firstNotNullOfOrNull { type ->
+            when {
+                type is Class<*> && clazz.isAssignableFrom(type) -> type
+                else -> null
+            }
         }
-        return if (type is ParameterizedType) {
-            type.actualTypeArguments[1] as Class<*>
-        } else {
-            BindingViewModel::class.java
-        }
+        @Suppress("UNCHECKED_CAST")
+        return outClazz as? Class<T>
     }
 
 }

@@ -2,7 +2,7 @@ package com.example.app
 
 import android.app.Application
 import android.content.Context
-import com.eitanliu.starter.ApplicationProvider
+import com.eitanliu.starter.ContextProvider
 import com.tencent.mmkv.MMKV
 import dagger.hilt.android.HiltAndroidApp
 
@@ -18,7 +18,7 @@ open class BaseApplication : Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-        ApplicationProvider.register(this)
+        ContextProvider.register(this)
         instance = this
     }
 

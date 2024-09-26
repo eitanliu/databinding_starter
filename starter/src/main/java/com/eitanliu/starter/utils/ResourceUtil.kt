@@ -13,7 +13,7 @@ import com.eitanliu.binding.extension.dp2px
 import com.eitanliu.binding.extension.px2dp
 import com.eitanliu.binding.extension.px2sp
 import com.eitanliu.binding.extension.sp2px
-import com.eitanliu.starter.ApplicationProvider
+import com.eitanliu.starter.ContextProvider
 
 /**
  * 资源文件工具类
@@ -21,32 +21,32 @@ import com.eitanliu.starter.ApplicationProvider
 object ResourceUtil {
 
     fun getBoolean(@BoolRes resId: Int): Boolean {
-        return ApplicationProvider.instance.resources.getBoolean(resId)
+        return ContextProvider.instance.resources.getBoolean(resId)
     }
 
     fun getString(@StringRes resId: Int): String {
-        return ApplicationProvider.instance.resources.getString(resId)
+        return ContextProvider.instance.resources.getString(resId)
     }
 
     fun getString(@StringRes resId: Int, vararg formatArgs: Any?): String {
-        return ApplicationProvider.instance.resources.getString(resId, formatArgs)
+        return ContextProvider.instance.resources.getString(resId, formatArgs)
     }
 
     fun getStringArray(@ArrayRes resId: Int): Array<String?> {
-        return ApplicationProvider.instance.resources.getStringArray(resId)
+        return ContextProvider.instance.resources.getStringArray(resId)
     }
 
     fun getColor(@ColorRes resId: Int): Int {
-        return ContextCompat.getColor(ApplicationProvider.instance, resId)
+        return ContextCompat.getColor(ContextProvider.instance, resId)
     }
 
     fun getColorStateList(@ColorRes resId: Int): ColorStateList? {
-        return ContextCompat.getColorStateList(ApplicationProvider.instance, resId)
+        return ContextCompat.getColorStateList(ContextProvider.instance, resId)
     }
 
     fun getDrawable(@DrawableRes resId: Int): Drawable? {
         if (resId == ResourcesId.ID_NULL) return null
-        return ContextCompat.getDrawable(ApplicationProvider.instance, resId)
+        return ContextCompat.getDrawable(ContextProvider.instance, resId)
     }
 
     fun @receiver:StringRes Int.string() = getString(this)
@@ -59,13 +59,13 @@ object ResourceUtil {
 
     fun @receiver:DrawableRes Int.drawable() = getDrawable(this)
 
-    fun Float.dp2px() = ApplicationProvider.instance.dp2px(this)
+    fun Float.dp2px() = ContextProvider.instance.dp2px(this)
 
-    fun Float.sp2px() = ApplicationProvider.instance.sp2px(this)
+    fun Float.sp2px() = ContextProvider.instance.sp2px(this)
 
-    fun Float.px2dp() = ApplicationProvider.instance.px2dp(this)
+    fun Float.px2dp() = ContextProvider.instance.px2dp(this)
 
-    fun Float.px2sp() = ApplicationProvider.instance.px2sp(this)
+    fun Float.px2sp() = ContextProvider.instance.px2sp(this)
 
 }
 

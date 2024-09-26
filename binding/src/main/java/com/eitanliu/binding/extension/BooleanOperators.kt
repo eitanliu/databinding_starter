@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
-package com.eitanliu.starter.extension
+package com.eitanliu.binding.extension
 
 /**
  * 替代三目条件运算
