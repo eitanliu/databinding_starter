@@ -8,12 +8,14 @@ import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.binding.state.MultipleUiState
 import com.eitanliu.binding.state.invoke
 import com.eitanliu.binding.state.lateSingleState
+import com.eitanliu.binding.state.multipleState
 import com.eitanliu.starter.bundle.BundleDelegate
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 
 class ActivityController : IActivity {
     override val event = Event()
     override val state = State()
+    override val onBackPressedEnable = multipleState<Boolean>()
 
     override fun startActivity(
         clz: Class<*>, bundle: Bundle?, callback: ActivityResultCallback<ActivityResult>?
@@ -27,6 +29,10 @@ class ActivityController : IActivity {
 
     override fun onBackPressed() {
         state.onBackPressed()
+    }
+
+    override fun handleOnBackPressed(onBackPressed: () -> Unit) {
+        state.handleOnBackPressed(onBackPressed)
     }
 
     inner class Event : IActivity.Event {
@@ -47,6 +53,8 @@ class ActivityController : IActivity {
         override val finish = lateSingleState<Unit>()
 
         override val onBackPressed = lateSingleState<Unit>()
+
+        override val handleOnBackPressed = lateSingleState<() -> Unit>()
     }
 }
 
@@ -58,6 +66,8 @@ interface IActivity {
     val event: Event
     val state: State
 
+    val onBackPressedEnable: MultipleUiState<Boolean?>
+
     fun startActivity(
         clz: Class<*>,
         bundle: Bundle? = null,
@@ -66,7 +76,15 @@ interface IActivity {
 
     fun finish()
 
+    /**
+     * 调用返回
+     */
     fun onBackPressed()
+
+    /**
+     * 自定义返回操作
+     */
+    fun handleOnBackPressed(onBackPressed: () -> Unit)
 
     interface Event {
         val onBackClick: UiEvent
@@ -80,8 +98,14 @@ interface IActivity {
         val finish: MultipleUiState<Unit>
 
         val onBackPressed: MultipleUiState<Unit>
+
+        val handleOnBackPressed: MultipleUiState<() -> Unit>
     }
 }
+
+inline fun <reified T> IActivity.startActivity(
+    callback: ActivityResultCallback<ActivityResult>? = null,
+) = startActivity<T>(null as Bundle?, callback)
 
 inline fun <reified T> IActivity.startActivity(
     bundle: BundleDelegate? = null,

@@ -41,7 +41,7 @@ abstract class BindingDialogFragment<VB : ViewDataBinding, VM : BindingViewModel
     ): View? {
         initParams(savedInstanceState)
         initViewDataBinding()
-        registerUiStateChange()
+        handleActivityUiState()
         initData()
         initView()
         initObserve()
@@ -57,7 +57,7 @@ abstract class BindingDialogFragment<VB : ViewDataBinding, VM : BindingViewModel
 
     open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
-    private fun registerUiStateChange() {
+    protected fun handleActivityUiState() {
         viewModel.state.startActivity.observe(viewLifecycleOwner) {
             activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(it)
         }
@@ -71,18 +71,18 @@ abstract class BindingDialogFragment<VB : ViewDataBinding, VM : BindingViewModel
         viewModel.lightStatusBars.observe(viewLifecycleOwner) {
             activity?.isAppearanceLightStatusBars = it == true
         }
-        viewModel.fitSystemBars.observe(viewLifecycleOwner, fixWindowInsets)
-        viewModel.fitStatusBars.observe(viewLifecycleOwner, fixWindowInsets)
-        viewModel.fitNavigationBars.observe(viewLifecycleOwner, fixWindowInsets)
-        viewModel.fitCaptionBar.observe(viewLifecycleOwner, fixWindowInsets)
-        viewModel.fitDisplayCutout.observe(viewLifecycleOwner, fixWindowInsets)
-        viewModel.fitHorizontal.observe(viewLifecycleOwner, fixWindowInsets)
-        viewModel.fitMergeType.observe(viewLifecycleOwner, fixWindowInsets)
+        viewModel.fitSystemBars.observe(viewLifecycleOwner, fixWindowInsetsObserver)
+        viewModel.fitStatusBars.observe(viewLifecycleOwner, fixWindowInsetsObserver)
+        viewModel.fitNavigationBars.observe(viewLifecycleOwner, fixWindowInsetsObserver)
+        viewModel.fitCaptionBar.observe(viewLifecycleOwner, fixWindowInsetsObserver)
+        viewModel.fitDisplayCutout.observe(viewLifecycleOwner, fixWindowInsetsObserver)
+        viewModel.fitHorizontal.observe(viewLifecycleOwner, fixWindowInsetsObserver)
+        viewModel.fitMergeType.observe(viewLifecycleOwner, fixWindowInsetsObserver)
         viewModel.fitInsetsType.observe(viewLifecycleOwner) { fitWindowInsets() }
         viewModel.fitInsetsMode.observe(viewLifecycleOwner) { fitWindowInsets() }
     }
 
-    private val fixWindowInsets = Observer<Boolean?> {
+    private val fixWindowInsetsObserver = Observer<Boolean?> {
         fitWindowInsets()
     }
 

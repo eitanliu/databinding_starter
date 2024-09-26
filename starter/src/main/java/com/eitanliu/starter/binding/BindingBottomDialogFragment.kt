@@ -42,7 +42,7 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
     ): View? {
         initParams(savedInstanceState)
         initViewDataBinding()
-        registerUiStateChange()
+        handleActivityUiState()
         initData()
         initView()
         initObserve()
@@ -58,7 +58,7 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
 
     open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
-    private fun registerUiStateChange() {
+    protected fun handleActivityUiState() {
         viewModel.state.startActivity.observe(viewLifecycleOwner) {
             activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(it)
         }

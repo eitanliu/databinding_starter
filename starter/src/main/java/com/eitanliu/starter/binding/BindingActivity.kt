@@ -13,11 +13,11 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
-import com.eitanliu.binding.adapter.onClickListener
-import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.binding.extension.refWeak
+import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
+import com.eitanliu.starter.utils.BarUtils
 import com.eitanliu.starter.utils.ReflectionUtil
 import java.lang.ref.Reference
 import java.util.Random
@@ -36,13 +36,14 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
 
     private val codeRandom = Random()
     private val requestCallbacks = SparseArray<Reference<ActivityResultCallback<ActivityResult>>>()
+    private val onBackPressedHandler by lazy { OnBackPressedHandler(true) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         initParams(savedInstanceState)
         initViewDataBinding()
-        registerUiStateChange()
+        handleActivityUiState()
         initData()
         initView()
         initObserve()
@@ -57,7 +58,7 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
 
     open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
-    private fun registerUiStateChange() {
+    protected fun handleActivityUiState() {
         viewModel.state.startActivity.observe(this) {
             startActivity(it)
         }
@@ -67,22 +68,44 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
         viewModel.state.onBackPressed.observe(this) {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        viewModel.onBackPressedEnable.observe(this) { value ->
+            onBackPressedHandler.isEnabled = value != false
+        }
+        viewModel.state.handleOnBackPressed.observe(this) { callback ->
+            onBackPressedHandler.onBackPressed = callback
+            onBackPressedHandler.isEnabled = viewModel.onBackPressedEnable.value != false
+            if (callback != null) {
+                onBackPressedDispatcher.addCallback(this, onBackPressedHandler)
+            } else {
+                onBackPressedHandler.remove()
+            }
+        }
         // 系统栏显示控制
         viewModel.lightStatusBars.observe(this) {
             isAppearanceLightStatusBars = it == true
         }
-        viewModel.fitSystemBars.observe(this, fixWindowInsets)
-        viewModel.fitStatusBars.observe(this, fixWindowInsets)
-        viewModel.fitNavigationBars.observe(this, fixWindowInsets)
-        viewModel.fitCaptionBar.observe(this, fixWindowInsets)
-        viewModel.fitDisplayCutout.observe(this, fixWindowInsets)
-        viewModel.fitHorizontal.observe(this, fixWindowInsets)
-        viewModel.fitMergeType.observe(this, fixWindowInsets)
+        viewModel.lightNavigationBar.observe(this) {
+            val isLight = it == true
+            val color = viewModel.navigationBarColor.value
+            BarUtils.setNavBar(window, isLight, color)
+        }
+        viewModel.navigationBarColor.observe(this) { color ->
+            val isLight = viewModel.lightNavigationBar.value == true
+            BarUtils.setNavBar(window, isLight, color)
+        }
+        viewModel.fitSystemBars.observe(this, fixWindowInsetsObserver)
+        viewModel.fitStatusBars.observe(this, fixWindowInsetsObserver)
+        viewModel.fitNavigationBars.observe(this, fixWindowInsetsObserver)
+        viewModel.fitCaptionBar.observe(this, fixWindowInsetsObserver)
+        viewModel.fitDisplayCutout.observe(this, fixWindowInsetsObserver)
+        viewModel.fitHorizontal.observe(this, fixWindowInsetsObserver)
+        viewModel.fitMergeType.observe(this, fixWindowInsetsObserver)
         viewModel.fitInsetsType.observe(this) { fitWindowInsets() }
         viewModel.fitInsetsMode.observe(this) { fitWindowInsets() }
     }
 
-    private val fixWindowInsets = Observer<Boolean?> {
+    private val fixWindowInsetsObserver = Observer<Boolean?> {
         fitWindowInsets()
     }
 

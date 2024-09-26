@@ -1,11 +1,14 @@
 package com.eitanliu.starter.binding.controller
 
+import android.graphics.Color
 import com.eitanliu.binding.state.MultipleUiState
 import com.eitanliu.binding.state.multipleState
 
 class SystemInsetsController : ISystemInsets {
 
     override val lightStatusBars = multipleState<Boolean?>()
+    override val lightNavigationBar = multipleState<Boolean?>()
+    override val navigationBarColor = multipleState<Int?>(Color.TRANSPARENT)
     override val fitSystemBars = multipleState<Boolean?>()
     override val fitStatusBars = multipleState<Boolean?>()
     override val fitNavigationBars = multipleState<Boolean?>()
@@ -24,6 +27,8 @@ class SystemInsetsController : ISystemInsets {
 interface ISystemInsets {
 
     val lightStatusBars: MultipleUiState<Boolean?>
+    val lightNavigationBar: MultipleUiState<Boolean?>
+    val navigationBarColor: MultipleUiState<Int?>
     val fitSystemBars: MultipleUiState<Boolean?>
     val fitStatusBars: MultipleUiState<Boolean?>
     val fitNavigationBars: MultipleUiState<Boolean?>
