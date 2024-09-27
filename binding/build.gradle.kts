@@ -26,7 +26,7 @@ afterEvaluate {
                 // artifact(sourcesJar)
 
                 if (jitpack) {
-                    groupId = arrayOf(systemEnv("GROUP"), systemEnv("ARTIFACT")).joinToString { "." }
+                    groupId = arrayOf(systemEnv("GROUP"), systemEnv("ARTIFACT")).joinToString(".")
                     version = systemEnv("VERSION")
                 }
                 println("Publication $project ===> $groupId:$artifactId:$version")
