@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.navbar.NavBarActivity">
+
+    <data>
+
+        <import type="androidx.core.view.WindowInsetsCompat" />
+
+        <import type="com.example.app.R" />
+
+        <variable
+            name="viewModel"
+            type="com.example.app.ui.navbar.NavBarVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mainContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            app:layout_constraintBottom_toTopOf="@+id/navView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="60dp"
+            android:textSize="12sp"
+            app:applyWindowInsets="@{WindowInsetsCompat.CONSUMED}"
+            app:itemActiveIndicatorEnabled="@{false}"
+            app:itemActiveIndicatorStyle="@android:color/transparent"
+            app:itemIconSize="26dp"
+            app:itemIconTintList="@{null}"
+            app:itemPaddingBottom="8dp"
+            app:itemPaddingTop="8dp"
+            app:itemTextAppearanceActiveBoldEnabled="true"
+            app:items="@{viewModel.items}"
+            app:itemsContainer="@{mainContainer.getId()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/main_navigation"
+            app:selectedItemIndex="@={viewModel.itemIndex}"
+            tools:itemIconTint="null" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

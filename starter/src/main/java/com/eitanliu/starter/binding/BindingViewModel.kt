@@ -1,6 +1,7 @@
 package com.eitanliu.starter.binding
 
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.eitanliu.binding.event.UiEvent
@@ -18,13 +19,17 @@ open class BindingViewModel(
     override val event = Event(this)
     override val state = State(this)
 
-    open class Event(viewModel: BindingViewModel) : IViewModel.Even,
-        IActivity.Event by viewModel.activity.event {
+    override fun onDestroy(owner: LifecycleOwner) {
+        owner.lifecycle.removeObserver(this)
+    }
+
+    open class Event(vm: BindingViewModel) : IViewModel.Even,
+        IActivity.Event by vm.activity.event {
         override val onMenuClick: UiEvent = bindingEvent { }
     }
 
-    open class State(viewModel: BindingViewModel) : IViewModel.State,
-        IActivity.State by viewModel.activity.state
+    open class State(vm: BindingViewModel) : IViewModel.State,
+        IActivity.State by vm.activity.state
 
 }
 

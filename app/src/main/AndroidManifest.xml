@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.ExampleActivity" />
+        <activity android:name=".ui.navbar.NavBarActivity" />
     </application>
 
 </manifest>

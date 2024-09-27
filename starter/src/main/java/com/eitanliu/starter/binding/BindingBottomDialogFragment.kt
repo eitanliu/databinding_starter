@@ -54,6 +54,7 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
         viewModel = createViewModel()
         binding.setVariable(initVariableId, viewModel)
         binding.lifecycleOwner = this
+        lifecycle.addObserver(viewModel)
     }
 
     open fun createViewModel() = ViewModelProvider(this)[viewModelType]

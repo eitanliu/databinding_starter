@@ -14,7 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-open class ExampleVM @Inject constructor(
+class ExampleVM @Inject constructor(
     stateHandle: SavedStateHandle,
 ) : BindingViewModel(stateHandle) {
     private val args = ExampleArgs(stateHandle.bundle)
@@ -28,14 +28,9 @@ open class ExampleVM @Inject constructor(
 
     val title = multipleState("${args.arg1} ${args.arg2}")
 
-    inner class Event(viewModel: BindingViewModel) : BindingViewModel.Event(viewModel) {
-
-        // 二次返回退出
-        val onBackPressed = debounceEvent(2000, {
-            finish()
-        }) {
-            ToastUtils.showShort("back again to exit")
-        }
+    inner class Event(
+        viewModel: BindingViewModel
+    ) : BindingViewModel.Event(viewModel) {
 
         val changeSystemBars = bindingEvent {
             fitSystemBars.value = fitSystemBars.value.not()
@@ -48,7 +43,9 @@ open class ExampleVM @Inject constructor(
         }
     }
 
-    inner class State(viewModel: BindingViewModel) : BindingViewModel.State(viewModel) {
+    inner class State(
+        viewModel: BindingViewModel
+    ) : BindingViewModel.State(viewModel) {
         val testState = singleState<Int>()
     }
 }

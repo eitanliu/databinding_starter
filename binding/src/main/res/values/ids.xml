@@ -9,4 +9,5 @@
     <item name="viewWindowInsetsCompat" type="id" />
     <item name="windowInsetsController" type="id" />
     <item name="cacheImage" type="id" />
+    <item name="menuItemSelected" type="id" />
 </resources>
