@@ -2,6 +2,38 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
+    `maven-publish`
+}
+
+fun properties(key: String) = project.findProperty(key).toString()
+fun systemEnv(key: String): String? = System.getenv(key)
+println("System.env $project ===> ${System.getenv()}")
+val jitpack = (systemEnv("JITPACK") ?: "false").toBoolean()
+
+afterEvaluate {
+
+    publishing {
+        //配置maven仓库
+        repositories {
+            maven {
+                if (!jitpack) url = uri("${layout.buildDirectory.file("repo").get()}")
+            }
+        }
+
+        publications {
+            create<MavenPublication>("product") {
+                from(components["release"])
+                // artifact(sourcesJar)
+
+                if (jitpack) {
+                    groupId = systemEnv("GROUP")
+                    artifactId = systemEnv("ARTIFACT")
+                    version = systemEnv("VERSION")
+                }
+            }
+
+        }
+    }
 }
 
 android {
