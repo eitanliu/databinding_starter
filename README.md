@@ -1,19 +1,12 @@
-import java.net.URI
+# Databinding Starter
 
-pluginManagement {
-    repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
+### How to
 
+To get a Git project into your build:  
+*Step 1.* Add the JitPack repository to your build file  
+Add it in your root build.gradle at the end of repositories:  
+
+```kotlin
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -28,7 +21,13 @@ dependencyResolutionManagement {
         }
     }
 }
+```
 
-include(":app")
-include(":binding")
-include(":starter")
+*Step 2.* Add the dependency
+
+```kotlin
+dependencies {
+    // implementation("com.github.eitanliu.databinding_starter:binding:main-SNAPSHOT")
+    implementation("com.github.eitanliu.databinding_starter:starter:main-SNAPSHOT")
+}
+```

@@ -9,6 +9,7 @@ plugins {
 fun properties(key: String) = project.findProperty(key).toString()
 fun systemEnv(key: String): String? = System.getenv(key)
 println("System.env $project ===> ${System.getenv()}")
+println("System.props $project ===> ${System.getProperties()}")
 val jitpack = (systemEnv("JITPACK") ?: "false").toBoolean()
 
 afterEvaluate {
@@ -17,7 +18,7 @@ afterEvaluate {
         //配置maven仓库
         repositories {
             maven {
-                if (!jitpack) url = uri("${layout.buildDirectory.file("repo").get()}")
+                if (!jitpack) url = uri("${layout.buildDirectory.get()}")
             }
         }
 
@@ -29,6 +30,9 @@ afterEvaluate {
                 if (jitpack) {
                     groupId = arrayOf(systemEnv("GROUP"), systemEnv("ARTIFACT")).joinToString(".")
                     version = systemEnv("VERSION")
+                } else {
+                    groupId = "com.github.eitanliu.databinding_starter"
+                    version = "1.0.0-SNAPSHOT"
                 }
                 println("Publication $project ===> $groupId:$artifactId:$version")
             }
@@ -73,7 +77,7 @@ android {
 
 dependencies {
 
-    implementation(project(":binding"))
+    api(project(":binding"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
