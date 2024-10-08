@@ -13,9 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
-import com.eitanliu.starter.extension.asTypeOrNull
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
+import com.eitanliu.starter.extension.asTypeOrNull
 import com.eitanliu.starter.utils.BarUtils
 import com.eitanliu.starter.utils.ReflectionUtil
 import java.lang.ref.Reference

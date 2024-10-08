@@ -1,10 +1,13 @@
 package com.eitanliu.starter.binding
 
+import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.databinding.DataBindingUtil
@@ -13,14 +16,23 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
-import com.eitanliu.starter.extension.asTypeOrNull
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
+import com.eitanliu.binding.extension.selfFragment
+import com.eitanliu.starter.binding.dialog.SafetyDialog
+import com.eitanliu.starter.binding.listener.DialogLifecycle
+import com.eitanliu.starter.extension.asTypeOrNull
 import com.eitanliu.starter.utils.ReflectionUtil
 import java.lang.ref.Reference
 import java.util.Random
 
-abstract class BindingDialogFragment<VB : ViewDataBinding, VM : BindingViewModel> : DialogFragment(),
+abstract class BindingDialogFragment<VB : ViewDataBinding, VM : BindingViewModel> :
+    DialogFragment(), DialogLifecycle.OnCreateListener, DialogInterface.OnShowListener,
     InitView {
+
+    var onCreateListener: DialogLifecycle.OnCreateListener? = null
+    var onDismissListener: DialogInterface.OnDismissListener? = null
+    var onCancelListener: DialogInterface.OnCancelListener? = null
+    var onShowListener: DialogInterface.OnShowListener? = null
 
     protected lateinit var binding: VB
 
@@ -33,6 +45,13 @@ abstract class BindingDialogFragment<VB : ViewDataBinding, VM : BindingViewModel
 
     private val codeRandom = Random()
     private val requestCallbacks = SparseArray<Reference<ActivityResultCallback<ActivityResult>>>()
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return SafetyDialog(requireContext(), theme).apply {
+            setOnCreateListener(selfFragment)
+            setOnShowListener(selfFragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,5 +118,23 @@ abstract class BindingDialogFragment<VB : ViewDataBinding, VM : BindingViewModel
             viewModel.fitInsetsType.value,
             viewModel.fitInsetsMode.value,
         )
+    }
+
+    override fun onCreate(dialog: DialogInterface, window: Window) {
+        onCreateListener?.onCreate(dialog, window)
+    }
+
+    override fun onShow(dialog: DialogInterface) {
+        onShowListener?.onShow(dialog)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissListener?.onDismiss(dialog)
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        onCancelListener?.onCancel(dialog)
     }
 }
