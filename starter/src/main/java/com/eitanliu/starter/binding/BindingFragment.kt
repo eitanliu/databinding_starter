@@ -14,7 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
+import com.eitanliu.starter.binding.controller.ActivityLauncher
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
+import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.extension.asTypeOrNull
 import com.eitanliu.starter.utils.BarUtils
 import com.eitanliu.starter.utils.ReflectionUtil
@@ -22,7 +24,7 @@ import java.lang.ref.Reference
 import java.util.Random
 
 abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fragment(),
-    InitView {
+    InitView, ActivityLauncher {
 
     protected lateinit var binding: VB
 
@@ -63,7 +65,7 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
 
     protected fun handleActivityUiState() {
         viewModel.state.startActivity.observe(viewLifecycleOwner) {
-            activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(it)
+            startActivity(it)
         }
         viewModel.state.finish.observe(viewLifecycleOwner) {
             activity?.finish()
@@ -141,5 +143,9 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
         viewModel.lightStatusBars.notifyChange()
         viewModel.lightNavigationBar.notifyChange()
         viewModel.navigationBarColor.notifyChange()
+    }
+
+    override fun startActivity(model: ActivityLaunchModel) {
+        activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(model)
     }
 }

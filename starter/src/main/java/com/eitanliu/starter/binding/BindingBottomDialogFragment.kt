@@ -17,8 +17,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.binding.extension.selfFragment
+import com.eitanliu.starter.binding.controller.ActivityLauncher
 import com.eitanliu.starter.binding.dialog.SafetyBottomDialog
 import com.eitanliu.starter.binding.listener.DialogLifecycle
+import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.extension.asTypeOrNull
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -27,7 +29,7 @@ import java.util.Random
 
 abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingViewModel> :
     BottomSheetDialogFragment(), DialogLifecycle.OnCreateListener, DialogInterface.OnShowListener,
-    InitView {
+    InitView, ActivityLauncher {
 
     var onCreateListener: DialogLifecycle.OnCreateListener? = null
     var onDismissListener: DialogInterface.OnDismissListener? = null
@@ -79,7 +81,7 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
 
     protected fun handleActivityUiState() {
         viewModel.state.startActivity.observe(viewLifecycleOwner) {
-            activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(it)
+            startActivity(it)
         }
         viewModel.state.finish.observe(viewLifecycleOwner) {
             activity?.finish()
@@ -136,5 +138,9 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         onCancelListener?.onCancel(dialog)
+    }
+
+    override fun startActivity(model: ActivityLaunchModel) {
+        activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(model)
     }
 }

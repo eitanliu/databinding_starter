@@ -17,10 +17,8 @@ class ActivityController : IActivity {
     override val state = State()
     override val onBackPressedEnable = multipleState<Boolean>()
 
-    override fun startActivity(
-        clz: Class<*>, bundle: Bundle?, callback: ActivityResultCallback<ActivityResult>?
-    ) {
-        state.startActivity(ActivityLaunchModel(clz, bundle, callback))
+    override fun startActivity(model: ActivityLaunchModel) {
+        state.startActivity(model)
     }
 
     override fun finish() {
@@ -61,18 +59,12 @@ class ActivityController : IActivity {
 /**
  * Activity 操作
  */
-interface IActivity {
+interface IActivity: ActivityLauncher {
     val activity: IActivity get() = this
     val event: Event
     val state: State
 
     val onBackPressedEnable: MultipleUiState<Boolean?>
-
-    fun startActivity(
-        clz: Class<*>,
-        bundle: Bundle? = null,
-        callback: ActivityResultCallback<ActivityResult>? = null,
-    )
 
     fun finish()
 

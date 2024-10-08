@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.binding.extension.refWeak
+import com.eitanliu.starter.binding.controller.ActivityLauncher
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.utils.BarUtils
@@ -23,7 +24,7 @@ import java.lang.ref.Reference
 import java.util.Random
 
 abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : AppCompatActivity(),
-    InitView {
+    InitView, ActivityLauncher {
 
     protected lateinit var binding: VB
 
@@ -128,7 +129,7 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
      * 跳转页面
      * @param model
      */
-    fun startActivity(
+    override fun startActivity(
         model: ActivityLaunchModel
     ) {
         val intent = Intent(this, model.clz)
