@@ -2,6 +2,7 @@
 <resources>
     <item name="bindingTags" type="id" />
     <item name="viewModel" type="id" />
+    <item name="lifecycleOwner" type="id" />
     <item name="fitSystemInsets" type="id" />
     <item name="gestureDetector" type="id" />
     <item name="softwareKeyboardController" type="id" />

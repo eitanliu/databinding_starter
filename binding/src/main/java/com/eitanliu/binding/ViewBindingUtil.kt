@@ -1,0 +1,54 @@
+package com.eitanliu.binding
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.viewbinding.ViewBinding
+import com.eitanliu.binding.extension.takeIf
+
+object ViewBindingUtil {
+
+    inline fun <reified T : ViewBinding> inflate(
+        inflater: LayoutInflater, parent: ViewGroup? = null, attachToParent: Boolean = false
+    ): T = inflate(T::class.java, inflater, parent, attachToParent)
+
+    @Suppress("UNCHECKED_CAST")
+    @JvmStatic
+    @JvmOverloads
+    fun <T : ViewBinding> inflate(
+        clazz: Class<T>,
+        inflater: LayoutInflater,
+        parent: ViewGroup? = null,
+        attachToParent: Boolean = false,
+    ): T {
+        val bind = clazz.getMethod(
+            "inflate", LayoutInflater::class.java, View::class.java, Boolean::class.java
+        )
+        return bind.invoke(null, inflater, parent, attachToParent) as T
+    }
+
+    inline fun <reified T : ViewBinding> bind(root: View) = bind(T::class.java, root)
+
+    @Suppress("UNCHECKED_CAST")
+    @JvmStatic
+    fun <T : ViewBinding> bind(clazz: Class<T>, root: View): T {
+        val bind = clazz.getMethod("bind", View::class.java)
+        return bind.invoke(null, root) as T
+    }
+
+    var ViewBinding.lifecycleOwner: LifecycleOwner?
+        get() = when (this) {
+            is ViewDataBinding -> lifecycleOwner
+            else -> root.getTag(R.id.lifecycleOwner) as? LifecycleOwner
+        } ?: root.findViewTreeLifecycleOwner()
+        ?: root.context.takeIf { it is LifecycleOwner } as? LifecycleOwner
+        set(value) {
+            when (this) {
+                is ViewDataBinding -> lifecycleOwner = value
+                else -> root.setTag(R.id.lifecycleOwner, value)
+            }
+        }
+}
