@@ -29,7 +29,7 @@ fun FragmentManager.show(
         hide(f)
     }
     if (!fragment.isAdded) {
-        add(containerViewId, fragment, tag ?: fragment::class.java.canonicalName)
+        add(containerViewId, fragment, tag ?: fragment::class.java.name)
     }
     show(fragment)
 }
@@ -53,7 +53,16 @@ inline fun <T : Fragment> FragmentManager.findOrCreateFragment(
 @JvmOverloads
 inline fun <T : Fragment> FragmentManager.findOrCreateFragment(
     clazz: Class<T>, args: Bundle?, tag: String? = null
-) = findFragmentByTag(tag ?: clazz.canonicalName) as? T ?: clazz.createFragment(args)
+) = findFragmentByTag(tag ?: clazz.name) as? T ?: clazz.createFragment(args)
+
+inline fun <reified T : Fragment> FragmentManager.findFragment(
+    tag: String?
+) = findFragmentByTag(tag ?: T::class.java.name) as? T
+
+@Suppress("UNCHECKED_CAST")
+fun <T : Fragment> FragmentManager.findFragment(
+    clazz: Class<out Fragment>, tag: String?
+) = findFragmentByTag(tag ?: clazz.name) as? T
 
 @Suppress("CAST_NEVER_SUCCEEDS")
 inline fun <reified T : Fragment> createFragment(): T = createFragment(null as? Bundle)
