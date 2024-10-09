@@ -24,10 +24,10 @@ object ViewBindingUtil {
         parent: ViewGroup? = null,
         attachToParent: Boolean = false,
     ): T {
-        val bind = clazz.getMethod(
-            "inflate", LayoutInflater::class.java, View::class.java, Boolean::class.java
+        val inflate = clazz.getMethod(
+            "inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.java
         )
-        return bind.invoke(null, inflater, parent, attachToParent) as T
+        return inflate.invoke(null, inflater, parent, attachToParent) as T
     }
 
     inline fun <reified T : ViewBinding> bind(root: View) = bind(T::class.java, root)
