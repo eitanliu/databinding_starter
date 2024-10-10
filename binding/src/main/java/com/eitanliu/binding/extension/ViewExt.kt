@@ -31,18 +31,6 @@ inline fun <T : View> View.parentAsView() = parent as T
 @Suppress("UNCHECKED_CAST")
 inline fun <T : View> View.asView() = this as T
 
-inline fun View.setBindingTag(key: Int, tag: Any?) = bindingTags.put(key, tag)
-
-inline fun View.getBindingTag(key: Int) = bindingTags.get(key)
-
-@Suppress("UNCHECKED_CAST")
-val View.bindingTags: SparseArray<Any?>
-    get() = run {
-        getTag(R.id.bindingTags) as? SparseArray<Any?> ?: SparseArray<Any?>().also {
-            setTag(R.id.bindingTags, it)
-        }
-    }
-
 inline val View.index get() = (parent as? ViewGroup)?.indexOfChild(this) ?: -1
 
 /**
@@ -132,21 +120,6 @@ inline fun View.visibleOnScreen(offset: Point) = Rect().also { getGlobalVisibleR
  * View可见部分 相对于 自身View位置左上角的坐标
  */
 inline val View.visibleOnSelf get() = Rect().also { getLocalVisibleRect(it) }
-
-/**
- * 获取LifecycleOwner
- */
-fun View.findLifecycleOwner(): LifecycleOwner? {
-    val binding = DataBindingUtil.findBinding<ViewDataBinding>(this)
-    var lifecycleOwner = binding?.lifecycleOwner
-    if (lifecycleOwner == null) {
-        lifecycleOwner = findViewTreeLifecycleOwner()
-    }
-    if (lifecycleOwner == null) {
-        lifecycleOwner = context.takeIf { it is LifecycleOwner } as? LifecycleOwner
-    }
-    return lifecycleOwner
-}
 
 val View.softwareKeyboardController
     get() = getBindingTag(R.id.softwareKeyboardController) as? SoftwareKeyboardControllerCompat

@@ -40,7 +40,7 @@ class FragmentItem private constructor(
             clazz: Class<out Fragment>, args: Bundle? = null,
             tag: String? = null, id: Int = ResourcesId.ID_NULL,
         ) = create(clazz, args, tag, id) {
-            it.clazz.createFragment()
+            it.clazz.createFragment(args)
         }
 
         fun create(

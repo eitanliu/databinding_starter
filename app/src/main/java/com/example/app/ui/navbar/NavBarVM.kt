@@ -18,10 +18,10 @@ class NavBarVM @Inject constructor(
     override val state = State(this)
 
     val items = listOf(
-        FragmentItem(HomeFragment::class.java, Bundle().apply {
+        FragmentItem.create(HomeFragment::class.java, Bundle().apply {
             putInt("age", 222)
         }),
-        FragmentItem(SettingFragment::class.java),
+        FragmentItem.create(SettingFragment::class.java),
     )
     val itemIndex = multipleState(0)
 

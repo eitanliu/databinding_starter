@@ -9,7 +9,7 @@ class WeakOnCreateListener(listener: DialogLifecycle.OnCreateListener?) :
 
     private val refListener = listener.refWeak()
 
-    override fun onCreate(dialog: DialogInterface, window: Window?) {
+    override fun onCreate(dialog: DialogInterface, window: Window) {
         refListener.get()?.onCreate(dialog, window)
     }
 }
