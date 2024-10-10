@@ -1,6 +1,8 @@
 package com.eitanliu.binding.adapter
 
 import android.app.Activity
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
@@ -16,8 +18,8 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.ImageViewTarget
@@ -33,12 +35,14 @@ class ImageViewAdapter
  * 加载图片绑定
  *
  * @param image Any? 加载图片
- * @param imagePreview Any? 预加载图片
+ * @param imageError Any? 出错图片
+ * @param imageThumbnail Any? 预加载图片
  * @param imagePlaceholder Drawable? 占位图
  */
 @BindingAdapter(
     "image",
-    "imagePreview",
+    "imageError",
+    "imageThumbnail",
     "imagePlaceholder",
     "resPlaceholder",
     "colorPlaceholder",
@@ -53,7 +57,8 @@ class ImageViewAdapter
 )
 fun ImageView.loadImage(
     image: Any?,
-    imagePreview: Any? = null,
+    imageError: Any? = null,
+    imageThumbnail: Any? = null,
     imagePlaceholder: Drawable? = null,
     @DrawableRes resPlaceholder: Int? = null,
     @ColorInt colorPlaceholder: Int? = null,
@@ -64,7 +69,7 @@ fun ImageView.loadImage(
     isCrossFade: Boolean? = null,
     isGif: Boolean? = null,
     clearOnDetach: Boolean? = null,
-): ImageViewTarget<out Drawable>? {
+): ImageViewTarget<Drawable>? {
 
     val context = context
     if (context is Activity && context.isDestroyed) {
@@ -88,39 +93,15 @@ fun ImageView.loadImage(
         else -> null
     }
 
-    fun checkEmpty(image: Any?): Boolean {
-        return image == null || (image as? String) == ""
-                || (image as? Int) == ResourcesId.ID_NULL
-                || (image as? Uri) == Uri.EMPTY
+    if (checkImageEmpty(image) && checkImageEmpty(imageError) && checkImageEmpty(imageThumbnail)) {
+        Glide.with(this).clear(this)
+        this.setImageDrawable(placeholder)
+        return null
     }
 
-    if (cacheImage?.model != image) cacheImage = null
+    if (cacheImage?.model != image) cacheImage = CacheImage(image, null)
 
-    if (!checkEmpty(imagePreview)) {
-        val previewBuilder = loadImageBuilder(
-            imagePreview, placeholder, priority,
-            skipMemoryCache, diskCacheStrategy,
-            crossFade, isCrossFade,
-        ) { result: Result<Drawable> ->
-            result.onSuccess { resource ->
-                // Log.e("LoadImage", "preview $result $preview")
-
-                if (cacheImage?.drawable == null) {
-                    setImageDrawable(resource)
-                    // loadImage(
-                    //     resource, placeholder, priority,
-                    //     skipMemoryCache, diskCacheStrategy,
-                    //     crossFade, isCrossFade, clearOnDetach
-                    // )
-                }
-            }
-            false
-        }
-        // Log.e("LoadImage", "preview load $preview")
-        previewBuilder?.preload()
-    }
-
-    fun load(): RequestBuilder<out Drawable>? {
+    fun load(): RequestBuilder<Drawable> {
         val imageListener = { result: Result<Drawable> ->
             // Log.e("LoadImage", "image $result $image")
             cacheImage = CacheImage(image, result.getOrNull())
@@ -128,22 +109,16 @@ fun ImageView.loadImage(
         }
 
         // Log.e("LoadImage", "image load $image")
-        return if (isGif == true) {
-            loadGifBuilder(
-                image, placeholder, priority,
-                skipMemoryCache, diskCacheStrategy,
-                crossFade, isCrossFade, imageListener
-            )
-        } else {
-            loadImageBuilder(
-                image, placeholder, priority,
-                skipMemoryCache, diskCacheStrategy,
-                crossFade, isCrossFade, imageListener
-            )
-        }
+        return context.loadImageBuilder(
+            image, imageError, imageThumbnail, placeholder, priority,
+            skipMemoryCache, diskCacheStrategy,
+            crossFade, isCrossFade, isGif, imageListener
+        )
     }
 
-    val imageTarget = load()?.into(this) as? ImageViewTarget<out Drawable>
+    val builder = load()
+
+    val imageTarget = builder.into(this) as? ImageViewTarget<Drawable>
     if (clearOnDetach == true) {
         imageTarget?.clearOnDetach()
     }
@@ -152,65 +127,82 @@ fun ImageView.loadImage(
 
 fun ImageView.loadImage(
     image: Any?,
+    error: Any? = null,
+    thumbnail: Any? = null,
     placeholder: Drawable? = null,
     priority: Priority? = null,
     skipMemoryCache: Boolean? = null,
     @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
     crossFade: Int? = null,
     isCrossFade: Boolean? = null,
+    isGif: Boolean? = null,
     clearOnDetach: Boolean? = null,
     listener: ((Result<Drawable>) -> Boolean)? = null,
 ): ImageViewTarget<Drawable>? {
-    val builder = loadImageBuilder(
-        image, placeholder, priority,
+
+    if (checkImageEmpty(image) && checkImageEmpty(error) && checkImageEmpty(thumbnail)) {
+        Glide.with(this).clear(this)
+        this.setImageDrawable(placeholder)
+        return null
+    }
+
+    val builder = context.loadImageBuilder(
+        image, error, thumbnail, placeholder, priority,
         skipMemoryCache, diskCacheStrategy,
-        crossFade, isCrossFade, listener
+        crossFade, isCrossFade, isGif, listener,
     )
-    val imageTarget = builder?.into(this) as? ImageViewTarget<Drawable>
+    // .run {
+    //     if (!checkImageEmpty(thumbnail)) {
+    //         // Log.e("LoadImage", "thumbnail load $imageThumbnail")
+    //         val thumbnailBuilder = context.loadImageBuilder(
+    //             thumbnail, error, null, placeholder, priority,
+    //             skipMemoryCache, diskCacheStrategy,
+    //             crossFade, isCrossFade, null,
+    //         )
+    //         thumbnail(thumbnailBuilder)
+    //     } else this
+    // }
+    val imageTarget = builder.into(this) as? ImageViewTarget<Drawable>
     if (clearOnDetach == true) {
         imageTarget?.clearOnDetach()
     }
     return imageTarget
 }
 
-fun ImageView.loadImageBuilder(
+fun Context.loadImageBuilder(
     image: Any?,
+    error: Any? = null,
+    thumbnail: Any? = null,
     placeholder: Drawable? = null,
     priority: Priority? = null,
     skipMemoryCache: Boolean? = null,
     @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
     crossFade: Int? = null,
     isCrossFade: Boolean? = null,
+    isGif: Boolean? = null,
     listener: ((Result<Drawable>) -> Boolean?)? = null,
-): RequestBuilder<Drawable>? {
-    fun checkEmpty(image: Any?): Boolean {
-        return image == null || (image as? String) == ""
-                || (image as? Int) == ResourcesId.ID_NULL
-                || (image as? Uri) == Uri.EMPTY
-    }
+): RequestBuilder<Drawable> {
 
-    if (checkEmpty(image)) {
-        Glide.with(this).clear(this)
-        this.setImageDrawable(placeholder)
-        return null
-    }
-
-    val builder = Glide.with(this).load(image).apply(
+    val builder = Glide.with(this).run {
+        @Suppress("UNCHECKED_CAST")
+        if (isGif == true) asGif() as RequestBuilder<Drawable> else asDrawable()
+    }.load(image).apply(
         RequestOptions().placeholder(placeholder)
             .priority(priority ?: Priority.NORMAL)
     ).run {
+        if (!checkImageEmpty(error)) error(
+            Glide.with(this@loadImageBuilder).load(error)
+        ) else this
+    }.run {
+        if (!checkImageEmpty(error)) thumbnail(
+            Glide.with(this@loadImageBuilder).load(thumbnail)
+        ) else this
+    }.run {
         if (skipMemoryCache == true) skipMemoryCache(true) else this
     }.run {
-        if (diskCacheStrategy == null) return@run this
-
-        when (diskCacheStrategy) {
-            ImageDiskCacheStrategy.ALL -> diskCacheStrategy(DiskCacheStrategy.ALL)
-            ImageDiskCacheStrategy.DATA -> diskCacheStrategy(DiskCacheStrategy.DATA)
-            ImageDiskCacheStrategy.RESOURCE -> diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            ImageDiskCacheStrategy.AUTOMATIC -> diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            ImageDiskCacheStrategy.NONE -> diskCacheStrategy(DiskCacheStrategy.NONE)
-            else -> this
-        }
+        if (diskCacheStrategy != null) diskCacheStrategy(
+            ImageDiskCacheStrategy.convert(diskCacheStrategy)
+        ) else this
     }.run {
         if (isCrossFade == true) transition(DrawableTransitionOptions.withCrossFade(
             DrawableCrossFadeFactory.Builder(crossFade.takeIf {
@@ -238,56 +230,47 @@ fun ImageView.loadImageBuilder(
     return builder
 }
 
-fun ImageView.loadGifBuilder(
+fun Context.loadBitmapBuilder(
     image: Any?,
+    error: Any? = null,
+    thumbnail: Any? = null,
     placeholder: Drawable? = null,
     priority: Priority? = null,
     skipMemoryCache: Boolean? = null,
     @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
     crossFade: Int? = null,
     isCrossFade: Boolean? = null,
-    listener: ((Result<GifDrawable>) -> Boolean?)? = null,
-): RequestBuilder<GifDrawable>? {
-    fun checkEmpty(image: Any?): Boolean {
-        return image == null || (image as? String) == ""
-                || (image as? Int) == ResourcesId.ID_NULL
-                || (image as? Uri) == Uri.EMPTY
-    }
+    listener: ((Result<Bitmap>) -> Boolean?)? = null,
+): RequestBuilder<Bitmap> {
 
-    if (checkEmpty(image)) {
-        Glide.with(this).clear(this)
-        this.setImageDrawable(placeholder)
-        return null
-    }
-
-    val builder = Glide.with(this).asGif().load(image).apply(
+    val builder = Glide.with(this).asBitmap().load(image).apply(
         RequestOptions().placeholder(placeholder)
             .priority(priority ?: Priority.NORMAL)
     ).run {
+        if (!checkImageEmpty(error)) error(error) else this
+    }.run {
+        @Suppress("CAST_NEVER_SUCCEEDS")
+        if (!checkImageEmpty(error)) thumbnail(
+            clone().error(null as? Any).load(thumbnail)
+        ) else this
+    }.run {
         if (skipMemoryCache == true) skipMemoryCache(true) else this
     }.run {
-        if (diskCacheStrategy == null) return@run this
-
-        when (diskCacheStrategy) {
-            ImageDiskCacheStrategy.ALL -> diskCacheStrategy(DiskCacheStrategy.ALL)
-            ImageDiskCacheStrategy.DATA -> diskCacheStrategy(DiskCacheStrategy.DATA)
-            ImageDiskCacheStrategy.RESOURCE -> diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            ImageDiskCacheStrategy.AUTOMATIC -> diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            ImageDiskCacheStrategy.NONE -> diskCacheStrategy(DiskCacheStrategy.NONE)
-            else -> this
-        }
+        if (diskCacheStrategy != null) diskCacheStrategy(
+            ImageDiskCacheStrategy.convert(diskCacheStrategy)
+        ) else this
     }.run {
-        if (isCrossFade == true) transition(DrawableTransitionOptions.withCrossFade(
+        if (isCrossFade == true) transition(BitmapTransitionOptions.withCrossFade(
             DrawableCrossFadeFactory.Builder(crossFade.takeIf {
                 it != null && it > 0
             } ?: 300).setCrossFadeEnabled(true)
         )) else this
     }.run {
-        if (listener != null) listener(object : RequestListener<GifDrawable> {
+        if (listener != null) listener(object : RequestListener<Bitmap> {
             override fun onLoadFailed(
                 e: GlideException?,
                 model: Any?,
-                target: Target<GifDrawable>,
+                target: Target<Bitmap>,
                 isFirstResource: Boolean
             ): Boolean {
                 return listener.invoke(
@@ -296,7 +279,7 @@ fun ImageView.loadGifBuilder(
             }
 
             override fun onResourceReady(
-                resource: GifDrawable, model: Any, target: Target<GifDrawable>?,
+                resource: Bitmap, model: Any, target: Target<Bitmap>?,
                 dataSource: DataSource, isFirstResource: Boolean
             ): Boolean {
                 return listener.invoke(Result.success(resource)) ?: false
@@ -304,6 +287,12 @@ fun ImageView.loadGifBuilder(
         }) else this
     }
     return builder
+}
+
+fun checkImageEmpty(image: Any?): Boolean {
+    return image == null || (image as? String) == ""
+            || (image as? Int) == ResourcesId.ID_NULL
+            || (image as? Uri) == Uri.EMPTY
 }
 
 // @BindingAdapter("android:src")
@@ -321,9 +310,7 @@ fun ImageView.loadGifBuilder(
 @Retention(AnnotationRetention.SOURCE)
 annotation class ImageDiskCacheStrategy {
     companion object {
-        /**
-         * [DiskCacheStrategy.NONE]
-         */
+
         const val NONE = 1
 
         const val ALL = 2
@@ -333,5 +320,14 @@ annotation class ImageDiskCacheStrategy {
         const val RESOURCE = 4
 
         const val AUTOMATIC = 5
+
+        fun convert(value: Int): DiskCacheStrategy = when (value) {
+            ALL -> DiskCacheStrategy.ALL
+            DATA -> DiskCacheStrategy.DATA
+            RESOURCE -> DiskCacheStrategy.RESOURCE
+            AUTOMATIC -> DiskCacheStrategy.AUTOMATIC
+            NONE -> DiskCacheStrategy.NONE
+            else -> DiskCacheStrategy.AUTOMATIC
+        }
     }
 }
