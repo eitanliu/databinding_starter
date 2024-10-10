@@ -39,6 +39,12 @@ object ViewBindingUtil {
         return bind.invoke(null, root) as T
     }
 
+    inline var ViewBinding.lifecycleOwnerExt: LifecycleOwner?
+        get() = lifecycleOwner
+        set(value) {
+            lifecycleOwner = value
+        }
+
     var ViewBinding.lifecycleOwner: LifecycleOwner?
         get() = when (this) {
             is ViewDataBinding -> lifecycleOwner
