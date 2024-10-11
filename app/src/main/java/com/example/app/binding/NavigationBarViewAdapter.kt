@@ -5,7 +5,6 @@ import androidx.annotation.IdRes
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.childFragmentManager
 import com.eitanliu.binding.R
 import com.eitanliu.binding.extension.bindingFragment
@@ -79,10 +78,7 @@ fun NavigationBarView.setItems(
         val item = items[min(i, items.size - 1)]
         val tag = item.tag ?: item.clazz.name
         // val fragment = fragmentManager.findOrCreateFragment(item.clazz, item.args, item.tag)
-        val fragment = fragmentManager.findFragment<Fragment>(item.clazz, tag)?.also { fragment ->
-            val i2 = items.indexOfFirst { item.clazz.isInstance(fragment) }
-            if (index != null && i2 != -1 && i2 != selectedItemIndex) selectedItemIndex = i2
-        } ?: item.create()
+        val fragment = fragmentManager.findFragment(item.clazz, tag) ?: item.create()
         fragmentManager.show(containerViewId, fragment, tag)
             .commitAllowingStateLoss()
     }
