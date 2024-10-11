@@ -5,7 +5,7 @@ import androidx.activity.ComponentDialog
 import androidx.core.app.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
 
-class StarterLifecycleOwnerExt
+class BindingLifecycleOwnerExt
 
 @Suppress("RestrictedApi")
 val LifecycleOwner.context: Context?
@@ -31,7 +31,7 @@ val LifecycleOwner.context: Context?
         }
     }
 
-val LifecycleOwner.fragmentManager: FragmentManager?
+val LifecycleOwner.childFragmentManager: FragmentManager?
     get() {
         return when (this) {
             is FragmentActivity -> {
@@ -44,6 +44,25 @@ val LifecycleOwner.fragmentManager: FragmentManager?
 
             is FragmentViewLifecycleOwner -> {
                 fragment?.childFragmentManager
+            }
+
+            else -> null
+        }
+    }
+
+val LifecycleOwner.parentFragmentManager: FragmentManager?
+    get() {
+        return when (this) {
+            is FragmentActivity -> {
+                supportFragmentManager
+            }
+
+            is Fragment -> {
+                parentFragmentManager
+            }
+
+            is FragmentViewLifecycleOwner -> {
+                fragment?.parentFragmentManager
             }
 
             else -> null

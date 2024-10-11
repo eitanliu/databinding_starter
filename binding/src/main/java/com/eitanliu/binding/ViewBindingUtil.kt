@@ -7,7 +7,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.viewbinding.ViewBinding
-import com.eitanliu.binding.extension.takeIf
+import com.eitanliu.binding.extension.baseIf
 
 object ViewBindingUtil {
 
@@ -46,15 +46,19 @@ object ViewBindingUtil {
         }
 
     var ViewBinding.lifecycleOwner: LifecycleOwner?
-        get() = when (this) {
-            is ViewDataBinding -> lifecycleOwner
-            else -> root.getTag(R.id.lifecycleOwner) as? LifecycleOwner
-        } ?: root.findViewTreeLifecycleOwner()
-        ?: root.context.takeIf { it is LifecycleOwner } as? LifecycleOwner
+        get() = selfLifecycleOwner
+            ?: root.findViewTreeLifecycleOwner()
+            ?: root.context.baseIf { it is LifecycleOwner } as? LifecycleOwner
         set(value) {
             when (this) {
                 is ViewDataBinding -> lifecycleOwner = value
                 else -> root.setTag(R.id.lifecycleOwner, value)
             }
+        }
+
+    val ViewBinding.selfLifecycleOwner: LifecycleOwner?
+        get() = when (this) {
+            is ViewDataBinding -> lifecycleOwner
+            else -> root.getTag(R.id.lifecycleOwner) as? LifecycleOwner
         }
 }

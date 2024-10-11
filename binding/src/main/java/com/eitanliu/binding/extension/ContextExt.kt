@@ -20,11 +20,11 @@ fun Context.contextTree(tree: (context: Context) -> Unit) {
     if (this is ContextWrapper) baseContext.contextTree(tree)
 }
 
-fun Context.takeIf(predicate: (context: Context) -> Boolean): Context? {
+fun Context.baseIf(predicate: (context: Context) -> Boolean): Context? {
     if (predicate(this)) {
         return this
     } else if (this is ContextWrapper) {
-        baseContext.takeIf(predicate)
+        baseContext.baseIf(predicate)
     }
     return null
 }

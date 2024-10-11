@@ -5,11 +5,12 @@ import androidx.annotation.IdRes
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import androidx.fragment.app.fragmentManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.childFragmentManager
 import com.eitanliu.binding.R
+import com.eitanliu.binding.extension.bindingFragment
+import com.eitanliu.binding.extension.bindingFragmentActivity
 import com.eitanliu.binding.extension.findFragment
-import com.eitanliu.binding.extension.findLifecycleOwner
-import com.eitanliu.binding.extension.findOrCreateFragment
 import com.eitanliu.binding.extension.getBindingTag
 import com.eitanliu.binding.extension.setBindingTag
 import com.eitanliu.binding.extension.show
@@ -68,7 +69,8 @@ fun NavigationBarView.setItems(
     index: Int? = null,
     selectedAttrChanged: InverseBindingListener? = null,
 ) {
-    val fragmentManager = findLifecycleOwner()?.fragmentManager ?: return
+    val owner = bindingFragment ?: bindingFragmentActivity
+    val fragmentManager = owner?.childFragmentManager ?: return
     if (!items.isNullOrEmpty()) {
         val i = index ?: 0
         if (index != null && i != selectedItemIndex) {
@@ -77,8 +79,11 @@ fun NavigationBarView.setItems(
         val item = items[min(i, items.size - 1)]
         val tag = item.tag ?: item.clazz.name
         // val fragment = fragmentManager.findOrCreateFragment(item.clazz, item.args, item.tag)
-        val fragment = fragmentManager.findFragment(item.clazz, tag) ?: item.create()
-        fragmentManager.show(containerViewId, fragment)
+        val fragment = fragmentManager.findFragment<Fragment>(item.clazz, tag)?.also { fragment ->
+            val i2 = items.indexOfFirst { item.clazz.isInstance(fragment) }
+            if (index != null && i2 != -1 && i2 != selectedItemIndex) selectedItemIndex = i2
+        } ?: item.create()
+        fragmentManager.show(containerViewId, fragment, tag)
             .commitAllowingStateLoss()
     }
 
