@@ -1,44 +1,9 @@
+apply(from = rootProject.file("gradle/maven_publish.gradle.kts"))
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     // alias(libs.plugins.dagger.hilt.android)
     kotlin("kapt")
-    `maven-publish`
-}
-
-fun properties(key: String) = project.findProperty(key).toString()
-fun systemEnv(key: String): String? = System.getenv(key)
-println("System.env $project ===> ${System.getenv()}")
-println("System.props $project ===> ${System.getProperties()}")
-val jitpack = (systemEnv("JITPACK") ?: "false").toBoolean()
-
-afterEvaluate {
-
-    publishing {
-        //配置maven仓库
-        repositories {
-            maven {
-                if (!jitpack) url = uri("${layout.buildDirectory.get()}")
-            }
-        }
-
-        publications {
-            create<MavenPublication>("product") {
-                from(components["release"])
-                // artifact(sourcesJar)
-
-                if (jitpack) {
-                    groupId = arrayOf(systemEnv("GROUP"), systemEnv("ARTIFACT")).joinToString(".")
-                    version = systemEnv("VERSION")
-                } else {
-                    groupId = "com.github.eitanliu.databinding_starter"
-                    version = "1.0.0-SNAPSHOT"
-                }
-                println("Publication $project ===> $groupId:$artifactId:$version")
-            }
-
-        }
-    }
 }
 
 android {
@@ -77,6 +42,7 @@ android {
 
 dependencies {
 
+    api(project(":utils"))
     api(project(":binding"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -1,5 +1,10 @@
 import java.net.URI
 
+include(":app")
+include(":utils")
+include(":binding")
+include(":starter")
+
 pluginManagement {
     repositories {
         google {
@@ -29,6 +34,3 @@ dependencyResolutionManagement {
     }
 }
 
-include(":app")
-include(":binding")
-include(":starter")

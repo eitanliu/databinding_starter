@@ -2,11 +2,10 @@ apply(from = rootProject.file("gradle/maven_publish.gradle.kts"))
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    kotlin("kapt")
 }
 
 android {
-    namespace = "com.eitanliu.binding"
+    namespace = "com.eitanliu.utils"
     compileSdk = 34
 
     defaultConfig {
@@ -38,16 +37,12 @@ android {
 
 dependencies {
 
-    api(project(":utils"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
-
-    implementation(libs.glide)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

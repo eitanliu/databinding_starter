@@ -11,3 +11,10 @@ buildscript {
     }
 
 }
+
+println("System.env ===> ${System.getenv()}")
+println("System.props ===> ${System.getProperties()}")
+
+allprojects {
+    println("Project.props $project ===> ${project.properties}")
+}
