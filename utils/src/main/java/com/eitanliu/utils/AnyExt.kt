@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.eitanliu.starter.extension
+package com.eitanliu.utils
 
 class AnyExt
 

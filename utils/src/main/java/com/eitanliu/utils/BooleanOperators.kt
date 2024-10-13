@@ -116,3 +116,5 @@ inline infix fun (() -> Boolean).and(
 inline infix fun (() -> Boolean).or(
     crossinline predicate: () -> Boolean
 ): () -> Boolean = { this() || predicate() }
+
+inline fun Boolean?.not(default: Boolean = false) = (this ?: default).not()

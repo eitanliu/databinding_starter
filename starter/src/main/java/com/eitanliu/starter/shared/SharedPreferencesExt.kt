@@ -3,6 +3,7 @@ package com.eitanliu.starter.shared
 import android.content.SharedPreferences
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.eitanliu.utils.asTypeOrNull
 import com.google.gson.reflect.TypeToken
 
 class SharedPreferencesExt
@@ -28,11 +29,17 @@ fun <T> SharedPreferences.get(
     key: String, default: T, clazz: Class<T>
 ): T {
     val res = if (contains(key)) when (clazz) {
-        Int::class.java, java.lang.Integer::class.java -> getInt(key, 0)
-        Long::class.java, java.lang.Long::class.java -> getLong(key, 0)
-        Float::class.java, java.lang.Float::class.java -> getFloat(key, 0f)
+        Int::class.java, java.lang.Integer::class.java ->
+            getInt(key, default.asTypeOrNull() ?: 0)
+
+        Long::class.java, java.lang.Long::class.java ->
+            getLong(key, default?.asTypeOrNull() ?: 0)
+
+        Float::class.java, java.lang.Float::class.java ->
+            getFloat(key, default.asTypeOrNull() ?: 0f)
+
         Double::class.java, java.lang.Double::class.java -> {
-            val def = default as? Double ?: 0.0
+            val def = default.asTypeOrNull() ?: 0.0
             if (this is SafetyPreferences) {
                 getDouble(key, def)
             } else {
@@ -41,8 +48,10 @@ fun <T> SharedPreferences.get(
             }
         }
 
-        Boolean::class.java, java.lang.Boolean::class.java -> getBoolean(key, false)
-        java.lang.String::class.java -> getString(key, null)
+        Boolean::class.java, java.lang.Boolean::class.java ->
+            getBoolean(key, default.asTypeOrNull() ?: false)
+
+        java.lang.String::class.java -> getString(key, default.asTypeOrNull())
         else -> throw IllegalArgumentException()
     } as T else default
     return res

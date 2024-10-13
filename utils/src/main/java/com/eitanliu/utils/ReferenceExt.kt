@@ -9,9 +9,9 @@ val emptyWeakReference = WeakReference(null)
 
 val emptySoftReference = SoftReference(null)
 
-inline fun <reified T> emptyWeakReference() = WeakReference<T>(null)
+inline fun <reified T> weakReference(referent: T? = null) = WeakReference<T>(referent)
 
-inline fun <reified T> emptySoftReference() = SoftReference<T>(null)
+inline fun <reified T> softReference(referent: T? = null) = SoftReference<T>(referent)
 
 inline fun <reified T> T.refWeak() = WeakReference(this)
 

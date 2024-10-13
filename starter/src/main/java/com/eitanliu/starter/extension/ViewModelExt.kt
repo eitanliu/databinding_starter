@@ -84,39 +84,3 @@ class InjectAndroidViewModelFactory<VM : ViewModel> @Inject constructor(
 }
 
 inline val <T : ViewModel> T.selfViewModel get() = this
-
-inline var <T> ObservableField<T>.value
-    get() = get()
-    set(value) = set(value)
-
-inline var ObservableBoolean.value
-    get() = get()
-    set(value) = set(value)
-
-inline var ObservableByte.value
-    get() = get()
-    set(value) = set(value)
-
-inline var ObservableChar.value
-    get() = get()
-    set(value) = set(value)
-
-inline var ObservableShort.value
-    get() = get()
-    set(value) = set(value)
-
-inline var ObservableInt.value
-    get() = get()
-    set(value) = set(value)
-
-inline var ObservableLong.value
-    get() = get()
-    set(value) = set(value)
-
-inline var ObservableFloat.value
-    get() = get()
-    set(value) = set(value)
-
-inline var ObservableDouble.value
-    get() = get()
-    set(value) = set(value)

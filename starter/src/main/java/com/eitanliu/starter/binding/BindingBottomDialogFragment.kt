@@ -21,8 +21,8 @@ import com.eitanliu.starter.binding.controller.ActivityLauncher
 import com.eitanliu.starter.binding.dialog.SafetyBottomDialog
 import com.eitanliu.starter.binding.listener.DialogLifecycle
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
-import com.eitanliu.starter.extension.asTypeOrNull
 import com.eitanliu.starter.utils.ReflectionUtil
+import com.eitanliu.utils.asTypeOrNull
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.lang.ref.Reference
 import java.util.Random
