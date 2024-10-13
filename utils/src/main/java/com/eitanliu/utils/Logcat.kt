@@ -1,4 +1,4 @@
-package com.eitanliu.starter
+package com.eitanliu.utils
 
 import android.util.Log
 import androidx.annotation.IntRange
@@ -47,18 +47,18 @@ object Logcat {
 
     inline fun msg(
         msg: String, tr: Throwable?,
-        tag: String, @Level level: Int = this.level,
+        tag: String, @Level level: Int = Logcat.level,
     ) = msg(msg, tr, level, tag)
 
     inline fun msg(
         msg: String, tr: Throwable?,
-        @Level level: Int, tag: String = this.tag,
+        @Level level: Int, tag: String = Logcat.tag,
     ) = msg(tr, level, tag) { msg }
 
     fun msg(
         tr: Throwable? = null,
-        @Level level: Int = this.level,
-        tag: String = this.tag,
+        @Level level: Int = Logcat.level,
+        tag: String = Logcat.tag,
         builder: () -> String
     ) {
         if (isDebug) {

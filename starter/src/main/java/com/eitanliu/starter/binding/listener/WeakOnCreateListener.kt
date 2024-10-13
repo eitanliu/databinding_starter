@@ -2,7 +2,7 @@ package com.eitanliu.starter.binding.listener
 
 import android.content.DialogInterface
 import android.view.Window
-import com.eitanliu.binding.extension.refWeak
+import com.eitanliu.utils.refWeak
 
 class WeakOnCreateListener(listener: DialogLifecycle.OnCreateListener?) :
     DialogLifecycle.OnCreateListener {

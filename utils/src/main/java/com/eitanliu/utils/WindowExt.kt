@@ -1,7 +1,8 @@
-package com.eitanliu.binding.extension
+package com.eitanliu.utils
 
 import android.view.Window
 import androidx.core.view.WindowInsetsCompat
+import com.eitanliu.utils.WindowInsetsUtil.getWindowInsetsController
 
 class WindowExt
 

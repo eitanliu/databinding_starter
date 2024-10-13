@@ -1,4 +1,4 @@
-package com.eitanliu.binding.extension
+package com.eitanliu.utils
 
 import java.lang.ref.SoftReference
 import java.lang.ref.WeakReference
@@ -9,11 +9,9 @@ val emptyWeakReference = WeakReference(null)
 
 val emptySoftReference = SoftReference(null)
 
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T> emptyWeakReference() = emptyWeakReference as WeakReference<T>
+inline fun <reified T> emptyWeakReference() = WeakReference<T>(null)
 
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T> emptySoftReference() = emptySoftReference as SoftReference<T>
+inline fun <reified T> emptySoftReference() = SoftReference<T>(null)
 
 inline fun <reified T> T.refWeak() = WeakReference(this)
 

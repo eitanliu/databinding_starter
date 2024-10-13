@@ -2,7 +2,7 @@ package com.eitanliu.starter.binding.listener
 
 import android.content.DialogInterface
 import android.content.DialogInterface.OnDismissListener
-import com.eitanliu.binding.extension.refSoft
+import com.eitanliu.utils.refSoft
 
 /**
  * OnDismissListener包装类，用于处理内存泄露的问题

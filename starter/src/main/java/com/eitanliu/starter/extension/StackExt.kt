@@ -1,6 +1,6 @@
 package com.eitanliu.starter.extension
 
-import com.eitanliu.binding.extension.then
+import com.eitanliu.utils.then
 import java.util.Stack
 
 class StackExt

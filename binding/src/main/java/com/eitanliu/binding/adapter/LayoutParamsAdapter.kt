@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
-import com.eitanliu.binding.extension.then
+import com.eitanliu.utils.then
 
 class LayoutParamsAdapter
 

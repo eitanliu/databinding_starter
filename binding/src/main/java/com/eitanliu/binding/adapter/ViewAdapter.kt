@@ -3,36 +3,29 @@ package com.eitanliu.binding.adapter
 import android.util.SparseArray
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.Insets
 import androidx.core.util.putAll
 import androidx.core.view.OnApplyWindowInsetsListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsCompat.Type.InsetsType
-import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
-import com.eitanliu.binding.R
-import com.eitanliu.binding.annotation.FitInsetsMode
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.event.UiEventConsumer
 import com.eitanliu.binding.event.UiEventConsumerResult
 import com.eitanliu.binding.event.UiEventResult
-import com.eitanliu.binding.extension.cacheWindowInsetsCompat
-import com.eitanliu.binding.extension.setBindingTag
-import com.eitanliu.binding.extension.bindingTags
-import com.eitanliu.binding.extension.getBindingTag
-import com.eitanliu.binding.extension.viewWindowInsetsCompat
 import com.eitanliu.binding.listener.CLICK_DELAY_DEFAULT
 import com.eitanliu.binding.listener.DebounceClickListener
 import com.eitanliu.binding.listener.DoubleTabTouchListener
-import com.eitanliu.binding.listener.OnDoubleTapListener
-import com.eitanliu.binding.listener.OnSingleTapConfirmedListener
-import com.eitanliu.binding.model.FitSystemInsets
+import com.eitanliu.utils.WindowInsetsUtil.fitWindowInsets
+import com.eitanliu.utils.annotation.FitInsetsMode
+import com.eitanliu.utils.bindingTags
+import com.eitanliu.utils.cacheWindowInsetsCompat
+import com.eitanliu.utils.setBindingTag
+import com.eitanliu.utils.viewWindowInsetsCompat
 
 class ViewAdapter
 
@@ -109,129 +102,6 @@ fun View.fitWindowInsets(
         cacheWindowInsetsCompat = insets
         insets
     }.takeIf { status || hasWindowInsets })
-}
-
-@JvmOverloads
-fun View.fitWindowInsets(
-    windowInsets: WindowInsetsCompat,
-    fitSystemBar: Boolean? = null,
-    fitStatusBars: Boolean? = null,
-    fitNavigationBars: Boolean? = null,
-    fitCaptionBar: Boolean? = null,
-    fitDisplayCutout: Boolean? = null,
-    fitHorizontal: Boolean? = null,
-    fitMergeType: Boolean? = null,
-    @InsetsType type: Int? = null,
-    @FitInsetsMode mode: Int? = null,
-) {
-    val status = type != null || fitSystemBar == true
-            || fitStatusBars == true || fitNavigationBars == true
-            || fitCaptionBar == true || fitDisplayCutout == true
-            || fitHorizontal == true
-
-    var insetsType: Int? = null
-    if (fitStatusBars == true) {
-        insetsType = WindowInsetsCompat.Type.statusBars()
-    }
-    if (fitNavigationBars == true) {
-        insetsType = WindowInsetsCompat.Type.navigationBars() or (insetsType ?: 0)
-    }
-    if (fitCaptionBar == true) {
-        insetsType = WindowInsetsCompat.Type.captionBar() or (insetsType ?: 0)
-    }
-    if (fitDisplayCutout == true) {
-        insetsType = WindowInsetsCompat.Type.displayCutout() or (insetsType ?: 0)
-    }
-    if (fitSystemBar == true) {
-        insetsType = WindowInsetsCompat.Type.systemBars() or (insetsType ?: 0)
-    }
-    insetsType = when {
-        type == null -> insetsType
-        fitMergeType == true -> type or (insetsType ?: 0)
-        else -> type
-    }
-
-    val cacheModel = getBindingTag(R.id.fitSystemInsets) as? FitSystemInsets
-    val cacheStatus = cacheModel?.status
-    val cacheMode = cacheModel?.mode
-    val cacheType = cacheModel?.type
-    val cacheInsets = cacheModel?.insets
-    val fitMode = mode ?: cacheMode ?: FitInsetsMode.MARGIN
-    val fitType = insetsType ?: cacheType ?: WindowInsetsCompat.Type.systemBars()
-    val fitInsets = windowInsets.getInsets(fitType)
-    val insets = if (fitHorizontal == true) {
-        val horizontalInsets = windowInsets.getInsets(
-            WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
-        )
-        Insets.max(horizontalInsets, fitInsets)
-    } else fitInsets
-    // Log.e("fitSystemBar", "$status $cacheStatus, $fitMode $cacheMode, $insetsType $cacheType")
-    // Log.e("fitSystemBarInsets", "apply: $insets, \ncache: $cacheInsets")
-    if (cacheStatus == null && !status) return // 跳过未设置
-    if (status == cacheStatus && cacheInsets == insets) return // 跳过未变化
-    val model = FitSystemInsets(status, fitMode, fitType, insets)
-    updateLayoutParams {
-        if (fitMode == FitInsetsMode.MARGIN && this is ViewGroup.MarginLayoutParams) {
-            var left = leftMargin
-            var top = topMargin
-            var right = rightMargin
-            var bottom = bottomMargin
-            if (cacheStatus == true && cacheInsets != null) {
-                if (cacheMode == FitInsetsMode.MARGIN) {
-                    left -= cacheInsets.left
-                    top -= cacheInsets.top
-                    right -= cacheInsets.right
-                    bottom -= cacheInsets.bottom
-                } else {
-                    if (height > 0) height -= insets.top + insets.bottom
-                    setPadding(
-                        paddingLeft - cacheInsets.left, paddingTop - cacheInsets.top,
-                        paddingRight - cacheInsets.right, paddingBottom - cacheInsets.top,
-                    )
-                }
-            }
-            if (status) {
-                leftMargin = left + insets.left
-                topMargin = top + insets.top
-                rightMargin = right + insets.right
-                bottomMargin = bottom + insets.bottom
-            } else {
-                leftMargin = left
-                topMargin = top
-                rightMargin = right
-                bottomMargin = bottom
-            }
-        } else {
-            var left = paddingLeft
-            var top = paddingTop
-            var right = paddingRight
-            var bottom = paddingBottom
-            if (cacheStatus == true && cacheInsets != null) {
-                if (cacheMode == FitInsetsMode.MARGIN && this is ViewGroup.MarginLayoutParams) {
-                    leftMargin -= cacheInsets.left
-                    topMargin -= cacheInsets.top
-                    rightMargin -= cacheInsets.right
-                    bottomMargin -= cacheInsets.bottom
-                } else {
-                    left -= cacheInsets.left
-                    top -= cacheInsets.top
-                    right -= cacheInsets.right
-                    bottom -= cacheInsets.bottom
-                    if (height > 0) height -= insets.top + insets.bottom
-                }
-            }
-            if (status) {
-                if (height > 0) height += insets.top + insets.bottom
-                setPadding(
-                    left + insets.left, top + insets.top,
-                    right + insets.right, bottom + insets.bottom
-                )
-            } else {
-                setPadding(left, top, right, bottom)
-            }
-        }
-    }
-    setBindingTag(R.id.fitSystemInsets, model)
 }
 
 /**
@@ -329,11 +199,11 @@ fun View.onDoubleClickListener(
     onDoubleClick: UiEvent?
 ) {
     val listener = DoubleTabTouchListener(this)
-    listener.singleTapConfirmedListener = OnSingleTapConfirmedListener {
+    listener.onSingleTapConfirmedListener {
         onClick?.invoke()
         true
     }
-    listener.doubleTapListener = OnDoubleTapListener {
+    listener.onDoubleTapListener {
         onDoubleClick?.invoke()
     }
     setOnTouchListener(listener)
@@ -347,11 +217,11 @@ fun View.onDoubleClickMotionListener(
     onDoubleClick: UiEventConsumer<MotionEvent>?
 ) {
     val listener = DoubleTabTouchListener(this)
-    listener.singleTapConfirmedListener = OnSingleTapConfirmedListener {
+    listener.onSingleTapConfirmedListener {
         onClick?.invoke()
         true
     }
-    listener.doubleTapListener = OnDoubleTapListener {
+    listener.onDoubleTapListener {
         onDoubleClick?.invoke(it)
     }
     setOnTouchListener(listener)
@@ -365,11 +235,11 @@ fun View.onDoubleClickMotion2Listener(
     onDoubleClick: UiEventConsumer<MotionEvent>?
 ) {
     val listener = DoubleTabTouchListener(this)
-    listener.singleTapConfirmedListener = OnSingleTapConfirmedListener {
+    listener.onSingleTapConfirmedListener {
         onClick?.invoke(it)
         true
     }
-    listener.doubleTapListener = OnDoubleTapListener {
+    listener.onDoubleTapListener {
         onDoubleClick?.invoke(it)
     }
     setOnTouchListener(listener)
@@ -386,10 +256,10 @@ fun View.onDoubleClickMotionResultListener(
     onDoubleClick: UiEventConsumer<MotionEvent>?
 ) {
     val listener = DoubleTabTouchListener(this)
-    listener.singleTapConfirmedListener = OnSingleTapConfirmedListener {
+    listener.onSingleTapConfirmedListener {
         onClick?.invoke(it) ?: false
     }
-    listener.doubleTapListener = OnDoubleTapListener {
+    listener.onDoubleTapListener {
         onDoubleClick?.invoke(it)
     }
     setOnTouchListener(listener)

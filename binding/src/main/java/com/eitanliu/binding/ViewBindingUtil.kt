@@ -7,7 +7,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.viewbinding.ViewBinding
-import com.eitanliu.binding.extension.baseIf
+import com.eitanliu.utils.baseIf
 
 object ViewBindingUtil {
 

@@ -2,7 +2,6 @@
 
 package com.eitanliu.binding.extension
 
-import android.util.SparseArray
 import android.view.View
 import androidx.core.app.ComponentActivity
 import androidx.databinding.DataBindingUtil
@@ -13,8 +12,8 @@ import androidx.fragment.app.asFragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.viewbinding.ViewBinding
-import com.eitanliu.binding.R
 import com.eitanliu.binding.ViewBindingUtil.selfLifecycleOwner
+import com.eitanliu.utils.baseIf
 
 class ViewBindingExt
 
@@ -31,18 +30,6 @@ val View.bindingFragment get() = findFragment<Fragment>()
 val View.bindingFragmentActivity get() = findActivity<FragmentActivity>()
 
 val View.bindingLifecycleOwner get() = findLifecycleOwner<LifecycleOwner>()
-
-@Suppress("UNCHECKED_CAST")
-val View.bindingTags: SparseArray<Any?>
-    get() = run {
-        getTag(R.id.bindingTags) as? SparseArray<Any?> ?: SparseArray<Any?>().also {
-            setTag(R.id.bindingTags, it)
-        }
-    }
-
-inline fun View.setBindingTag(key: Int, tag: Any?) = bindingTags.put(key, tag)
-
-inline fun <reified T> View.getBindingTag(key: Int) = bindingTags.get(key) as? T
 
 inline fun <reified T : ViewDataBinding> View.findDataBinding(self: Boolean = true): T? {
     var view: View? = if (self) this else parent as? View

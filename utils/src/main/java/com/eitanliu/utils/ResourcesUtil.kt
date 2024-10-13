@@ -1,4 +1,4 @@
-package com.eitanliu.starter.utils
+package com.eitanliu.utils
 
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
@@ -8,17 +8,12 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import com.eitanliu.binding.annotation.ResourcesId
-import com.eitanliu.binding.extension.dp2px
-import com.eitanliu.binding.extension.px2dp
-import com.eitanliu.binding.extension.px2sp
-import com.eitanliu.binding.extension.sp2px
-import com.eitanliu.starter.ContextProvider
+import androidx.core.content.res.ResourcesCompat
 
 /**
  * 资源文件工具类
  */
-object ResourceUtil {
+object ResourcesUtil {
 
     fun getBoolean(@BoolRes resId: Int): Boolean {
         return ContextProvider.instance.resources.getBoolean(resId)
@@ -45,7 +40,7 @@ object ResourceUtil {
     }
 
     fun getDrawable(@DrawableRes resId: Int): Drawable? {
-        if (resId == ResourcesId.ID_NULL) return null
+        if (resId == ResourcesCompat.ID_NULL) return null
         return ContextCompat.getDrawable(ContextProvider.instance, resId)
     }
 

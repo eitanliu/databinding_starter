@@ -1,6 +1,6 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package com.eitanliu.binding.extension
+package com.eitanliu.utils
 
 import android.content.res.Resources
 import android.content.res.Resources.Theme

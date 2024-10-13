@@ -1,6 +1,7 @@
 package com.eitanliu.binding.listener
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.SystemClock
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -11,28 +12,14 @@ private const val DOUBLE_TAP_INTERVAL = 300
 
 class DoubleTabTouchListener(
     touchView: View,
-) : View.OnTouchListener {
-
-    private val gestureDetector: GestureDetector by lazy {
-        GestureDetector(
-            touchView.context, DoubleTabGestureListener().also {
-                it.singleTapConfirmedListener = singleTapConfirmedListener
-                it.doubleTapListener = doubleTapListener
-            }
-        )
-    }
-
-
-    var singleTapConfirmedListener: OnSingleTapConfirmedListener? = null
+) : DoubleTabGestureListener(touchView.context), View.OnTouchListener {
 
     fun onSingleTapConfirmedListener(listener: OnSingleTapConfirmedListener) {
-        singleTapConfirmedListener = listener
+        onSingleTapConfirmedListener = listener
     }
 
-    var doubleTapListener: OnDoubleTapListener? = null
-
     fun onDoubleTapListener(listener: OnDoubleTapListener) {
-        doubleTapListener = listener
+        onDoubleTapListener = listener
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -42,11 +29,17 @@ class DoubleTabTouchListener(
 
 }
 
-class DoubleTabGestureListener : GestureDetector.SimpleOnGestureListener() {
+open class DoubleTabGestureListener(
+    context: Context,
+) : GestureDetector.SimpleOnGestureListener() {
     private var down: Long = 0
     private var isConsume = false
-    var singleTapConfirmedListener: OnSingleTapConfirmedListener? = null
-    var doubleTapListener: OnDoubleTapListener? = null
+    var onSingleTapConfirmedListener: OnSingleTapConfirmedListener? = null
+    var onDoubleTapListener: OnDoubleTapListener? = null
+
+    open val gestureDetector: GestureDetector by lazy {
+        GestureDetector(context, this)
+    }
 
     override fun onDown(e: MotionEvent): Boolean {
         return true
@@ -58,7 +51,7 @@ class DoubleTabGestureListener : GestureDetector.SimpleOnGestureListener() {
             return true
         }
 
-        return singleTapConfirmedListener?.onSingleTapConfirmed(e)
+        return onSingleTapConfirmedListener?.onSingleTapConfirmed(e)
             ?: super.onSingleTapConfirmed(e)
     }
 
@@ -80,7 +73,7 @@ class DoubleTabGestureListener : GestureDetector.SimpleOnGestureListener() {
     }
 
     private fun extraDoubleTap(e: MotionEvent) {
-        doubleTapListener?.onDoubleTap(e)
+        onDoubleTapListener?.onDoubleTap(e)
     }
 }
 

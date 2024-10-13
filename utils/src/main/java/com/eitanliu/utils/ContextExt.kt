@@ -1,17 +1,17 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package com.eitanliu.binding.extension
+package com.eitanliu.utils
 
 import android.app.ActivityManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.util.TypedValueCompat
 import kotlin.math.roundToInt
-
 
 class ContextExt
 
@@ -77,3 +77,17 @@ inline fun Context.applyDimension(
 inline fun Context.deriveDimension(
     @TypedValueCompat.ComplexDimensionUnit unit: Int, pixelValue: Float,
 ) = resources.deriveDimension(unit, pixelValue)
+
+val Context.dividerHeight get() = listDivider?.intrinsicHeight ?: idp(1)
+
+val Context.dividerWidth get() = listDivider?.intrinsicWidth ?: idp(1)
+
+val Context.listDivider
+    get() = run {
+        var listDivider: Drawable? = null
+        val dividerAttrs = intArrayOf(android.R.attr.listDivider)
+        obtainStyledAttributes(dividerAttrs).apply {
+            listDivider = getDrawable(0)
+        }.recycle()
+        listDivider
+    }

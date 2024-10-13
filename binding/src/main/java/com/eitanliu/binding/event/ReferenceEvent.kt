@@ -2,8 +2,8 @@
 
 package com.eitanliu.binding.event
 
-import com.eitanliu.binding.extension.emptyWeakReference
-import com.eitanliu.binding.extension.refWeak
+import com.eitanliu.utils.emptyWeakReference
+import com.eitanliu.utils.refWeak
 import java.lang.ref.Reference
 
 interface ReferenceEvent

@@ -2,7 +2,7 @@ package com.eitanliu.starter.binding.listener
 
 import android.content.DialogInterface
 import android.content.DialogInterface.OnShowListener
-import com.eitanliu.binding.extension.refWeak
+import com.eitanliu.utils.refWeak
 
 /**
  * OnShowListener包装类，用于处理内存泄露的问题

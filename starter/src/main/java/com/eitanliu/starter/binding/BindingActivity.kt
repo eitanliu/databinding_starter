@@ -14,12 +14,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
-import com.eitanliu.binding.extension.refWeak
+import com.eitanliu.utils.refWeak
 import com.eitanliu.starter.binding.controller.ActivityLauncher
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
-import com.eitanliu.starter.utils.BarUtils
 import com.eitanliu.starter.utils.ReflectionUtil
+import com.eitanliu.utils.BarUtil.setNavBar
 import java.lang.ref.Reference
 import java.util.Random
 
@@ -90,11 +90,11 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
         viewModel.lightNavigationBar.observe(this) {
             val isLight = it == true
             val color = viewModel.navigationBarColor.value
-            BarUtils.setNavBar(window, isLight, color)
+            window.setNavBar(isLight, color)
         }
         viewModel.navigationBarColor.observe(this) { color ->
             val isLight = viewModel.lightNavigationBar.value == true
-            BarUtils.setNavBar(window, isLight, color)
+            window.setNavBar(isLight, color)
         }
         viewModel.fitSystemBars.observe(this, fixWindowInsetsObserver)
         viewModel.fitStatusBars.observe(this, fixWindowInsetsObserver)

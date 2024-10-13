@@ -7,20 +7,20 @@ import androidx.annotation.BoolRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.databinding.BindingConversion
-import com.eitanliu.starter.utils.ResourceUtil
+import com.eitanliu.utils.ResourcesUtil
 
 class ResourceConverters
 
 @BindingConversion
-fun convertIdDrawable(@DrawableRes id: Int) = ResourceUtil.getDrawable(id)
+fun convertIdDrawable(@DrawableRes id: Int) = ResourcesUtil.getDrawable(id)
 
 @BindingConversion
-fun convertIdBoolean(@BoolRes id: Int) = ResourceUtil.getBoolean(id)
+fun convertIdBoolean(@BoolRes id: Int) = ResourcesUtil.getBoolean(id)
 
 @BindingConversion
-fun convertIdString(@StringRes id: Int) = ResourceUtil.getString(id)
+fun convertIdString(@StringRes id: Int) = ResourcesUtil.getString(id)
 
 @BindingConversion
-fun convertIdStringArray(@ArrayRes id: Int) = ResourceUtil.getStringArray(id)
+fun convertIdStringArray(@ArrayRes id: Int) = ResourcesUtil.getStringArray(id)
 
 

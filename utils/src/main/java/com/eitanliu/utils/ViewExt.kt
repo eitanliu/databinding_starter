@@ -1,24 +1,18 @@
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
-package com.eitanliu.binding.extension
+package com.eitanliu.utils
 
 import android.graphics.Point
 import android.graphics.Rect
 import android.os.Build
 import android.util.SparseArray
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.annotation.RequiresApi
 import androidx.core.view.SoftwareKeyboardControllerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.findViewTreeLifecycleOwner
-import com.eitanliu.binding.R
 
 class ViewExt
 
@@ -121,6 +115,24 @@ inline fun View.visibleOnScreen(offset: Point) = Rect().also { getGlobalVisibleR
  */
 inline val View.visibleOnSelf get() = Rect().also { getLocalVisibleRect(it) }
 
+@Suppress("UNCHECKED_CAST")
+val View.bindingTags: SparseArray<Any?>
+    get() = run {
+        getTag(R.id.bindingTags) as? SparseArray<Any?> ?: SparseArray<Any?>().also {
+            setTag(R.id.bindingTags, it)
+        }
+    }
+
+inline fun <reified T> View.getBindingTag(key: Int) = bindingTags.get(key) as? T
+
+inline fun View.setBindingTag(key: Int, tag: Any?) = bindingTags.put(key, tag)
+
+inline val View.layoutInflater: LayoutInflater get() = LayoutInflater.from(context)
+
+inline val View.dividerHeight get() = context.dividerHeight
+
+inline val View.dividerWidth get() = context.dividerWidth
+
 val View.softwareKeyboardController
     get() = getBindingTag(R.id.softwareKeyboardController) as? SoftwareKeyboardControllerCompat
         ?: SoftwareKeyboardControllerCompat(this).also {
@@ -149,11 +161,4 @@ var View.viewWindowInsetsCompat
     get() = getBindingTag(R.id.viewWindowInsetsCompat) as? WindowInsetsCompat
     set(value) {
         setBindingTag(R.id.viewWindowInsetsCompat, value)
-    }
-
-fun View.getWindowInsetsController(
-    window: Window
-) = getBindingTag(R.id.windowInsetsController) as? WindowInsetsControllerCompat
-    ?: WindowInsetsControllerCompat(window, this).also {
-        setBindingTag(R.id.windowInsetsController, it)
     }

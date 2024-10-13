@@ -18,8 +18,8 @@ import com.eitanliu.starter.binding.controller.ActivityLauncher
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.extension.asTypeOrNull
-import com.eitanliu.starter.utils.BarUtils
 import com.eitanliu.starter.utils.ReflectionUtil
+import com.eitanliu.utils.BarUtil.setNavBar
 import java.lang.ref.Reference
 import java.util.Random
 
@@ -95,13 +95,13 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
             val isLight = it == true
             val color = viewModel.navigationBarColor.value
             activity?.also { act ->
-                BarUtils.setNavBar(act.window, isLight, color)
+                act.window.setNavBar(isLight, color)
             }
         }
         viewModel.navigationBarColor.observe(viewLifecycleOwner) { color ->
             val isLight = viewModel.lightNavigationBar.value == true
             activity?.also { act ->
-                BarUtils.setNavBar(act.window, isLight, color)
+                act.window.setNavBar(isLight, color)
             }
         }
         viewModel.fitSystemBars.observe(viewLifecycleOwner, fixWindowInsetsObserver)

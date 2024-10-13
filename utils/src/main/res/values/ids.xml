@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="window" type="id" />
     <item name="bindingTags" type="id" />
-    <item name="bindingInverseHandler" type="id" />
     <item name="inflateLayoutId" type="id" />
-    <item name="viewModel" type="id" />
     <item name="lifecycleOwner" type="id" />
     <item name="fitSystemInsets" type="id" />
-    <item name="gestureDetector" type="id" />
     <item name="softwareKeyboardController" type="id" />
     <item name="cacheWindowInsetsCompat" type="id" />
     <item name="viewWindowInsetsCompat" type="id" />
     <item name="windowInsetsController" type="id" />
-    <item name="cacheImage" type="id" />
-    <item name="menuItemSelected" type="id" />
 </resources>

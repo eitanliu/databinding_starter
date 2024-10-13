@@ -1,14 +1,14 @@
-package com.eitanliu.starter
+package com.eitanliu.utils
 
 import android.content.Context
 
 @Suppress("StaticFieldLeak")
 object ContextProvider {
 
-    internal lateinit var instance: Context
+    lateinit var instance: Context
         private set
 
     fun register(context: Context) {
-        this.instance = context
+        instance = context
     }
 }
