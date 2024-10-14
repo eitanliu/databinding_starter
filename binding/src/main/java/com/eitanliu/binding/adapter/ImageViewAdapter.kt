@@ -9,14 +9,14 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.annotation.IntDef
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
+import androidx.databinding.BindingMethods
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -25,11 +25,24 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
+import com.eitanliu.binding.annotation.ImageDiskCacheStrategy
 import com.eitanliu.binding.annotation.ResourcesId
 import com.eitanliu.binding.extension.cacheImage
 import com.eitanliu.binding.model.CacheImage
 
+@BindingMethods(
+    // BindingMethod(type = ImageView::class, attribute = "srcCompat", method = "setImageResource"),
+)
 class ImageViewAdapter
+
+@BindingAdapter("srcCompat")
+fun ImageView.setImageResource(@DrawableRes resId: Int?) {
+    if (resId != null && resId != ResourcesCompat.ID_NULL) {
+        setImageResource(resId)
+    } else {
+        setImageDrawable(null)
+    }
+}
 
 /**
  * 加载图片绑定
@@ -293,41 +306,4 @@ fun checkImageEmpty(image: Any?): Boolean {
     return image == null || (image as? String) == ""
             || (image as? Int) == ResourcesId.ID_NULL
             || (image as? Uri) == Uri.EMPTY
-}
-
-// @BindingAdapter("android:src")
-// fun ImageView.setImageSrc(@DrawableRes resId: Int) {
-//     setImageDrawable(ResourceUtil.getDrawable(resId))
-// }
-
-@IntDef(
-    ImageDiskCacheStrategy.NONE,
-    ImageDiskCacheStrategy.ALL,
-    ImageDiskCacheStrategy.DATA,
-    ImageDiskCacheStrategy.RESOURCE,
-    ImageDiskCacheStrategy.AUTOMATIC,
-)
-@Retention(AnnotationRetention.SOURCE)
-annotation class ImageDiskCacheStrategy {
-    companion object {
-
-        const val NONE = 1
-
-        const val ALL = 2
-
-        const val DATA = 3
-
-        const val RESOURCE = 4
-
-        const val AUTOMATIC = 5
-
-        fun convert(value: Int): DiskCacheStrategy = when (value) {
-            ALL -> DiskCacheStrategy.ALL
-            DATA -> DiskCacheStrategy.DATA
-            RESOURCE -> DiskCacheStrategy.RESOURCE
-            AUTOMATIC -> DiskCacheStrategy.AUTOMATIC
-            NONE -> DiskCacheStrategy.NONE
-            else -> DiskCacheStrategy.AUTOMATIC
-        }
-    }
 }

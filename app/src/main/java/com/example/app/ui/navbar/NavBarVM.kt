@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.SavedStateHandle
 import com.eitanliu.binding.state.multipleState
 import com.eitanliu.starter.binding.BindingViewModel
-import com.example.app.binding.model.FragmentItem
+import com.eitanliu.starter.binding.model.FragmentItem
 import com.example.app.ui.navbar.home.HomeFragment
 import com.example.app.ui.navbar.setting.SettingFragment
 import dagger.hilt.android.lifecycle.HiltViewModel

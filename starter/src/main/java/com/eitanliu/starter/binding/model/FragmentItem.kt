@@ -1,4 +1,4 @@
-package com.example.app.binding.model
+package com.eitanliu.starter.binding.model
 
 import android.os.Bundle
 import androidx.annotation.IdRes

@@ -1,4 +1,4 @@
-package com.example.app.binding
+package com.eitanliu.starter.binding.adapter
 
 import android.view.MenuItem
 import androidx.annotation.IdRes
@@ -13,7 +13,7 @@ import com.eitanliu.binding.extension.findFragment
 import com.eitanliu.binding.extension.show
 import com.eitanliu.utils.getBindingTag
 import com.eitanliu.utils.setBindingTag
-import com.example.app.binding.model.FragmentItem
+import com.eitanliu.starter.binding.model.FragmentItem
 import com.google.android.material.navigation.NavigationBarView
 import kotlin.math.min
 
