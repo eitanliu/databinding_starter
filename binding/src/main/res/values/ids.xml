@@ -13,4 +13,5 @@
     <item name="windowInsetsController" type="id" />
     <item name="cacheImage" type="id" />
     <item name="menuItemSelected" type="id" />
+    <item name="fontFamily" type="id" />
 </resources>

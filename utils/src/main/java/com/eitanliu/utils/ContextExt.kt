@@ -78,6 +78,15 @@ inline fun Context.deriveDimension(
     @TypedValueCompat.ComplexDimensionUnit unit: Int, pixelValue: Float,
 ) = resources.deriveDimension(unit, pixelValue)
 
+val Context.defaultTextColor
+    get() : Int {
+        val attrs = intArrayOf(android.R.attr.textColor)
+        val ta = obtainStyledAttributes(android.R.style.TextAppearance, attrs)
+        val defaultTextColor = ta.getColor(0, 0)
+        ta.recycle()
+        return defaultTextColor
+    }
+
 val Context.dividerHeight get() = listDivider?.intrinsicHeight ?: idp(1)
 
 val Context.dividerWidth get() = listDivider?.intrinsicWidth ?: idp(1)

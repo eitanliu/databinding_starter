@@ -13,6 +13,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsCompat.Type.InsetsType
 import androidx.databinding.BindingAdapter
+import androidx.databinding.BindingMethod
+import androidx.databinding.BindingMethods
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.event.UiEventConsumer
 import com.eitanliu.binding.event.UiEventConsumerResult
@@ -27,6 +29,13 @@ import com.eitanliu.utils.cacheWindowInsetsCompat
 import com.eitanliu.utils.setBindingTag
 import com.eitanliu.utils.viewWindowInsetsCompat
 
+/**
+ * 官方支持的绑定函数查看 [androidx.databinding.adapters]
+ */
+@BindingMethods(
+    BindingMethod(type = View::class, attribute = "select", method = "setSelect"),
+    BindingMethod(type = View::class, attribute = "enabled", method = "setEnabled"),
+)
 class ViewAdapter
 
 /**
