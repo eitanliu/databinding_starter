@@ -1,15 +1,16 @@
 package com.eitanliu.starter.preferences
 
 import android.content.SharedPreferences
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.eitanliu.starter.utils.StringSerializer
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate")
 open class SharedProperty<T>(
     val default: T,
     prefs: SharedPreferences,
-    val key: String? = null
+    val key: String? = null,
+    val serializer: StringSerializer<T> = StringSerializer.None(),
+    val onUpdate: ((value: T) -> Unit)? = null,
 ) {
     private val prefs = prefs.typeOf<SafetyPreferences>() ?: prefs
 
@@ -20,27 +21,28 @@ open class SharedProperty<T>(
         putValue(key ?: property.name, value)
 
 
-    @Suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
     protected open fun getValue(name: String, default: T): T = with(prefs) {
         if (default == null && !prefs.contains(name)) return@with null as T
 
-        val res = when (default) {
-            is Int -> getInt(name, default)
-            is Long -> getLong(name, default)
-            is Float -> getFloat(name, default)
-            is Double -> {
+        val type = serializer.typeToken.rawType
+        val res = when (type) {
+            java.lang.Integer::class.java -> getInt(name, default as? Int ?: 0)
+            java.lang.Long::class.java -> getLong(name, default as? Long ?: 0)
+            java.lang.Float::class.java -> getFloat(name, default as? Float ?: 0f)
+            java.lang.Double::class.java -> {
+                val def = default as? Double ?: 0.0
                 if (this is SafetyPreferences) {
-                    getDouble(name, default)
+                    getDouble(name, def)
                 } else {
-                    val value = getLong(name, default.toRawBits())
+                    val value = getLong(name, def.toRawBits())
                     Double.fromBits(value)
                 }
             }
 
-            is Boolean -> getBoolean(name, default)
-            is String -> getString(name, default)
-            is String? -> getString(name, default)
-            else -> throw IllegalArgumentException()
+            java.lang.Boolean::class.java -> getBoolean(name, default as? Boolean ?: false)
+            java.lang.String::class.java -> getString(name, default as? String)
+            else -> serializer.decode(getString(name, default as? String))
         } as T
         return res
     }
@@ -62,38 +64,9 @@ open class SharedProperty<T>(
             is Boolean -> putBoolean(name, value)
             is String -> putString(name, value)
             null -> remove(name)
-            else -> throw IllegalArgumentException()
+            else -> putString(name, serializer.encode(value))
         }
-        apply()
-    }
-}
-
-@Suppress("MemberVisibilityCanBePrivate")
-open class SharedJsonProperty<T>(
-    val default: T,
-    val typeToken: TypeToken<T>,
-    prefs: SharedPreferences,
-    val onUpdate: ((value: T) -> Unit)? = null,
-    val key: String? = null
-) {
-    private val prefs = prefs.typeOf<SafetyPreferences>() ?: prefs
-
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): T =
-        getValue(key ?: property.name)
-
-    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) =
-        putValue(key ?: property.name, value)
-
-    protected open fun getValue(name: String): T = with(prefs) {
-        // val default = if (List::class.java.isAssignableFrom(typeToken.rawType)) "[]" else "{}"
-        val json = getString(name, null) ?: return@with default
-        return Gson().fromJson(json, typeToken.type)
-    }
-
-    protected open fun putValue(name: String, value: T) = with(prefs.edit()) {
         onUpdate?.invoke(value)
-        val json = value?.let { Gson().toJson(it) }
-        putString(name, json)
         apply()
     }
 }
