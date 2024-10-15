@@ -38,7 +38,7 @@ fun TextView.setTextColor(@ColorRes resId: Int?) {
 
 @BindingAdapter("android:textStyle")
 fun TextView.setTextStyle(@TextStyle style: String?) {
-    typeface = TextStyle.convert(style, typeface, context)
+    typeface = TextStyle.convert(context, typeface, style)
 }
 
 @BindingAdapter("android:textStyle")
@@ -143,7 +143,7 @@ var TextView.fontFamilyTag
 )
 fun TextView.onClickListener(
     delay: Long? = CLICK_DELAY_DEFAULT, debounce: Boolean? = true,
-    onRepeatClick: (UiEvent)? = null, onClick: (UiEvent)?,
+    onRepeatClick: UiEvent? = null, onClick: UiEvent?,
 ) = (this as View).onClickListener(delay, debounce, onRepeatClick, onClick)
 
 @BindingAdapter(

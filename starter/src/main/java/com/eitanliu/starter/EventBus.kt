@@ -1,4 +1,4 @@
-package com.example.app
+package com.eitanliu.starter
 
 import androidx.annotation.MainThread
 import androidx.core.util.Consumer
@@ -66,12 +66,12 @@ object EventBus {
     ) = get(type, key).observe(owner, single, observer)
 
     inline fun <reified T> get(
-        key: String = T::class.java.name, autoRemove: Boolean = this.autoRemove
+        key: String = T::class.java.name, autoRemove: Boolean = EventBus.autoRemove
     ) = get(T::class.java, key, autoRemove)
 
     @Suppress("UNCHECKED_CAST")
     fun <T> get(
-        type: Class<T>, key: String = type.name, autoRemove: Boolean = this.autoRemove
+        type: Class<T>, key: String = type.name, autoRemove: Boolean = EventBus.autoRemove
     ) = bus.getOrPut(key) {
         BusLiveData<T>().autoRemove(Consumer<BusLiveData<T>> {
             bus.remove(key)
