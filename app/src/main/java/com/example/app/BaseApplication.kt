@@ -1,13 +1,13 @@
 package com.example.app
 
-import android.app.Application
 import android.content.Context
+import androidx.multidex.MultiDexApplication
 import com.eitanliu.utils.ContextProvider
 import com.tencent.mmkv.MMKV
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-open class BaseApplication : Application() {
+open class BaseApplication : MultiDexApplication() {
 
     companion object {
         @JvmStatic

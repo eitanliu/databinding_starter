@@ -6,12 +6,14 @@ plugins {
     kotlin("kapt")
 }
 
+val jvmVersion = "11"
+
 android {
     namespace = "com.eitanliu.starter"
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -28,12 +30,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.toVersion(jvmVersion)
+        targetCompatibility = JavaVersion.toVersion(jvmVersion)
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = jvmVersion
     }
 
     viewBinding { enable = true }
@@ -44,6 +46,12 @@ dependencies {
 
     api(project(":utils"))
     api(project(":binding"))
+
+    ////// test //////
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -54,8 +62,4 @@ dependencies {
     ////// framework //////
     implementation(libs.mmkv)
     implementation(libs.gson)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }

@@ -4,6 +4,8 @@ kotlin = "2.0.10"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+desugar-jdk-libs = "2.1.2"
+multidex = "2.0.0"
 
 ### plugin
 imgCompress-plugin = "1.2.1"
@@ -15,8 +17,8 @@ javapoet = "1.13.0"
 
 ### jetpack
 core = "1.13.1"
-lifecycle-ktx = "2.8.4"
-activity = "1.9.1"
+lifecycle-ktx = "2.8.6"
+activity = "1.9.2"
 appcompat = "1.7.0"
 
 dagger-hilt = "2.52"
@@ -26,10 +28,10 @@ hilt-navigation = "1.0.0"
 
 room = "2.6.1"
 work = "2.9.1"
-media3 = "1.4.0"
+media3 = "1.4.1"
 
 material = "1.12.0"
-emoji2 = "1.4.0"
+emoji2 = "1.5.0"
 palette = "1.0.0"
 constraintlayout = "2.1.4"
 coordinatorlayout = "1.2.0"
@@ -43,11 +45,11 @@ swiperefreshlayout = "1.1.0"
 
 ### google
 firebase = "32.8.0"
-gms = "18.3.0"
+gms = "21.3.0"
 gms-ads = "23.3.0"
 play-review = "2.0.1"
 google-ump = "3.0.0"
-google-scanning = "17.2.0"
+google-scanning = "17.3.0"
 billing = "6.2.0"
 
 ### framework
@@ -57,7 +59,7 @@ lottie = "6.2.0"
 glide = "4.16.0"
 glide-transformations = "4.3.0"
 okio = "3.0.0"
-okhttp = "4.10.0"
+okhttp = "4.12.0"
 retrofit = "2.9.0"
 
 ### thrid party
@@ -79,6 +81,8 @@ firebase-crashlytics-plugin = { module = "com.google.firebase:firebase-crashlyti
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 
 ### jetpack
+desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk-libs" }
+androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }

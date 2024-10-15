@@ -5,6 +5,8 @@ plugins {
     kotlin("kapt")
 }
 
+val jvmVersion = "11"
+
 android {
     namespace = "com.example.app"
     compileSdk = 34
@@ -17,6 +19,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled = true
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -31,13 +35,17 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.toVersion(jvmVersion)
+        targetCompatibility = JavaVersion.toVersion(jvmVersion)
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = jvmVersion
     }
+
     viewBinding { enable = true }
     dataBinding { enable = true }
 
@@ -66,7 +74,15 @@ dependencies {
 
     implementation(project(":binding"))
     implementation(project(":starter"))
+
+    ////// test //////
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
     ////// jetpack //////
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation(libs.androidx.multidex)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity)
@@ -82,40 +98,6 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.work.ktx)
     implementation(libs.androidx.work.multiprocess)
-
-    ////// test //////
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-    var isOutMode = false
-    if (isOutMode) {
-        implementation(platform(libs.firebase.bom))
-        implementation(libs.firebase.analytics.ktx)
-        implementation(libs.firebase.config.ktx)
-        implementation(libs.firebase.crashlytics)
-        implementation(libs.firebase.messaging)
-        implementation(libs.firebase.perf)
-        implementation(libs.play.services.base)
-        implementation(libs.play.services.location)
-        implementation(libs.play.services.auth)
-        implementation(libs.play.review)
-        implementation(libs.play.review.ktx)
-        implementation(libs.google.ump)
-        implementation(libs.google.scanning)
-        implementation(libs.billing)
-    } else {
-        // implementation(project(":mo"))
-        implementation(libs.google.ump) {
-            exclude(libs.play.services.basement.getModuleMap())
-        }
-        implementation(libs.billing) {
-            exclude(libs.play.services.base.getModuleMap())
-            exclude(libs.play.services.basement.getModuleMap())
-            exclude(libs.play.services.tasks.getModuleMap())
-            exclude(libs.play.services.location.getModuleMap())
-        }
-    }
 
     ////// framework //////
     implementation(libs.mmkv)
