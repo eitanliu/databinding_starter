@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
-public interface JvmValue<T> {
+public interface JvmState<T> {
     void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer);
 
     T get();

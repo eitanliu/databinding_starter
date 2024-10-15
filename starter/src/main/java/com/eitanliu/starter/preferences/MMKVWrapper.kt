@@ -1,14 +1,14 @@
 @file:Suppress("DEPRECATION", "unused")
 
-package com.eitanliu.starter.shared
+package com.eitanliu.starter.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.eitanliu.starter.shared.SafetyPreferences.Companion.parserKeyType
-import com.eitanliu.starter.shared.SafetyPreferences.Companion.toKeyType
-import com.eitanliu.starter.shared.SafetyPreferences.Type
+import com.eitanliu.starter.preferences.SafetyPreferences.Companion.parserKeyType
+import com.eitanliu.starter.preferences.SafetyPreferences.Companion.toKeyType
+import com.eitanliu.starter.preferences.SafetyPreferences.Type
 import com.tencent.mmkv.MMKV
 import com.tencent.mmkv.MMKVContentChangeNotification
 

@@ -1,4 +1,4 @@
-package com.eitanliu.starter.shared
+package com.eitanliu.starter.preferences
 
 import android.content.SharedPreferences
 import com.google.gson.Gson

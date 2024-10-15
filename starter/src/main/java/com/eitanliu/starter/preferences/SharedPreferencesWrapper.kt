@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION", "unused")
 
-package com.eitanliu.starter.shared
+package com.eitanliu.starter.preferences
 
 import android.content.Context
 import android.content.ContextWrapper

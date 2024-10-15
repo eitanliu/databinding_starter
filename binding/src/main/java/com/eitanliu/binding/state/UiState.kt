@@ -2,9 +2,9 @@ package com.eitanliu.binding.state
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import com.eitanliu.binding.internal.JvmValue
+import com.eitanliu.binding.internal.JvmState
 
-interface UiState<T> : JvmValue<T> {
+interface UiState<T> : JvmState<T> {
 
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>)
 

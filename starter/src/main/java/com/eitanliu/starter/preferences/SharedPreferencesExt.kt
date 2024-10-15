@@ -1,7 +1,6 @@
-package com.eitanliu.starter.shared
+package com.eitanliu.starter.preferences
 
 import android.content.SharedPreferences
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.eitanliu.utils.asTypeOrNull
 import com.google.gson.reflect.TypeToken
@@ -104,21 +103,8 @@ inline fun <reified T> SharedPreferences.jsonPropertyOrNull(
     noinline onUpdate: ((value: T?) -> Unit)? = null
 ) = jsonProperty(default, key, onUpdate)
 
-fun SharedPreferences.onChangeListener(owner: LifecycleOwner, listener: (key: String?) -> Unit) {
-
-    owner.lifecycle.addObserver(object : SharedPreferences.OnSharedPreferenceChangeListener,
-        DefaultLifecycleObserver {
-        init {
-            registerOnSharedPreferenceChangeListener(this)
-        }
-
-        override fun onDestroy(owner: LifecycleOwner) {
-            unregisterOnSharedPreferenceChangeListener(this)
-            owner.lifecycle.removeObserver(this)
-        }
-
-        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-            listener(key)
-        }
-    })
+fun SharedPreferences.onChangeListener(
+    owner: LifecycleOwner, listener: (key: String?) -> Unit
+) {
+    owner.lifecycle.addObserver(OnChangeLifecycleListener(this, listener))
 }
