@@ -1,11 +1,23 @@
 package com.eitanliu.binding.internal;
 
-public interface JvmValue<T> {
-    T getValue();
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
-    void setValue(T value);
+public interface JvmValue<T> {
+    void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer);
 
     T get();
 
     void set(T value);
+
+    T getValue();
+
+    void setValue(T value);
+
+    void postValue(T value);
+
+    void invoke(T value);
+
+    void notifyChange();
 }

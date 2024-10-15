@@ -1,40 +1,50 @@
 package com.eitanliu.binding.utils
 
 import androidx.databinding.ObservableField
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.eitanliu.binding.state.MultipleLiveState
 import com.eitanliu.binding.state.MultipleObservableState
 import com.eitanliu.binding.state.SingleLiveState
 import com.eitanliu.binding.state.SingleObservableState
+import com.eitanliu.binding.state.UiState
 
 object StateUtil {
     @JvmStatic
-    fun invoke(state: MutableLiveData<Unit>) {
-        state.value = Unit
+    operator fun MutableLiveData<Unit>.invoke() {
+        setValue(Unit)
     }
 
     @JvmStatic
-    fun invoke(state: MultipleLiveState<Unit>) {
-        state.value = Unit
+    operator fun MultipleLiveState<Unit>.invoke() {
+        setValue(Unit)
     }
 
     @JvmStatic
-    fun invoke(state: SingleLiveState<Unit>) {
-        state.value = Unit
+    operator fun SingleLiveState<Unit>.invoke() {
+        setValue(Unit)
     }
 
     @JvmStatic
-    fun invoke(state: ObservableField<Unit>) {
-        state.set(Unit)
+    operator fun ObservableField<Unit>.invoke() {
+        set(Unit)
     }
 
     @JvmStatic
-    fun invoke(state: MultipleObservableState<Unit>) {
-        state.value = Unit
+    operator fun MultipleObservableState<Unit>.invoke() {
+        set(Unit)
     }
 
     @JvmStatic
-    fun invoke(state: SingleObservableState<Unit>) {
-        state.value = Unit
+    operator fun SingleObservableState<Unit>.invoke() {
+        set(Unit)
     }
+
+    @JvmStatic
+    operator fun UiState<Unit>.invoke() = invoke(Unit)
+
+    inline fun <T> UiState<T>.observe(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
+        observe(owner) { observer(it) }
+    }
+
 }

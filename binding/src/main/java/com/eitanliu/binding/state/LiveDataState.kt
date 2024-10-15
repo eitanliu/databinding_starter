@@ -6,26 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.atomic.AtomicBoolean
 
-typealias SingleLiveStateBoolean = SingleLiveState<Boolean>
-typealias SingleLiveStateByte = SingleLiveState<Byte>
-typealias SingleLiveStateChart = SingleLiveState<Char>
-typealias SingleLiveStateShort = SingleLiveState<Short>
-typealias SingleLiveStateInt = SingleLiveState<Int>
-typealias SingleLiveStateLong = SingleLiveState<Long>
-typealias SingleLiveStateFloat = SingleLiveState<Float>
-typealias SingleLiveStateDouble = SingleLiveState<Double>
-typealias SingleLiveStateEnum<T> = SingleLiveState<T>
-
-typealias MultipleLiveStateBoolean = MultipleLiveState<Boolean>
-typealias MultipleLiveStateByte = MultipleLiveState<Byte>
-typealias MultipleLiveStateChart = MultipleLiveState<Char>
-typealias MultipleLiveStateShort = MultipleLiveState<Short>
-typealias MultipleLiveStateInt = MultipleLiveState<Int>
-typealias MultipleLiveStateLong = MultipleLiveState<Long>
-typealias MultipleLiveStateFloat = MultipleLiveState<Float>
-typealias MultipleLiveStateDouble = MultipleLiveState<Double>
-typealias MultipleLiveStateEnum<T> = MultipleLiveState<T>
-
 open class SingleLiveState<T> : MultipleUiState<T> {
 
     private val pending = AtomicBoolean(false)
@@ -107,13 +87,7 @@ open class MultipleLiveState<T> : MutableLiveData<T>, UiState<T> {
     }
 
     override fun setValue(value: T) {
-        when (value) {
-            is Boolean, Byte, Char, Short, Int, Float, Long, Float, Double, Enum -> {
-                if (value != getValue()) super.setValue(value)
-            }
-
-            else -> super.setValue(value)
-        }
+        super.setValue(value)
     }
 
     override fun get(): T {

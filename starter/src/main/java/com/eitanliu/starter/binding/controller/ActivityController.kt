@@ -6,11 +6,11 @@ import androidx.activity.result.ActivityResultCallback
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.binding.state.MultipleUiState
-import com.eitanliu.binding.state.invoke
 import com.eitanliu.binding.state.lateSingleState
 import com.eitanliu.binding.state.multipleState
-import com.eitanliu.starter.bundle.BundleDelegate
+import com.eitanliu.binding.utils.StateUtil.invoke
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
+import com.eitanliu.starter.bundle.BundleDelegate
 
 class ActivityController : IActivity {
     override val event = Event()
