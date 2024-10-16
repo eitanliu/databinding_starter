@@ -17,8 +17,9 @@ afterEvaluate {
                     groupId = arrayOf(systemEnv("GROUP"), systemEnv("ARTIFACT")).joinToString(".")
                     version = systemEnv("VERSION")
                 } else {
-                    groupId = "com.github.eitanliu.databinding_starter"
-                    version = "1.0.0-SNAPSHOT"
+                    val artifactGroup = property("ARTIFACT_GROUP", project)
+                    if (artifactGroup.isNullOrEmpty().not()) groupId = artifactGroup
+                    version = property("ARTIFACT_VERSION", project) ?: "1.0.0-SNAPSHOT"
                 }
                 println("Publication $project ===> $jitpack $groupId:$artifactId:$version")
             }

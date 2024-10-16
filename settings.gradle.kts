@@ -1,5 +1,3 @@
-import java.net.URI
-
 include(":app")
 include(":utils")
 include(":binding")
@@ -16,6 +14,13 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven {
+            setUrl("https://jitpack.io")
+            val jitpackToken = System.getProperties().getProperty("jitpackToken")
+            if (jitpackToken.isNullOrEmpty().not()) {
+                credentials { username = jitpackToken }
+            }
+        }
     }
 }
 
@@ -25,7 +30,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url = URI.create("https://jitpack.io")
+            setUrl("https://jitpack.io")
             val jitpackToken = System.getProperties().getProperty("jitpackToken")
             if (jitpackToken.isNullOrEmpty().not()) {
                 credentials { username = jitpackToken }

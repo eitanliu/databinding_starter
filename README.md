@@ -13,7 +13,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url = URI.create("https://jitpack.io")
+            setUrl("https://jitpack.io")
             val jitpackToken = System.getProperties().getProperty("jitpackToken")
             if (jitpackToken.isNullOrEmpty().not()) {
                 credentials { username = jitpackToken }
@@ -27,6 +27,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
+    // implementation("com.github.eitanliu.databinding_starter:utils:main-SNAPSHOT")
     // implementation("com.github.eitanliu.databinding_starter:binding:main-SNAPSHOT")
     implementation("com.github.eitanliu.databinding_starter:starter:main-SNAPSHOT")
 }
