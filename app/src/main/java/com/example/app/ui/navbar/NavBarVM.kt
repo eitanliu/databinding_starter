@@ -26,7 +26,6 @@ class NavBarVM @Inject constructor(
     val itemIndex = multipleState(0)
 
     init {
-        lightStatusBars.value = false
         fitSystemBars.value = true
     }
 

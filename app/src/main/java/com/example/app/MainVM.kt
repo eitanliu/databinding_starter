@@ -26,7 +26,6 @@ class MainVM @Inject constructor(
     override val state = State(this)
 
     init {
-        lightStatusBars.value = false
         fitSystemBars.value = true
         handleOnBackPressed(event.onBackPressed)
     }

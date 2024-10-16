@@ -5,8 +5,8 @@ import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.binding.state.multipleState
 import com.eitanliu.starter.binding.BindingViewModel
 import com.eitanliu.starter.binding.controller.startActivity
+import com.example.app.extension.bundle
 import com.example.app.ui.ExampleActivity
-import com.example.app.ui.ExampleArgs
 import javax.inject.Inject
 
 class SettingVM @Inject constructor(
@@ -14,7 +14,7 @@ class SettingVM @Inject constructor(
 ) : BindingViewModel(stateHandle) {
     override val event = Event(this)
 
-    val title = multipleState("Setting ${stateHandle.keys()}")
+    val title = multipleState("Setting ${stateHandle.bundle}")
 
 
     inner class Event(
@@ -22,10 +22,7 @@ class SettingVM @Inject constructor(
     ) : BindingViewModel.Event(vm) {
 
         val exampleClick = bindingEvent {
-            startActivity<ExampleActivity>(ExampleArgs().apply {
-                arg1 = "Example"
-                arg2 = 888
-            })
+            startActivity<ExampleActivity>()
         }
     }
 

@@ -78,7 +78,7 @@ open class MultipleLiveState<T> : MutableLiveData<T>, UiState<T> {
     }
 
     override fun notifyChange() {
-        super.setValue(value)
+        if (isInitialized) super.setValue(value)
     }
 
     @Suppress("UNCHECKED_CAST")
