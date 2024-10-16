@@ -1,7 +1,7 @@
 package com.eitanliu.starter.preferences
 
 import android.content.SharedPreferences
-import com.eitanliu.starter.utils.StringSerializer
+import com.eitanliu.serializer.StringSerializer
 import kotlin.reflect.KProperty
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -25,7 +25,7 @@ open class SharedProperty<T>(
     protected open fun getValue(name: String, default: T): T = with(prefs) {
         if (default == null && !prefs.contains(name)) return@with null as T
 
-        val type = serializer.typeToken.rawType
+        val type = serializer.rawType
         val res = when (type) {
             java.lang.Integer::class.java -> getInt(name, default as? Int ?: 0)
             java.lang.Long::class.java -> getLong(name, default as? Long ?: 0)

@@ -1,27 +1,25 @@
 package com.eitanliu.utils
 
 import android.util.Log
-import androidx.annotation.IntRange
+import androidx.annotation.IntDef
 import kotlin.math.min
 
 @Suppress("NOTHING_TO_INLINE")
 object Logcat {
     @Retention(AnnotationRetention.SOURCE)
-    @IntRange(from = 2, to = 7)
-    annotation class Level {
-        companion object {
-            const val V: Int = Log.VERBOSE
-            const val D: Int = Log.DEBUG
-            const val I: Int = Log.INFO
-            const val W: Int = Log.WARN
-            const val E: Int = Log.ERROR
-            const val A: Int = Log.ASSERT
-        }
-    }
+    @IntDef(V, D, I, W, E, A)
+    annotation class Level
+
+    const val V: Int = Log.VERBOSE
+    const val D: Int = Log.DEBUG
+    const val I: Int = Log.INFO
+    const val W: Int = Log.WARN
+    const val E: Int = Log.ERROR
+    const val A: Int = Log.ASSERT
 
     private const val MAX_LENGTH = 2000
 
-    var level = Level.I
+    var level = I
     var tag = "StarterLog"
     var space = "->"
     var isDebug = true
@@ -59,28 +57,29 @@ object Logcat {
         tr: Throwable? = null,
         @Level level: Int = Logcat.level,
         tag: String = Logcat.tag,
-        builder: () -> String
+        builder: () -> String = { "" }
     ) {
         if (isDebug) {
             val msg = builder()
             val length = msg.length
-            var index = 0
+            var index = 1
             var start = 0
             var end = min(length, MAX_LENGTH)
-            val pad = length / MAX_LENGTH / 10 + 2
+            val lines = length / MAX_LENGTH
+            val pad = lines / 10 + 2
 
             do {
-                val p = if (pad > 2) "$index ".padStart(pad, '0') else ""
+                val p = if (lines > 2) "$index ".padStart(pad, '0') else ""
                 val ctx = "${trace()} $p$space ${msg.subSequence(start, end)}"
                 when (level) {
-                    Level.V -> Log.v(tag, ctx, tr)
-                    Level.D -> Log.d(tag, ctx, tr)
-                    Level.I -> Log.i(tag, ctx, tr)
-                    Level.W -> Log.w(tag, ctx, tr)
-                    Level.E -> Log.e(tag, ctx, tr)
+                    V -> Log.v(tag, ctx, tr)
+                    D -> Log.d(tag, ctx, tr)
+                    I -> Log.i(tag, ctx, tr)
+                    W -> Log.w(tag, ctx, tr)
+                    E -> Log.e(tag, ctx, tr)
                     else -> {
-                        Log.println(Level.A, tag, ctx)
-                        if (tr != null) Log.println(Level.A, tag, Log.getStackTraceString(tr))
+                        Log.println(A, tag, ctx)
+                        if (tr != null) Log.println(A, tag, Log.getStackTraceString(tr))
                     }
                 }
 

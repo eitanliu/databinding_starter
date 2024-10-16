@@ -1,6 +1,6 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package com.eitanliu.starter.extension
+package com.eitanliu.utils
 
 import com.google.gson.Gson
 import com.google.gson.JsonElement

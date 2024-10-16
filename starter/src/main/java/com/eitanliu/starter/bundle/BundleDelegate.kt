@@ -3,7 +3,7 @@
 package com.eitanliu.starter.bundle
 
 import android.os.Bundle
-import com.eitanliu.starter.extension.typeToken
+import com.eitanliu.utils.typeToken
 
 interface BundleDelegate {
     val bundle: Bundle

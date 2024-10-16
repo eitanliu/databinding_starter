@@ -52,7 +52,7 @@ open class CrashLogHandler : Thread.UncaughtExceptionHandler, DelegateUncaughtEx
     override val delegateHandler = Thread.getDefaultUncaughtExceptionHandler()
 
     override fun uncaughtException(t: Thread, e: Throwable) {
-        Logcat.msg("Crash: ${t.name}", e, Logcat.Level.E)
+        Logcat.msg("Crash: ${t.name}", e, Logcat.E)
         delegateHandler?.uncaughtException(t, e)
     }
 }

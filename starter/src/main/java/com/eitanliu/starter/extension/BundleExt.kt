@@ -5,7 +5,7 @@ package com.eitanliu.starter.extension
 import android.os.Bundle
 import com.eitanliu.starter.bundle.BundleDelegate
 import com.eitanliu.starter.bundle.newBundleDelegate
-import com.eitanliu.starter.utils.BundleUtils
+import com.eitanliu.utils.BundleUtils
 
 class BundleExt
 

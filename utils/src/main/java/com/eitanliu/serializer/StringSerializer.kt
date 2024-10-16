@@ -1,17 +1,12 @@
-package com.eitanliu.starter.utils
+package com.eitanliu.serializer
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-interface StringSerializer<T> {
-    val typeToken: TypeToken<T>
-
-    fun decode(string: String?): T?
-
-    fun encode(value: T?): String?
+interface StringSerializer<T> : TypeSerializer<T, String> {
 
     class None<T>(
-        override val typeToken: TypeToken<T> = object : TypeToken<T>() {}
+        override val rawType: Class<in T> = object : TypeToken<T>() {}.rawType
     ) : StringSerializer<T> {
         override fun decode(string: String?): T? {
             throw IllegalArgumentException()
@@ -23,10 +18,12 @@ interface StringSerializer<T> {
     }
 
     class Json<T>(
-        override val typeToken: TypeToken<T> = object : TypeToken<T>() {}
+        val typeToken: TypeToken<T> = object : TypeToken<T>() {},
     ) : StringSerializer<T> {
+        override val rawType: Class<in T> = typeToken.rawType
+
         override fun decode(string: String?): T? {
-            return Gson().fromJson(string, typeToken.type)
+            return Gson().fromJson(string, typeToken)
         }
 
         override fun encode(value: T?): String? {

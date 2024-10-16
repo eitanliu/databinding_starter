@@ -5,7 +5,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 desugar-jdk-libs = "2.1.2"
-multidex = "2.0.0"
+multidex = "2.0.1"
 
 ### plugin
 imgCompress-plugin = "1.2.1"
@@ -80,9 +80,11 @@ google-services-plugin = { module = "com.google.gms:google-services", version.re
 firebase-crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-plugin" }
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 
-### jetpack
+### build
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk-libs" }
 androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
+
+### jetpack
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }

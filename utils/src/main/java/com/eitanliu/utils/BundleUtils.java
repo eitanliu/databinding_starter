@@ -1,4 +1,4 @@
-package com.eitanliu.starter.utils;
+package com.eitanliu.utils;
 
 import android.os.Binder;
 import android.os.Bundle;

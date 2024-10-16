@@ -3,7 +3,7 @@ package com.eitanliu.starter.preferences
 import android.content.SharedPreferences
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import com.eitanliu.starter.utils.StringSerializer
+import com.eitanliu.serializer.StringSerializer
 import com.eitanliu.utils.asTypeOrNull
 
 class SharedPreferencesExt
