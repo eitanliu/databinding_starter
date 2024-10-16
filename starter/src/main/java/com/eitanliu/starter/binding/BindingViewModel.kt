@@ -1,6 +1,5 @@
 package com.eitanliu.starter.binding
 
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,7 +12,7 @@ import com.eitanliu.starter.binding.controller.SystemInsetsController
 
 open class BindingViewModel(
     val stateHandle: SavedStateHandle
-) : ViewModel(), DefaultLifecycleObserver, IViewModel,
+) : ViewModel(), LifecycleViewModel,
     IActivity by ActivityController(),
     ISystemInsets by SystemInsetsController() {
 
@@ -24,24 +23,18 @@ open class BindingViewModel(
         owner.lifecycle.removeObserver(this)
     }
 
-    open class Event(vm: BindingViewModel) : IViewModel.Event,
+    open class Event(
+        vm: BindingViewModel
+    ) : LifecycleViewModel.Event,
         IActivity.Event by vm.activity.event {
         override val onMenuClick: UiEvent = bindingEvent { }
     }
 
-    open class State(vm: BindingViewModel) : IViewModel.State,
+    open class State(
+        vm: BindingViewModel
+    ) : LifecycleViewModel.State,
         IActivity.State by vm.activity.state {
     }
 
 }
 
-interface IViewModel {
-    val event: Event
-    val state: State
-
-    interface Event : IActivity.Event {
-        val onMenuClick: UiEvent
-    }
-
-    interface State : IActivity.State
-}

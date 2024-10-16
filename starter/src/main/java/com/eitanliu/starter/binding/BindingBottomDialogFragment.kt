@@ -3,13 +3,11 @@ package com.eitanliu.starter.binding
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
+import androidx.activity.ComponentDialog
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
@@ -18,14 +16,14 @@ import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.binding.extension.selfFragment
 import com.eitanliu.starter.binding.controller.ActivityLauncher
+import com.eitanliu.starter.binding.controller.IDialog
 import com.eitanliu.starter.binding.dialog.SafetyBottomDialog
+import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.listener.DialogLifecycle
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.eitanliu.utils.asTypeOrNull
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.lang.ref.Reference
-import java.util.Random
 
 abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingViewModel> :
     BottomSheetDialogFragment(), DialogLifecycle.OnCreateListener, DialogInterface.OnShowListener,
@@ -45,8 +43,7 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
         ReflectionUtil.getViewModelGenericType(this) as Class<VM>
     }
 
-    private val codeRandom = Random()
-    private val requestCallbacks = SparseArray<Reference<ActivityResultCallback<ActivityResult>>>()
+    private val onBackPressedHandler by lazy { OnBackPressedHandler(true) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return SafetyBottomDialog(requireContext(), theme).apply {
@@ -63,6 +60,7 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
         initParams(savedInstanceState)
         initViewDataBinding()
         handleActivityUiState()
+        handleDialogUiState()
         initData()
         initView()
         initObserve()
@@ -87,7 +85,21 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
             activity?.finish()
         }
         viewModel.state.onBackPressed.observe(viewLifecycleOwner) {
-            activity?.onBackPressedDispatcher?.onBackPressed()
+            dialog.asTypeOrNull<ComponentDialog>()?.onBackPressedDispatcher?.onBackPressed()
+        }
+        viewModel.onBackPressedEnable.observe(viewLifecycleOwner) { value ->
+            onBackPressedHandler.isEnabled = value != false
+        }
+        viewModel.state.handleOnBackPressed.observe(viewLifecycleOwner) { callback ->
+            onBackPressedHandler.onBackPressed = callback
+            onBackPressedHandler.isEnabled = viewModel.onBackPressedEnable.value != false
+            if (callback != null) {
+                dialog.asTypeOrNull<ComponentDialog>()?.also { dialog ->
+                    dialog.onBackPressedDispatcher.addCallback(dialog, onBackPressedHandler)
+                }
+            } else {
+                onBackPressedHandler.remove()
+            }
         }
         // 系统栏显示控制
         viewModel.lightStatusBars.observe(viewLifecycleOwner) {
@@ -102,6 +114,22 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
         viewModel.fitMergeType.observe(viewLifecycleOwner, fitSystemInsetsObserver)
         viewModel.fitInsetsType.observe(viewLifecycleOwner) { fitWindowInsets() }
         viewModel.fitInsetsMode.observe(viewLifecycleOwner) { fitWindowInsets() }
+    }
+
+    protected fun handleDialogUiState() {
+        val vm = viewModel.asTypeOrNull<IDialog>() ?: return
+        vm.canceledOnTouchOutside.observe(this) {
+            dialog?.setCanceledOnTouchOutside(it)
+        }
+        vm.state.dismiss.observe(this) {
+            dismiss()
+        }
+        vm.state.dismissNow.observe(this) {
+            dismissNow()
+        }
+        vm.state.dismissAllowingStateLoss.observe(this) {
+            dismissAllowingStateLoss()
+        }
     }
 
     private val fitSystemInsetsObserver = Observer<Boolean?> {
