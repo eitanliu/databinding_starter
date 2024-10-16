@@ -16,6 +16,7 @@ open class BindingViewModel(
 ) : ViewModel(), DefaultLifecycleObserver, IViewModel,
     IActivity by ActivityController(),
     ISystemInsets by SystemInsetsController() {
+
     override val event = Event(this)
     override val state = State(this)
 
@@ -23,21 +24,22 @@ open class BindingViewModel(
         owner.lifecycle.removeObserver(this)
     }
 
-    open class Event(vm: BindingViewModel) : IViewModel.Even,
+    open class Event(vm: BindingViewModel) : IViewModel.Event,
         IActivity.Event by vm.activity.event {
         override val onMenuClick: UiEvent = bindingEvent { }
     }
 
     open class State(vm: BindingViewModel) : IViewModel.State,
-        IActivity.State by vm.activity.state
+        IActivity.State by vm.activity.state {
+    }
 
 }
 
 interface IViewModel {
-    val event: Even
+    val event: Event
     val state: State
 
-    interface Even : IActivity.Event {
+    interface Event : IActivity.Event {
         val onMenuClick: UiEvent
     }
 

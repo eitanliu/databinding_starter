@@ -1,8 +1,5 @@
 package com.eitanliu.starter.binding.controller
 
-import android.os.Bundle
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.binding.state.MultipleUiState
@@ -10,7 +7,6 @@ import com.eitanliu.binding.state.lateSingleState
 import com.eitanliu.binding.state.multipleState
 import com.eitanliu.binding.utils.StateUtil.invoke
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
-import com.eitanliu.starter.bundle.BundleDelegate
 
 class ActivityController : IActivity {
     override val event = Event()
@@ -59,7 +55,7 @@ class ActivityController : IActivity {
 /**
  * Activity 操作
  */
-interface IActivity: ActivityLauncher {
+interface IActivity : ActivityLauncher {
     val activity: IActivity get() = this
     val event: Event
     val state: State
@@ -94,17 +90,3 @@ interface IActivity: ActivityLauncher {
         val handleOnBackPressed: MultipleUiState<() -> Unit>
     }
 }
-
-inline fun <reified T> IActivity.startActivity(
-    callback: ActivityResultCallback<ActivityResult>? = null,
-) = startActivity<T>(null as Bundle?, callback)
-
-inline fun <reified T> IActivity.startActivity(
-    bundle: BundleDelegate? = null,
-    callback: ActivityResultCallback<ActivityResult>? = null,
-) = startActivity<T>(bundle?.bundle, callback)
-
-inline fun <reified T> IActivity.startActivity(
-    bundle: Bundle? = null,
-    callback: ActivityResultCallback<ActivityResult>? = null,
-) = startActivity(T::class.java, bundle, callback)

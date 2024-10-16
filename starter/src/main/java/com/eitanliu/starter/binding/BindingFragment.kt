@@ -1,12 +1,9 @@
 package com.eitanliu.starter.binding
 
 import android.os.Bundle
-import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -15,13 +12,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.starter.binding.controller.ActivityLauncher
+import com.eitanliu.starter.binding.controller.IFragment
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.eitanliu.utils.BarUtil.setNavBar
 import com.eitanliu.utils.asTypeOrNull
-import java.lang.ref.Reference
-import java.util.Random
 
 abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fragment(),
     InitView, ActivityLauncher {
@@ -35,8 +31,6 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
         ReflectionUtil.getViewModelGenericType(this) as Class<VM>
     }
 
-    private val codeRandom = Random()
-    private val requestCallbacks = SparseArray<Reference<ActivityResultCallback<ActivityResult>>>()
     private val onBackPressedHandler by lazy { OnBackPressedHandler(true) }
 
     override fun onCreateView(
@@ -137,9 +131,12 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
         if (!hidden) {
             notifyUiChange()
         }
+        viewModel.asTypeOrNull<IFragment>()?.also { vm ->
+            vm.hidden.value = hidden
+        }
     }
 
-    private fun notifyUiChange() {
+    protected fun notifyUiChange() {
         viewModel.lightStatusBars.notifyChange()
         viewModel.lightNavigationBar.notifyChange()
         viewModel.navigationBarColor.notifyChange()
