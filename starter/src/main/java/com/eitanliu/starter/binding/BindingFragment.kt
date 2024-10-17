@@ -40,7 +40,7 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
     ): View? {
         initParams(savedInstanceState)
         initViewDataBinding()
-        handleActivityUiState()
+        observeActivityUiState()
         initData()
         initView()
         initObserve()
@@ -57,7 +57,7 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
 
     open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
-    protected fun handleActivityUiState() {
+    protected open fun observeActivityUiState() {
         viewModel.state.startActivity.observe(viewLifecycleOwner) {
             startActivity(it)
         }
@@ -82,18 +82,22 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
             }
         }
         // 系统栏显示控制
-        viewModel.lightStatusBars.observe(viewLifecycleOwner) {
-            activity?.isAppearanceLightStatusBars = it == true
+        viewModel.lightStatusBars.observe(viewLifecycleOwner) { state ->
+            if (state == null) return@observe
+            activity?.isAppearanceLightStatusBars = state == true
         }
-        viewModel.lightNavigationBar.observe(viewLifecycleOwner) {
-            val isLight = it == true
+        viewModel.lightNavigationBar.observe(viewLifecycleOwner) { state ->
             val color = viewModel.navigationBarColor.value
+            if (color == null && state == null) return@observe
+            val isLight = state == true
             activity?.also { act ->
                 act.window.setNavBar(isLight, color)
             }
         }
         viewModel.navigationBarColor.observe(viewLifecycleOwner) { color ->
-            val isLight = viewModel.lightNavigationBar.value == true
+            val state = viewModel.lightNavigationBar.value
+            if (color == null && state == null) return@observe
+            val isLight = state == true
             activity?.also { act ->
                 act.window.setNavBar(isLight, color)
             }

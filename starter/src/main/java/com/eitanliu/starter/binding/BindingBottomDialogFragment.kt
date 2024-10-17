@@ -13,7 +13,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
-import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.binding.extension.selfFragment
 import com.eitanliu.starter.binding.controller.ActivityLauncher
 import com.eitanliu.starter.binding.controller.IDialog
@@ -22,7 +21,9 @@ import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.listener.DialogLifecycle
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.utils.ReflectionUtil
+import com.eitanliu.utils.BarUtil.setNavBar
 import com.eitanliu.utils.asTypeOrNull
+import com.eitanliu.utils.isAppearanceLightStatusBars
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingViewModel> :
@@ -59,8 +60,8 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
     ): View? {
         initParams(savedInstanceState)
         initViewDataBinding()
-        handleActivityUiState()
-        handleDialogUiState()
+        observeActivityUiState()
+        observeDialogUiState()
         initData()
         initView()
         initObserve()
@@ -77,7 +78,7 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
 
     open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
-    protected fun handleActivityUiState() {
+    protected open fun observeActivityUiState() {
         viewModel.state.startActivity.observe(viewLifecycleOwner) {
             startActivity(it)
         }
@@ -102,8 +103,25 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
             }
         }
         // 系统栏显示控制
-        viewModel.lightStatusBars.observe(viewLifecycleOwner) {
-            activity?.isAppearanceLightStatusBars = it == true
+        viewModel.lightStatusBars.observe(viewLifecycleOwner) { state ->
+            if (state == null) return@observe
+            dialog?.window?.isAppearanceLightStatusBars = state == true
+        }
+        viewModel.lightNavigationBar.observe(viewLifecycleOwner) { state ->
+            val color = viewModel.navigationBarColor.value
+            if (color == null && state == null) return@observe
+            val isLight = state == true
+            dialog?.also { dialog ->
+                dialog.window?.setNavBar(isLight, color)
+            }
+        }
+        viewModel.navigationBarColor.observe(viewLifecycleOwner) { color ->
+            val state = viewModel.lightNavigationBar.value
+            if (color == null && state == null) return@observe
+            val isLight = state == true
+            dialog?.also { dialog ->
+                dialog.window?.setNavBar(isLight, color)
+            }
         }
         viewModel.fitSystemBars.observe(viewLifecycleOwner, fitSystemInsetsObserver)
         viewModel.fitStatusBars.observe(viewLifecycleOwner, fitSystemInsetsObserver)
@@ -116,7 +134,7 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
         viewModel.fitInsetsMode.observe(viewLifecycleOwner) { fitWindowInsets() }
     }
 
-    protected fun handleDialogUiState() {
+    protected open fun observeDialogUiState() {
         val vm = viewModel.asTypeOrNull<IDialog>() ?: return
         vm.canceledOnTouchOutside.observe(this) {
             dialog?.setCanceledOnTouchOutside(it)

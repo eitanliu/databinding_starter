@@ -14,12 +14,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
-import com.eitanliu.utils.refWeak
 import com.eitanliu.starter.binding.controller.ActivityLauncher
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.eitanliu.utils.BarUtil.setNavBar
+import com.eitanliu.utils.refWeak
 import java.lang.ref.Reference
 import java.util.Random
 
@@ -44,7 +44,7 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
         enableEdgeToEdge()
         initParams(savedInstanceState)
         initViewDataBinding()
-        handleActivityUiState()
+        observeActivityUiState()
         initData()
         initView()
         initObserve()
@@ -60,7 +60,7 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
 
     open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
-    protected fun handleActivityUiState() {
+    protected open fun observeActivityUiState() {
         viewModel.state.startActivity.observe(this) {
             startActivity(it)
         }
@@ -84,16 +84,20 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
             }
         }
         // 系统栏显示控制
-        viewModel.lightStatusBars.observe(this) {
-            isAppearanceLightStatusBars = it == true
+        viewModel.lightStatusBars.observe(this) { state ->
+            if (state == null) return@observe
+            isAppearanceLightStatusBars = state == true
         }
-        viewModel.lightNavigationBar.observe(this) {
-            val isLight = it == true
+        viewModel.lightNavigationBar.observe(this) { state ->
             val color = viewModel.navigationBarColor.value
+            if (color == null && state == null) return@observe
+            val isLight = state == true
             window.setNavBar(isLight, color)
         }
         viewModel.navigationBarColor.observe(this) { color ->
-            val isLight = viewModel.lightNavigationBar.value == true
+            val state = viewModel.lightNavigationBar.value
+            if (color == null && state == null) return@observe
+            val isLight = state == true
             window.setNavBar(isLight, color)
         }
         viewModel.fitSystemBars.observe(this, fixWindowInsetsObserver)

@@ -3,6 +3,7 @@ package com.eitanliu.starter.binding.controller
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.binding.state.MultipleUiState
+import com.eitanliu.binding.state.lateMultipleState
 import com.eitanliu.binding.state.lateSingleState
 import com.eitanliu.binding.state.multipleState
 import com.eitanliu.binding.utils.StateUtil.invoke
@@ -48,7 +49,7 @@ class ActivityController : IActivity {
 
         override val onBackPressed = lateSingleState<Unit>()
 
-        override val handleOnBackPressed = lateSingleState<() -> Unit>()
+        override val handleOnBackPressed = lateMultipleState<() -> Unit>()
     }
 }
 
