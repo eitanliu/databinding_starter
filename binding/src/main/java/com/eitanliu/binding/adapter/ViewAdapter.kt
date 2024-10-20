@@ -83,10 +83,10 @@ fun View.fitWindowInsets(
     windowInsets: WindowInsetsCompat? = null,
     listener: OnApplyWindowInsetsListener? = null,
 ) {
-    val status = type != null || fitSystemBars == true
-            || fitStatusBars == true || fitNavigationBars == true
-            || fitCaptionBar == true || fitDisplayCutout == true
-            || fitHorizontal == true
+    val status = type != null || fitSystemBars == null
+            || fitStatusBars == null || fitNavigationBars == null
+            || fitCaptionBar == null || fitDisplayCutout == null
+            || fitHorizontal == null
 
     val hasWindowInsets = windowInsets != null || listener != null
 

@@ -1,6 +1,7 @@
 package com.eitanliu.starter.binding
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.SparseArray
 import androidx.activity.enableEdgeToEdge
@@ -50,6 +51,13 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
         initObserve()
     }
 
+    protected val uiModeNight get() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        viewModel.uiMode.value = resources.configuration.uiMode
+    }
+
     private fun initViewDataBinding() {
         binding = DataBindingUtil.setContentView(this, initContentView)
         viewModel = createViewModel()
@@ -61,6 +69,7 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
     open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
     protected open fun observeActivityUiState() {
+        viewModel.uiMode.value = resources.configuration.uiMode
         viewModel.state.startActivity.observe(this) {
             startActivity(it)
         }
@@ -88,14 +97,14 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
             if (state == null) return@observe
             isAppearanceLightStatusBars = state == true
         }
-        viewModel.lightNavigationBar.observe(this) { state ->
-            val color = viewModel.navigationBarColor.value
+        viewModel.lightNavigationBars.observe(this) { state ->
+            val color = viewModel.navigationBarsColor.value
             if (color == null && state == null) return@observe
             val isLight = state == true
             window.setNavBar(isLight, color)
         }
-        viewModel.navigationBarColor.observe(this) { color ->
-            val state = viewModel.lightNavigationBar.value
+        viewModel.navigationBarsColor.observe(this) { color ->
+            val state = viewModel.lightNavigationBars.value
             if (color == null && state == null) return@observe
             val isLight = state == true
             window.setNavBar(isLight, color)

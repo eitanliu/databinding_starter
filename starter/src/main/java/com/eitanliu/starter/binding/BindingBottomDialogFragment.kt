@@ -107,16 +107,16 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
             if (state == null) return@observe
             dialog?.window?.isAppearanceLightStatusBars = state == true
         }
-        viewModel.lightNavigationBar.observe(viewLifecycleOwner) { state ->
-            val color = viewModel.navigationBarColor.value
+        viewModel.lightNavigationBars.observe(viewLifecycleOwner) { state ->
+            val color = viewModel.navigationBarsColor.value
             if (color == null && state == null) return@observe
             val isLight = state == true
             dialog?.also { dialog ->
                 dialog.window?.setNavBar(isLight, color)
             }
         }
-        viewModel.navigationBarColor.observe(viewLifecycleOwner) { color ->
-            val state = viewModel.lightNavigationBar.value
+        viewModel.navigationBarsColor.observe(viewLifecycleOwner) { color ->
+            val state = viewModel.lightNavigationBars.value
             if (color == null && state == null) return@observe
             val isLight = state == true
             dialog?.also { dialog ->

@@ -86,16 +86,16 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
             if (state == null) return@observe
             activity?.isAppearanceLightStatusBars = state == true
         }
-        viewModel.lightNavigationBar.observe(viewLifecycleOwner) { state ->
-            val color = viewModel.navigationBarColor.value
+        viewModel.lightNavigationBars.observe(viewLifecycleOwner) { state ->
+            val color = viewModel.navigationBarsColor.value
             if (color == null && state == null) return@observe
             val isLight = state == true
             activity?.also { act ->
                 act.window.setNavBar(isLight, color)
             }
         }
-        viewModel.navigationBarColor.observe(viewLifecycleOwner) { color ->
-            val state = viewModel.lightNavigationBar.value
+        viewModel.navigationBarsColor.observe(viewLifecycleOwner) { color ->
+            val state = viewModel.lightNavigationBars.value
             if (color == null && state == null) return@observe
             val isLight = state == true
             activity?.also { act ->
@@ -142,8 +142,8 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
 
     protected fun notifyUiChange() {
         viewModel.lightStatusBars.notifyChange()
-        viewModel.lightNavigationBar.notifyChange()
-        viewModel.navigationBarColor.notifyChange()
+        viewModel.lightNavigationBars.notifyChange()
+        viewModel.navigationBarsColor.notifyChange()
     }
 
     override fun startActivity(model: ActivityLaunchModel) {
