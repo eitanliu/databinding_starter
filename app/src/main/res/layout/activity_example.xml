@@ -12,7 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#6666">
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,16 +53,29 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SystemBars"
+                    android:text="FitSystemBars"
                     app:debounce="@{false}"
-                    app:onClickEvent="@{viewModel.event.changeSystemBars}" />
+                    app:onClickEvent="@{viewModel.event.fitSystemBarsClick}" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="LightStatus"
+                    android:text="LightStatusBar"
                     app:debounce="@{false}"
-                    app:onClickEvent="@{viewModel.event.changeLightStatus}" />
+                    app:onClickEvent="@{viewModel.event.lightStatusBar}" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LightNavBar"
+                    app:debounce="@{false}"
+                    app:onClickEvent="@{viewModel.event.lightNavBar}" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NightModel"
+                    app:onClickEvent="@{viewModel.event.nightModeClick}" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>
 

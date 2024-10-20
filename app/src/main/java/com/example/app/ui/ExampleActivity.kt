@@ -18,4 +18,11 @@ class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
         super.onCreate(savedInstanceState)
 
     }
+
+    override fun observeActivityUiState() {
+        super.observeActivityUiState()
+        viewModel.state.testState.observe(this) {
+            recreate()
+        }
+    }
 }
