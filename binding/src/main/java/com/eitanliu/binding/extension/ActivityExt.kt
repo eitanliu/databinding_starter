@@ -3,6 +3,7 @@ package com.eitanliu.binding.extension
 import android.app.Activity
 import com.eitanliu.utils.isAppearanceLightNavigationBars
 import com.eitanliu.utils.isAppearanceLightStatusBars
+import com.eitanliu.utils.isShowSoftwareKeyboard
 import com.eitanliu.utils.navigationBarsInsets
 import com.eitanliu.utils.statusBarsInsets
 import com.eitanliu.utils.systemBarsInsets
@@ -22,6 +23,9 @@ inline var Activity.isAppearanceLightNavigationBars
     set(value) {
         window.isAppearanceLightNavigationBars = value
     }
+
+inline val Activity.isShowSoftwareKeyboard
+    get() = window.isShowSoftwareKeyboard
 
 inline val Activity.systemBarsInsets
     get() = window.systemBarsInsets

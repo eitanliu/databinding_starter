@@ -1,6 +1,5 @@
 package com.example.app
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.blankj.utilcode.util.ToastUtils
 import com.eitanliu.binding.event.bindingEvent

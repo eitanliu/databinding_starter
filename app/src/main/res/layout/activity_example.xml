@@ -53,6 +53,13 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="ToggleSoftKeyboard"
+                    app:debounce="@{false}"
+                    app:onClickEvent="@{viewModel.event.toggleSoftKeyboard}" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="FitSystemBars"
                     app:debounce="@{false}"
                     app:onClickEvent="@{viewModel.event.fitSystemBarsClick}" />

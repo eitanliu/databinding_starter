@@ -2,15 +2,21 @@ package com.example.app.ui
 
 import android.content.Context
 import android.content.res.Configuration
+import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.SavedStateHandle
+import com.eitanliu.binding.event.bindingConsumer
 import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.binding.extension.observe
 import com.eitanliu.binding.state.multipleState
 import com.eitanliu.binding.state.singleState
 import com.eitanliu.starter.binding.BindingViewModel
 import com.eitanliu.utils.Logcat
+import com.eitanliu.utils.hideSoftKeyboard
+import com.eitanliu.utils.imeInsets
+import com.eitanliu.utils.isShowSoftwareKeyboard
+import com.eitanliu.utils.showSoftKeyboard
 import com.example.app.extension.bundle
 import com.example.app.extension.not
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,6 +53,18 @@ class ExampleVM @Inject constructor(
     inner class Event(
         viewModel: BindingViewModel
     ) : BindingViewModel.Event(viewModel) {
+
+        val toggleSoftKeyboard = bindingConsumer<View> { view ->
+            // view.toggleSoftKeyboard()
+            view.rootView.apply {
+                Logcat.msg("softKeyboard $isShowSoftwareKeyboard ${view.imeInsets}")
+                if (isShowSoftwareKeyboard) {
+                    hideSoftKeyboard()
+                } else {
+                    showSoftKeyboard()
+                }
+            }
+        }
 
         val fitSystemBarsClick = bindingEvent {
             fitSystemBars.value = fitSystemBars.value.not()

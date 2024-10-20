@@ -18,6 +18,9 @@ inline var Window.isAppearanceLightNavigationBars
         decorView.getWindowInsetsController(this).isAppearanceLightNavigationBars = value
     }
 
+val Window.isShowSoftwareKeyboard
+    get() = decorView.rootWindowInsetsCompat?.isShowSoftwareKeyboard
+
 inline val Window.systemBarsInsets
     get() = decorView.rootWindowInsetsCompat?.systemBarsInsets
 
@@ -27,12 +30,21 @@ inline val Window.statusBarsInsets
 inline val Window.navigationBarsInsets
     get() = decorView.rootWindowInsetsCompat?.navigationBarsInsets
 
+val WindowInsetsCompat.isShowSoftwareKeyboard: Boolean
+    get() {
+        val imeBottom = imeInsets.bottom
+        val navBottom = navigationBarsInsets.bottom
+        return imeBottom > navBottom
+    }
+
 inline val WindowInsetsCompat.systemBarsInsets
     get() = getInsets(WindowInsetsCompat.Type.systemBars())
 
 inline val WindowInsetsCompat.statusBarsInsets
     get() = getInsets(WindowInsetsCompat.Type.statusBars())
 
-
 inline val WindowInsetsCompat.navigationBarsInsets
     get() = getInsets(WindowInsetsCompat.Type.navigationBars())
+
+inline val WindowInsetsCompat.imeInsets
+    get() = getInsets(WindowInsetsCompat.Type.ime())

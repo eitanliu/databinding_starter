@@ -139,6 +139,25 @@ val View.softwareKeyboardController
             setBindingTag(R.id.softwareKeyboardController, it)
         }
 
+val View.isShowSoftwareKeyboard
+    get() = rootWindowInsetsCompat?.isShowSoftwareKeyboard ?: false
+
+inline fun View.toggleSoftKeyboard() {
+    if (isShowSoftwareKeyboard) {
+        hideSoftKeyboard()
+    } else {
+        showSoftKeyboard()
+    }
+}
+
+inline fun View.hideSoftKeyboard() {
+    softwareKeyboardController.hide()
+}
+
+inline fun View.showSoftKeyboard() {
+    softwareKeyboardController.show()
+}
+
 inline val View.systemBarsInsets
     get() = rootWindowInsetsCompat?.systemBarsInsets
 
@@ -147,6 +166,9 @@ inline val View.statusBarsInsets
 
 inline val View.navigationBarsInsets
     get() = rootWindowInsetsCompat?.navigationBarsInsets
+
+inline val View.imeInsets
+    get() = rootWindowInsetsCompat?.imeInsets
 
 val View.rootWindowInsetsCompat
     get() = ViewCompat.getRootWindowInsets(this)
