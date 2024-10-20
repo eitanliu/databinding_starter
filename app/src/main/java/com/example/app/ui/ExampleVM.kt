@@ -71,6 +71,11 @@ class ExampleVM @Inject constructor(
             Logcat.msg("fitSystemBars ${fitSystemBars.value}")
         }
 
+        val fitHorizontalClick = bindingEvent {
+            fitHorizontal.value = fitHorizontal.value.not()
+            Logcat.msg("fitSystemBars ${fitHorizontal.value}")
+        }
+
         val lightStatusBar = bindingEvent {
             lightStatusBars.value = lightStatusBars.value.not(isNoNight)
             Logcat.msg("$isNoNight $uiModelLight ${lightStatusBars.value}")

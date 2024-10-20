@@ -7,6 +7,6 @@ import com.eitanliu.utils.annotation.FitInsetsMode
 class FitWindowInsets(
     val status: Boolean,
     @FitInsetsMode val mode: Int,
-    @InsetsType val type: Int,
+    @InsetsType val type: Int?,
     val insets: Insets,
 )

@@ -57,12 +57,22 @@
                     app:debounce="@{false}"
                     app:onClickEvent="@{viewModel.event.toggleSoftKeyboard}" />
 
-                <Button
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="FitSystemBars"
-                    app:debounce="@{false}"
-                    app:onClickEvent="@{viewModel.event.fitSystemBarsClick}" />
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FitSystemBars"
+                        app:debounce="@{false}"
+                        app:onClickEvent="@{viewModel.event.fitSystemBarsClick}" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FitHorizontal"
+                        app:debounce="@{false}"
+                        app:onClickEvent="@{viewModel.event.fitHorizontalClick}" />
+                </LinearLayout>
 
                 <Button
                     android:layout_width="wrap_content"

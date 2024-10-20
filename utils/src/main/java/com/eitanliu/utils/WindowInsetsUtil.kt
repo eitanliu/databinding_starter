@@ -58,13 +58,14 @@ object WindowInsetsUtil {
         val cacheType = cacheModel?.type
         val cacheInsets = cacheModel?.insets
         val fitMode = mode ?: cacheMode ?: FitInsetsMode.MARGIN
-        val fitType = insetsType ?: cacheType ?: WindowInsetsCompat.Type.systemBars()
-        val fitInsets = windowInsets.getInsets(fitType)
+        val fitType = insetsType
+        val fitInsets = fitType?.let { windowInsets.getInsets(it) } ?: Insets.NONE
         val insets = if (fitHorizontal == true) {
             val horizontalInsets = windowInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
             )
-            Insets.max(horizontalInsets, fitInsets)
+            val fitHorizontalInsets = Insets.of(horizontalInsets.left, 0, horizontalInsets.right, 0)
+            Insets.max(fitHorizontalInsets, fitInsets)
         } else fitInsets
         // Log.e("fitSystemBar", "$status $cacheStatus, $fitMode $cacheMode, $insetsType $cacheType")
         // Log.e("fitSystemBarInsets", "apply: $insets, \ncache: $cacheInsets")
