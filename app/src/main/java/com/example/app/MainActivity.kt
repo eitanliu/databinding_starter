@@ -3,6 +3,7 @@ package com.example.app
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import androidx.appcompat.view.ContextThemeWrapper
 import com.eitanliu.starter.binding.BindingActivity
 import com.eitanliu.utils.Logcat
 import com.example.app.databinding.ActivityMainBinding
@@ -24,10 +25,6 @@ class MainActivity : BindingActivity<ActivityMainBinding, MainVM>() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         Logcat.msg("${newConfig.uiMode}")
-    }
-
-    override fun createConfigurationContext(overrideConfiguration: Configuration): Context {
-        return super.createConfigurationContext(overrideConfiguration)
     }
 
 
