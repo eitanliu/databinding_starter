@@ -12,7 +12,7 @@ import androidx.fragment.app.asFragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.viewbinding.ViewBinding
-import com.eitanliu.binding.ViewBindingUtil.selfLifecycleOwner
+import com.eitanliu.binding.ViewBindingUtil.lifecycleOwner
 import com.eitanliu.utils.baseIf
 
 class ViewBindingExt
@@ -77,11 +77,11 @@ fun <T : LifecycleOwner> View.findLifecycleOwner(
     }
 
     var binding = findViewBinding<ViewBinding>()
-    var lifecycleOwner: T? = checkType(binding?.selfLifecycleOwner)
+    var lifecycleOwner: T? = checkType(binding?.lifecycleOwner)
     while (lifecycleOwner == null && binding != null) {
         val view = binding.root.parent as? View
         binding = view?.findViewBinding<ViewBinding>(false)
-        lifecycleOwner = checkType(binding?.selfLifecycleOwner)
+        lifecycleOwner = checkType(binding?.lifecycleOwner)
     }
     if (lifecycleOwner == null) {
         lifecycleOwner = checkType(findViewTreeLifecycleOwner())

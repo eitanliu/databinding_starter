@@ -8,6 +8,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.eitanliu.utils.baseIf
+import java.lang.ref.Reference
+import java.lang.ref.WeakReference
 
 object ViewBindingUtil {
 
@@ -40,25 +42,26 @@ object ViewBindingUtil {
     }
 
     inline var ViewBinding.lifecycleOwnerExt: LifecycleOwner?
-        get() = lifecycleOwner
+        get() = findLifecycleOwner()
         set(value) {
             lifecycleOwner = value
         }
 
     var ViewBinding.lifecycleOwner: LifecycleOwner?
-        get() = selfLifecycleOwner
-            ?: root.findViewTreeLifecycleOwner()
-            ?: root.context.baseIf { it is LifecycleOwner } as? LifecycleOwner
+        get() = when (this) {
+            is ViewDataBinding -> lifecycleOwner
+            else -> (root.getTag(R.id.lifecycleOwner) as? Reference<*>)?.get() as? LifecycleOwner
+        }
         set(value) {
             when (this) {
                 is ViewDataBinding -> lifecycleOwner = value
-                else -> root.setTag(R.id.lifecycleOwner, value)
+                else -> root.setTag(R.id.lifecycleOwner, WeakReference(value))
             }
         }
 
-    val ViewBinding.selfLifecycleOwner: LifecycleOwner?
-        get() = when (this) {
-            is ViewDataBinding -> lifecycleOwner
-            else -> root.getTag(R.id.lifecycleOwner) as? LifecycleOwner
-        }
+    fun ViewBinding.findLifecycleOwner(): LifecycleOwner? {
+        return lifecycleOwner
+            ?: root.findViewTreeLifecycleOwner()
+            ?: root.context.baseIf { it is LifecycleOwner } as? LifecycleOwner
+    }
 }
