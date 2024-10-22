@@ -32,7 +32,7 @@ fun <T, V> LiveData<T>.observe(
     owner.addCloseable(observe(view, init, observer))
 }
 
-fun <T, V> LiveData<T>.observe(
+private fun <T, V> LiveData<T>.observe(
     view: V,
     init: (V.() -> Unit)? = null,
     observer: V.(T) -> Unit,
