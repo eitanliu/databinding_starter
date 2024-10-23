@@ -12,7 +12,11 @@ import com.eitanliu.starter.binding.model.ActivityLaunchModel
 class ActivityController : IActivity {
     override val event = Event()
     override val state = State()
-    override val onBackPressedEnable = multipleState<Boolean>()
+
+    override val title = lateMultipleState<String?>()
+    override val resTitle = lateMultipleState<Int?>()
+    override val backVisible = multipleState<Boolean?>(true)
+    override val onBackPressedEnable = lateMultipleState<Boolean?>()
 
     override fun startActivity(model: ActivityLaunchModel) {
         state.startActivity(model)
@@ -61,6 +65,9 @@ interface IActivity : ActivityLauncher {
     val event: Event
     val state: State
 
+    val title: MultipleUiState<String?>
+    val resTitle: MultipleUiState<Int?>
+    val backVisible: MultipleUiState<Boolean?>
     val onBackPressedEnable: MultipleUiState<Boolean?>
 
     fun finish()

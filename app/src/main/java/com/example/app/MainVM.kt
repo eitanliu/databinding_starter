@@ -34,9 +34,9 @@ class MainVM @Inject constructor(
     init {
         fitSystemBars.value = true
         handleOnBackPressed(event.onBackPressed)
+        title.value = "${args.arg1} ${args.arg2}"
+        backVisible.value = false
     }
-
-    val title = multipleState("${args.arg1} ${args.arg2}")
 
     fun onBackPressedEnableDelay(delay: Long) = viewModelScope.launch {
         onBackPressedEnable.value = false

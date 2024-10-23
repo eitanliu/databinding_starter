@@ -9,7 +9,11 @@ multidex = "2.0.1"
 
 ### plugin
 imgCompress-plugin = "1.2.1"
-aabresguard-plugin = "0.1.10"
+# https://github.com/bytedance/AabResGuard
+#aabresguard-plugin = "0.1.10"
+# https://central.sonatype.com/namespace/io.github.bumptechlab
+# https://repo1.maven.org/maven2/io/github/bumptechlab/aabresguard-plugin/maven-metadata.xml
+aabresguard-plugin = "1.0.4"
 google-services-plugin = "4.3.13"
 firebase-perf-plugin = "1.4.2"
 firebase-crashlytics-plugin = "2.9.9"
@@ -75,7 +79,10 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 
 ### plugin
 imgCompress-plugin = { group = "io.github.duking666", name = "ImgCompressPlugin", version.ref = "imgCompress-plugin" }
-aabresguard-plugin = { module = "com.bytedance.android:aabresguard-plugin", version.ref = "aabresguard-plugin" }
+# https://github.com/bytedance/ByteX
+#aabresguard-plugin = { module = "com.bytedance.android:aabresguard-plugin", version.ref = "aabresguard-plugin" }
+# https://repo1.maven.org/maven2/io/github/bumptechlab/aabresguard-plugin/maven-metadata.xml
+aabresguard-plugin = { module = "io.github.bumptechlab:aabresguard-plugin", version.ref = "aabresguard-plugin" }
 google-services-plugin = { module = "com.google.gms:google-services", version.ref = "google-services-plugin" }
 firebase-crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-plugin" }
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }

@@ -30,8 +30,6 @@ class ExampleVM @Inject constructor(
     override val event = Event(this)
     override val state = State(this)
 
-    val title = multipleState("${args.arg1} ${args.arg2}")
-
     val uiModelLight get() = (uiMode.value ?: 0) and Configuration.UI_MODE_NIGHT_MASK
 
     val isNoNight get() = uiModelLight == Configuration.UI_MODE_NIGHT_NO
@@ -43,6 +41,8 @@ class ExampleVM @Inject constructor(
         }
 
     init {
+        title.value = "${args.arg1} ${args.arg2}"
+        backVisible.value = true
         fitSystemBars.value = false
         uiMode.observe(this) {
             lightStatusBars.value = isNoNight
