@@ -18,7 +18,7 @@ import com.eitanliu.binding.ViewBindingUtil
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
-import com.eitanliu.starter.binding.model.ActivityLaunchModel
+import com.eitanliu.starter.binding.model.ActivityLauncherInfo
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.eitanliu.utils.BarUtil.setNavBar
 import com.eitanliu.utils.refWeak
@@ -150,18 +150,17 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
 
     /**
      * 跳转页面
-     * @param model
+     * @param info
      */
     override fun startActivity(
-        model: ActivityLaunchModel
+        info: ActivityLauncherInfo
     ) {
-        val intent = Intent(this, model.clz)
-        if (model.bundle != null) {
-            intent.putExtras(model.bundle)
-        }
-        if (model.callback != null) {
+        val intent = info.intent
+        if (info.clz != null) info.intent.setClass(this, info.clz)
+
+        if (info.callback != null) {
             val requestCode = generateRandomNumber()
-            requestCallbacks[requestCode] = model.callback.refWeak()
+            requestCallbacks[requestCode] = info.callback.refWeak()
             @Suppress("DEPRECATION")
             startActivityForResult(intent, requestCode)
         } else {

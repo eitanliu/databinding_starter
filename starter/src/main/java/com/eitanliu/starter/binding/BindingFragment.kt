@@ -14,7 +14,7 @@ import com.eitanliu.binding.ViewBindingUtil
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
-import com.eitanliu.starter.binding.model.ActivityLaunchModel
+import com.eitanliu.starter.binding.model.ActivityLauncherInfo
 import com.eitanliu.starter.binding.registry.IFragment
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.eitanliu.utils.BarUtil.setNavBar
@@ -154,7 +154,7 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
         viewModel.navigationBarsColor.notifyChange()
     }
 
-    override fun startActivity(model: ActivityLaunchModel) {
-        activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(model)
+    override fun startActivity(info: ActivityLauncherInfo) {
+        activity.asTypeOrNull<BindingActivity<*, *>>()?.startActivity(info)
     }
 }

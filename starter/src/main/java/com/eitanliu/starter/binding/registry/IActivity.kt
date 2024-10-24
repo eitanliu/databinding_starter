@@ -4,7 +4,7 @@ import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.state.MultipleUiState
 import com.eitanliu.starter.binding.ActivityLauncher
 import com.eitanliu.starter.binding.BindingOwner
-import com.eitanliu.starter.binding.model.ActivityLaunchModel
+import com.eitanliu.starter.binding.model.ActivityLauncherInfo
 
 /**
  * Activity 操作
@@ -39,7 +39,7 @@ interface IActivity : ActivityLauncher {
     }
 
     interface State {
-        val startActivity: MultipleUiState<ActivityLaunchModel>
+        val startActivity: MultipleUiState<ActivityLauncherInfo>
 
         val finish: MultipleUiState<Unit>
 

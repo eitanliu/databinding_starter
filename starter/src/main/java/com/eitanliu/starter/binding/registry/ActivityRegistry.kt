@@ -6,7 +6,7 @@ import com.eitanliu.binding.state.lateSingleState
 import com.eitanliu.binding.state.multipleState
 import com.eitanliu.binding.utils.StateUtil.invoke
 import com.eitanliu.starter.binding.BindingOwner
-import com.eitanliu.starter.binding.model.ActivityLaunchModel
+import com.eitanliu.starter.binding.model.ActivityLauncherInfo
 
 class ActivityRegistry(
     override val bindingOwner: BindingOwner? = null
@@ -19,8 +19,8 @@ class ActivityRegistry(
     override val backVisible = multipleState<Boolean?>(true)
     override val onBackPressedEnable = lateMultipleState<Boolean?>()
 
-    override fun startActivity(model: ActivityLaunchModel) {
-        state.startActivity(model)
+    override fun startActivity(info: ActivityLauncherInfo) {
+        state.startActivity(info)
     }
 
     override fun finish() {
@@ -48,7 +48,7 @@ class ActivityRegistry(
 
     inner class State : IActivity.State {
 
-        override val startActivity = lateSingleState<ActivityLaunchModel>()
+        override val startActivity = lateSingleState<ActivityLauncherInfo>()
 
         override val finish = lateSingleState<Unit>()
 
