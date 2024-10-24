@@ -1,6 +1,5 @@
 package com.eitanliu.starter.binding.registry
 
-import com.eitanliu.binding.state.MultipleUiState
 import com.eitanliu.binding.state.lateMultipleState
 
 class FragmentRegistry : IFragment {
@@ -16,19 +15,3 @@ class FragmentRegistry : IFragment {
     }
 }
 
-/**
- * Fragment 操作
- */
-interface IFragment {
-    val fragment: IFragment get() = this
-    val event: Event
-    val state: State
-
-    val hidden: MultipleUiState<Boolean?>
-
-    interface Event {
-    }
-
-    interface State {
-    }
-}

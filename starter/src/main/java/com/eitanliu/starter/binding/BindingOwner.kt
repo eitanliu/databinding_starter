@@ -3,12 +3,12 @@ package com.eitanliu.starter.binding
 import com.eitanliu.utils.refWeak
 import java.lang.ref.Reference
 
-interface BindingDelegateOwner {
+interface BindingOwner {
     val delegate: BindingDelegate?
 
     fun bind(delegate: BindingDelegate)
 
-    class Impl : BindingDelegateOwner {
+    class Impl : BindingOwner {
 
         private var _ref: Reference<BindingDelegate>? = null
 

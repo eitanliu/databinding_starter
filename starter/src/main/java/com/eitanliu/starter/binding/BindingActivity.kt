@@ -8,14 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.util.containsKey
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.eitanliu.binding.ViewBindingUtil
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
-import com.eitanliu.starter.binding.registry.ActivityLauncher
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.utils.ReflectionUtil
@@ -25,11 +26,16 @@ import java.lang.ref.Reference
 import java.util.Random
 
 abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : AppCompatActivity(),
-    InitView, ActivityLauncher {
+    BindingView, ActivityLauncher {
 
     protected lateinit var binding: VB
 
     protected lateinit var viewModel: VM
+
+    @Suppress("UNCHECKED_CAST")
+    private val viewBindingType: Class<VB> by lazy {
+        ReflectionUtil.getViewBindingGenericType(this) as Class<VB>
+    }
 
     @Suppress("UNCHECKED_CAST")
     private val viewModelType: Class<VM> by lazy {
@@ -44,11 +50,11 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         initParams(savedInstanceState)
-        initViewDataBinding()
+        ensureBinding()
         observeActivityUiState()
-        initData()
-        initView()
-        initObserve()
+        bindData()
+        bindView()
+        bindObserve()
     }
 
     protected val uiModeNight get() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
@@ -58,15 +64,19 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
         viewModel.uiMode.value = resources.configuration.uiMode
     }
 
-    private fun initViewDataBinding() {
-        binding = DataBindingUtil.setContentView(this, initContentView)
+    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
+
+    private fun ensureBinding() {
+        binding = if (bindLayoutId != ResourcesCompat.ID_NULL) {
+            DataBindingUtil.setContentView(this, bindLayoutId)
+        } else ViewBindingUtil.inflate(viewBindingType, layoutInflater, null, false).apply {
+            setContentView(root)
+        }
         viewModel = createViewModel()
-        binding.setVariable(initVariableId, viewModel)
+        binding.setVariable(bindVariableId, viewModel)
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
     }
-
-    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
     protected open fun observeActivityUiState() {
         viewModel.uiMode.value = resources.configuration.uiMode

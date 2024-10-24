@@ -5,10 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.ToastUtils
 import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.binding.event.debounceEvent
-import com.eitanliu.binding.state.multipleState
 import com.eitanliu.binding.state.singleState
 import com.eitanliu.starter.binding.BindingViewModel
-import com.eitanliu.starter.binding.registry.startActivity
+import com.eitanliu.starter.binding.startActivity
 import com.example.app.extension.bundle
 import com.example.app.ui.ExampleActivity
 import com.example.app.ui.ExampleArgs

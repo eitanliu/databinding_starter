@@ -4,6 +4,8 @@
     <item name="bindingTags" type="id" />
     <item name="inflateLayoutId" type="id" />
     <item name="lifecycleOwner" type="id" />
+    <item name="viewController" type="id" />
+    <item name="viewModel" type="id" />
     <item name="fitSystemInsets" type="id" />
     <item name="softwareKeyboardController" type="id" />
     <item name="cacheWindowInsetsCompat" type="id" />

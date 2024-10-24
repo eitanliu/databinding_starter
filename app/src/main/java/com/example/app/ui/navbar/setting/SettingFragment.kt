@@ -9,7 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SettingFragment : BindingFragment<FragmentHomeBinding, SettingVM>() {
 
-    override val initContentView = R.layout.fragment_setting
+    override val bindLayoutId = R.layout.fragment_setting
 
-    override val initVariableId: Int = BR.viewModel
+    override val bindVariableId: Int = BR.viewModel
 }

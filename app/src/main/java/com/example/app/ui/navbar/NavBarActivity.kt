@@ -19,9 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NavBarActivity : BindingActivity<ActivityNavBarBinding, NavBarVM>() {
 
-    override val initContentView = R.layout.activity_nav_bar
+    override val bindLayoutId = R.layout.activity_nav_bar
 
-    override val initVariableId = BR.viewModel
+    override val bindVariableId = BR.viewModel
 
     private val homeFragment by lazy {
         supportFragmentManager.findOrCreateFragment<HomeFragment>(HomeArgs().apply {

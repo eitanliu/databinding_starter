@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.activity.ComponentDialog
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.eitanliu.binding.ViewBindingUtil
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.selfFragment
-import com.eitanliu.starter.binding.registry.ActivityLauncher
 import com.eitanliu.starter.binding.registry.IDialog
 import com.eitanliu.starter.binding.dialog.SafetyBottomDialog
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
@@ -28,7 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingViewModel> :
     BottomSheetDialogFragment(), DialogLifecycle.OnCreateListener, DialogInterface.OnShowListener,
-    InitView, ActivityLauncher {
+    BindingView, ActivityLauncher {
 
     var onCreateListener: DialogLifecycle.OnCreateListener? = null
     var onDismissListener: DialogInterface.OnDismissListener? = null
@@ -38,6 +39,11 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
     protected lateinit var binding: VB
 
     protected lateinit var viewModel: VM
+
+    @Suppress("UNCHECKED_CAST")
+    private val viewBindingType: Class<VB> by lazy {
+        ReflectionUtil.getViewBindingGenericType(this) as Class<VB>
+    }
 
     @Suppress("UNCHECKED_CAST")
     private val viewModelType: Class<VM> by lazy {
@@ -59,24 +65,26 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
         savedInstanceState: Bundle?
     ): View? {
         initParams(savedInstanceState)
-        initViewDataBinding()
+        ensureBinding()
         observeActivityUiState()
         observeDialogUiState()
-        initData()
-        initView()
-        initObserve()
+        bindData()
+        bindView()
+        bindObserve()
         return binding.root
     }
 
-    private fun initViewDataBinding(parent: ViewGroup? = null) {
-        binding = DataBindingUtil.inflate(layoutInflater, initContentView, parent, false)
+    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
+
+    private fun ensureBinding(parent: ViewGroup? = null) {
+        binding = if (bindLayoutId != ResourcesCompat.ID_NULL) {
+            DataBindingUtil.inflate(layoutInflater, bindLayoutId, parent, false)
+        } else ViewBindingUtil.inflate(viewBindingType, layoutInflater, null, false)
         viewModel = createViewModel()
-        binding.setVariable(initVariableId, viewModel)
+        binding.setVariable(bindVariableId, viewModel)
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
     }
-
-    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
     protected open fun observeActivityUiState() {
         viewModel.state.startActivity.observe(viewLifecycleOwner) {

@@ -4,27 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.eitanliu.binding.ViewBindingUtil
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
-import com.eitanliu.starter.binding.registry.ActivityLauncher
-import com.eitanliu.starter.binding.registry.IFragment
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
+import com.eitanliu.starter.binding.registry.IFragment
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.eitanliu.utils.BarUtil.setNavBar
 import com.eitanliu.utils.asTypeOrNull
 
 abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fragment(),
-    InitView, ActivityLauncher {
+    BindingView, ActivityLauncher {
 
     protected lateinit var binding: VB
 
     protected lateinit var viewModel: VM
+
+    @Suppress("UNCHECKED_CAST")
+    private val viewBindingType: Class<VB> by lazy {
+        ReflectionUtil.getViewBindingGenericType(this) as Class<VB>
+    }
 
     @Suppress("UNCHECKED_CAST")
     private val viewModelType: Class<VM> by lazy {
@@ -39,23 +45,25 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
         savedInstanceState: Bundle?
     ): View? {
         initParams(savedInstanceState)
-        initViewDataBinding()
+        ensureBinding()
         observeActivityUiState()
-        initData()
-        initView()
-        initObserve()
+        bindData()
+        bindView()
+        bindObserve()
         return binding.root
     }
 
-    private fun initViewDataBinding(parent: ViewGroup? = null) {
-        binding = DataBindingUtil.inflate(layoutInflater, initContentView, parent, false)
+    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
+
+    private fun ensureBinding(parent: ViewGroup? = null) {
+        binding = if (bindLayoutId != ResourcesCompat.ID_NULL) {
+            DataBindingUtil.inflate(layoutInflater, bindLayoutId, parent, false)
+        } else ViewBindingUtil.inflate(viewBindingType, layoutInflater, null, false)
         viewModel = createViewModel()
-        binding.setVariable(initVariableId, viewModel)
+        binding.setVariable(bindVariableId, viewModel)
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
     }
-
-    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
     protected open fun observeActivityUiState() {
         viewModel.state.startActivity.observe(viewLifecycleOwner) {

@@ -20,9 +20,9 @@ import kotlin.math.roundToInt
 @AndroidEntryPoint
 class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
 
-    override val initContentView = R.layout.activity_example
+    override val bindLayoutId = R.layout.activity_example
 
-    override val initVariableId = BR.viewModel
+    override val bindVariableId = BR.viewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

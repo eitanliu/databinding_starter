@@ -1,21 +1,23 @@
 package com.eitanliu.starter.binding
 
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
+import com.eitanliu.binding.BR
 
 /**
  * 基础View层的接口
  */
-interface InitView {
+interface BindingView {
 
     /**
      * 布局Id
      */
-    val initContentView: Int
+    val bindLayoutId: Int get() = ResourcesCompat.ID_NULL
 
     /**
      * DataBinding绑定的VariableId
      */
-    val initVariableId: Int
+    val bindVariableId: Int get() = BR.viewModel
 
     /**
      * 在创建布局和ViewModel之前调用
@@ -25,16 +27,16 @@ interface InitView {
     /**
      * viewModel和DataBinding创建完成后调用
      */
-    fun initData() {}
+    fun bindData() {}
 
     /**
-     * [initData]之后调用初始化显示内容
+     * [bindData]之后调用初始化显示内容
      */
-    fun initView() {}
+    fun bindView() {}
 
     /**
-     * [initView]之后调用，监听数据变化刷新UI
+     * [bindView]之后调用，监听数据变化刷新UI
      */
-    fun initObserve() {}
+    fun bindObserve() {}
 
 }
