@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import androidx.core.view.DisplayCompat
 import androidx.fragment.app.context
 import com.eitanliu.starter.binding.BindingActivity
 import com.eitanliu.utils.Logcat
@@ -44,17 +45,17 @@ class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
 
     override fun attachBaseContext(newBase: Context) {
         val displayMetrics = newBase.resources.displayMetrics
-        val width = min(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        // val width = min(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        val mode = DisplayCompat.getMode(newBase, ContextCompat.getDisplayOrDefault(newBase))
+        val width = min(mode.physicalWidth, mode.physicalWidth)
         val designWidth = 420.0
         val designDip = width / designWidth
+        val designDpi = (designDip * 160).roundToInt()
+        val conf = Configuration(newBase.resources.configuration)
         val differDip = designDip - displayMetrics.density
-        Logcat.msg("differDip $designDip - ${displayMetrics.density} = $differDip")
+        Logcat.msg("width $width, differDip $designDip - ${displayMetrics.density} = $differDip")
         // 避免差异过大，超过指定系数使用系统默认值
-        val fixDip = if (abs(differDip) < 0.6) designDip else displayMetrics.density.toDouble()
-        val fixDpi = (fixDip * 160).roundToInt()
-        val conf = Configuration().apply {
-            densityDpi = fixDpi
-        }
+        if (abs(differDip) < 0.6) conf.densityDpi = designDpi
         val context = newBase.createConfigurationContext(conf)
         return super.attachBaseContext(context)
     }
