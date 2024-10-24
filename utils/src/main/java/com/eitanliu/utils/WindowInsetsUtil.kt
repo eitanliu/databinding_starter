@@ -119,7 +119,7 @@ object WindowInsetsUtil {
                         top -= cacheInsets.top
                         right -= cacheInsets.right
                         bottom -= cacheInsets.bottom
-                        if (height > 0) height -= insets.top + insets.bottom
+                        if (height > 0) height -= cacheInsets.top + cacheInsets.bottom
                     }
                 }
                 if (status) {

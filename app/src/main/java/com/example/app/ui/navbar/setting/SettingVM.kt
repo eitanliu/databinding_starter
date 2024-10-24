@@ -2,7 +2,6 @@ package com.example.app.ui.navbar.setting
 
 import androidx.lifecycle.SavedStateHandle
 import com.eitanliu.binding.event.bindingEvent
-import com.eitanliu.binding.state.multipleState
 import com.eitanliu.starter.binding.FragmentViewModel
 import com.eitanliu.starter.binding.registry.startActivity
 import com.example.app.extension.bundle
@@ -14,7 +13,9 @@ class SettingVM @Inject constructor(
 ) : FragmentViewModel(stateHandle) {
     override val event = Event(this)
 
-    val title = multipleState("Setting ${stateHandle.bundle}")
+    init {
+        title.value = "Setting ${stateHandle.bundle}"
+    }
 
 
     inner class Event(

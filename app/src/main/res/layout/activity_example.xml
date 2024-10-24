@@ -15,15 +15,11 @@
         android:layout_height="match_parent"
         android:background="#6666">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.title}"
-            app:fitStatusBars="@{!viewModel.fitSystemBars}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Hello World!" />
+        <include
+            android:id="@+id/laToolbar"
+            layout="@layout/layout_toolbar"
+            app:layout_constraintBaseline_toTopOf="parent"
+            app:viewModel="@{viewModel}" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -31,7 +27,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/laToolbar"
+            app:layout_constraintVertical_bias="0">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -43,12 +40,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="BackPressed"
-                    app:debounce="@{false}"
-                    app:onClickEvent="@{viewModel.event.onBackClick}" />
+                <!-- <Button -->
+                <!--     android:layout_width="wrap_content" -->
+                <!--     android:layout_height="wrap_content" -->
+                <!--     android:text="BackPressed" -->
+                <!--     app:debounce="@{false}" -->
+                <!--     app:onClickEvent="@{viewModel.event.onBackClick}" /> -->
 
                 <Button
                     android:layout_width="wrap_content"
@@ -60,12 +57,14 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="FitSystemBars"
                         app:debounce="@{false}"
                         app:onClickEvent="@{viewModel.event.fitSystemBarsClick}" />
+
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -9,6 +9,6 @@ import com.eitanliu.starter.bundle.setValue
 class MainArgs(
     override val bundle: Bundle = Bundle()
 ) : BundleDelegate {
-    var arg1 by property("1")
-    var arg2 by property(22)
+    var arg1 by property("Binding")
+    var arg2 by property("Starter")
 }

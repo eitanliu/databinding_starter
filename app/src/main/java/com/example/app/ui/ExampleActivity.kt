@@ -1,8 +1,10 @@
 package com.example.app.ui
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.context
 import com.eitanliu.starter.binding.BindingActivity
 import com.eitanliu.utils.Logcat
@@ -27,6 +29,10 @@ class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
         context?.contextTree {
             Logcat.msg("$it")
         }
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
+        resources.configuration.orientation
+        val display = ContextCompat.getDisplayOrDefault(this)
+        display.rotation
     }
 
     override fun observeActivityUiState() {

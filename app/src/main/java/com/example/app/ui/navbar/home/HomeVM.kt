@@ -16,9 +16,8 @@ class HomeVM @Inject constructor(
 ) : FragmentViewModel(stateHandle) {
     override val event = Event(this)
 
-    val title = multipleState("Home ${stateHandle.bundle}")
-
     init {
+        title.value = "Home ${stateHandle.bundle}"
         hidden.observe(this) {
             Logcat.msg("Home hidden ${hidden.value}")
         }
