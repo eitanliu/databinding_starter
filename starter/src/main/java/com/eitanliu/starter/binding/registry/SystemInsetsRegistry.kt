@@ -1,9 +1,9 @@
-package com.eitanliu.starter.binding.controller
+package com.eitanliu.starter.binding.registry
 
 import com.eitanliu.binding.state.MultipleUiState
 import com.eitanliu.binding.state.multipleState
 
-class SystemInsetsController : ISystemInsets {
+class SystemInsetsRegistry : ISystemInsets {
 
     override val uiMode = multipleState<Int?>()
     override val lightStatusBars = multipleState<Boolean?>()

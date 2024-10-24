@@ -5,16 +5,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.event.bindingEvent
-import com.eitanliu.starter.binding.controller.ActivityController
-import com.eitanliu.starter.binding.controller.IActivity
-import com.eitanliu.starter.binding.controller.ISystemInsets
-import com.eitanliu.starter.binding.controller.SystemInsetsController
+import com.eitanliu.starter.binding.registry.ActivityRegistry
+import com.eitanliu.starter.binding.registry.IActivity
+import com.eitanliu.starter.binding.registry.ISystemInsets
+import com.eitanliu.starter.binding.registry.SystemInsetsRegistry
 
 open class BindingViewModel(
     val stateHandle: SavedStateHandle
 ) : ViewModel(), LifecycleViewModel,
-    IActivity by ActivityController(),
-    ISystemInsets by SystemInsetsController() {
+    IActivity by ActivityRegistry(),
+    ISystemInsets by SystemInsetsRegistry() {
 
     override val event = Event(this)
     override val state = State(this)

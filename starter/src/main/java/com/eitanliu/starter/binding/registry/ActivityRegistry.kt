@@ -1,4 +1,4 @@
-package com.eitanliu.starter.binding.controller
+package com.eitanliu.starter.binding.registry
 
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.event.bindingEvent
@@ -9,7 +9,7 @@ import com.eitanliu.binding.state.multipleState
 import com.eitanliu.binding.utils.StateUtil.invoke
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 
-class ActivityController : IActivity {
+class ActivityRegistry : IActivity {
     override val event = Event()
     override val state = State()
     override val onBackPressedEnable = multipleState<Boolean>()

@@ -1,13 +1,13 @@
 package com.eitanliu.starter.binding
 
 import androidx.lifecycle.SavedStateHandle
-import com.eitanliu.starter.binding.controller.FragmentController
-import com.eitanliu.starter.binding.controller.IFragment
+import com.eitanliu.starter.binding.registry.FragmentRegistry
+import com.eitanliu.starter.binding.registry.IFragment
 
 open class FragmentViewModel(
     stateHandle: SavedStateHandle
 ) : BindingViewModel(stateHandle),
-    IFragment by FragmentController() {
+    IFragment by FragmentRegistry() {
 
     override val event = Event(this)
     override val state = State(this)

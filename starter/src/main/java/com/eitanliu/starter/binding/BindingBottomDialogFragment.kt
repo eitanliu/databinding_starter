@@ -14,8 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.selfFragment
-import com.eitanliu.starter.binding.controller.ActivityLauncher
-import com.eitanliu.starter.binding.controller.IDialog
+import com.eitanliu.starter.binding.registry.ActivityLauncher
+import com.eitanliu.starter.binding.registry.IDialog
 import com.eitanliu.starter.binding.dialog.SafetyBottomDialog
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.listener.DialogLifecycle

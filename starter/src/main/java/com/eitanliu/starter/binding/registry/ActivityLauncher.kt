@@ -1,4 +1,4 @@
-package com.eitanliu.starter.binding.controller
+package com.eitanliu.starter.binding.registry
 
 import android.os.Bundle
 import androidx.activity.result.ActivityResult

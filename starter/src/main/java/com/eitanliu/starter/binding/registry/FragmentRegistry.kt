@@ -1,9 +1,9 @@
-package com.eitanliu.starter.binding.controller
+package com.eitanliu.starter.binding.registry
 
 import com.eitanliu.binding.state.MultipleUiState
 import com.eitanliu.binding.state.lateMultipleState
 
-class FragmentController : IFragment {
+class FragmentRegistry : IFragment {
     override val event = Event()
     override val state = State()
 

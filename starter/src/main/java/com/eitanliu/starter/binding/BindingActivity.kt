@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
-import com.eitanliu.starter.binding.controller.ActivityLauncher
+import com.eitanliu.starter.binding.registry.ActivityLauncher
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 import com.eitanliu.starter.utils.ReflectionUtil
