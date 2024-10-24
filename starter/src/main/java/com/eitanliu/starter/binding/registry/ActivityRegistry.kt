@@ -7,9 +7,12 @@ import com.eitanliu.binding.state.lateMultipleState
 import com.eitanliu.binding.state.lateSingleState
 import com.eitanliu.binding.state.multipleState
 import com.eitanliu.binding.utils.StateUtil.invoke
+import com.eitanliu.starter.binding.BindingDelegateOwner
 import com.eitanliu.starter.binding.model.ActivityLaunchModel
 
-class ActivityRegistry : IActivity {
+class ActivityRegistry(
+    override val delegateOwner: BindingDelegateOwner? = null
+) : IActivity {
     override val event = Event()
     override val state = State()
 
@@ -61,6 +64,7 @@ class ActivityRegistry : IActivity {
  * Activity 操作
  */
 interface IActivity : ActivityLauncher {
+    val delegateOwner: BindingDelegateOwner?
     val activity: IActivity get() = this
     val event: Event
     val state: State
