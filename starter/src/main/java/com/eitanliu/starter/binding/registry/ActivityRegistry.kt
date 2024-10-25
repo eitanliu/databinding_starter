@@ -9,7 +9,7 @@ import com.eitanliu.starter.binding.BindingOwner
 import com.eitanliu.starter.binding.model.ActivityLauncherInfo
 
 class ActivityRegistry(
-    override val bindingOwner: BindingOwner? = null
+    override val bindingOwner: BindingOwner = BindingOwner.Impl()
 ) : IActivity {
     override val event = Event()
     override val state = State()
