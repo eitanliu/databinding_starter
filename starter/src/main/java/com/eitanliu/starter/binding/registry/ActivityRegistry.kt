@@ -4,9 +4,9 @@ import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.binding.state.lateMultipleState
 import com.eitanliu.binding.state.lateSingleState
 import com.eitanliu.binding.state.multipleState
-import com.eitanliu.binding.utils.StateUtil.invoke
 import com.eitanliu.starter.binding.BindingOwner
 import com.eitanliu.starter.binding.model.ActivityLauncherInfo
+import com.eitanliu.utils.UiStateUtil.invoke
 
 class ActivityRegistry(
     override val bindingOwner: BindingOwner? = null

@@ -6,13 +6,12 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.childFragmentManager
-import com.eitanliu.binding.R
+import com.eitanliu.binding.adapter.viewController
 import com.eitanliu.binding.extension.bindingFragment
 import com.eitanliu.binding.extension.bindingFragmentActivity
 import com.eitanliu.binding.extension.findFragment
 import com.eitanliu.binding.extension.show
-import com.eitanliu.utils.getBindingTag
-import com.eitanliu.utils.setBindingTag
+import com.eitanliu.starter.binding.controller.NavigationBarController
 import com.eitanliu.starter.binding.model.FragmentItem
 import com.google.android.material.navigation.NavigationBarView
 import kotlin.math.min
@@ -25,6 +24,11 @@ import kotlin.math.min
  */
 class NavigationBarViewAdapter
 
+val NavigationBarView.navigationBarController
+    get() = viewController[NavigationBarController] ?: NavigationBarController(this).also {
+        viewController += it
+    }
+
 var NavigationBarView.selectedItemIndex
     get() = getMenuItemIndex(menuItemSelected)
     set(value) {
@@ -34,9 +38,9 @@ var NavigationBarView.selectedItemIndex
     }
 
 var NavigationBarView.menuItemSelected
-    get() = getBindingTag(R.id.menuItemSelected) as? MenuItem
+    get() = navigationBarController.menuItemSelected
     private set(value) {
-        setBindingTag(R.id.menuItemSelected, value)
+        navigationBarController.menuItemSelected = value
     }
 
 fun NavigationBarView.getMenuItemIndex(item: MenuItem?) = menu.run {

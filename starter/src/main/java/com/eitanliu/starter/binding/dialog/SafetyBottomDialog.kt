@@ -3,12 +3,12 @@ package com.eitanliu.starter.binding.dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.eitanliu.starter.binding.listener.DialogLifecycle
-import com.eitanliu.starter.binding.listener.WeakOnCreateListener
 import com.eitanliu.starter.binding.listener.WeakOnCancelListener
+import com.eitanliu.starter.binding.listener.WeakOnCreateListener
 import com.eitanliu.starter.binding.listener.WeakOnDismissListener
 import com.eitanliu.starter.binding.listener.WeakOnShowListener
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 /**
  * dialog的listener是用handler发送的，导致dialog被持有无法释放

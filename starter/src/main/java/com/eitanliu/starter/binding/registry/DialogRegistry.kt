@@ -3,7 +3,7 @@ package com.eitanliu.starter.binding.registry
 import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.binding.state.lateSingleState
 import com.eitanliu.binding.state.multipleState
-import com.eitanliu.binding.utils.StateUtil.invoke
+import com.eitanliu.utils.UiStateUtil.invoke
 
 
 class DialogRegistry : IDialog {

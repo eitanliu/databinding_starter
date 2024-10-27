@@ -16,11 +16,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.ViewBindingUtil
 import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.selfFragment
-import com.eitanliu.starter.binding.registry.IDialog
 import com.eitanliu.starter.binding.dialog.SafetyBottomDialog
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.listener.DialogLifecycle
 import com.eitanliu.starter.binding.model.ActivityLauncherInfo
+import com.eitanliu.starter.binding.registry.IDialog
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.eitanliu.utils.BarUtil.setNavBar
 import com.eitanliu.utils.asTypeOrNull

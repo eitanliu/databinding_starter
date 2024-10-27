@@ -10,9 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.core.view.SoftwareKeyboardControllerCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.eitanliu.binding.adapter.viewExtController
 
 class ViewExt
 
@@ -134,10 +132,7 @@ inline val View.dividerHeight get() = context.dividerHeight
 inline val View.dividerWidth get() = context.dividerWidth
 
 val View.softwareKeyboardController
-    get() = getBindingTag(R.id.softwareKeyboardController) as? SoftwareKeyboardControllerCompat
-        ?: SoftwareKeyboardControllerCompat(this).also {
-            setBindingTag(R.id.softwareKeyboardController, it)
-        }
+    get() = viewExtController.softwareKeyboardController
 
 val View.isShowSoftwareKeyboard
     get() = rootWindowInsetsCompat?.isShowSoftwareKeyboard ?: false
@@ -171,16 +166,16 @@ inline val View.imeInsets
     get() = rootWindowInsetsCompat?.imeInsets
 
 val View.rootWindowInsetsCompat
-    get() = ViewCompat.getRootWindowInsets(this)
+    get() = viewExtController.rootWindowInsetsCompat
 
 var View.cacheWindowInsetsCompat
-    get() = getBindingTag(R.id.cacheWindowInsetsCompat) as? WindowInsetsCompat
+    get() = viewExtController.cacheWindowInsetsCompat
     set(value) {
-        setBindingTag(R.id.cacheWindowInsetsCompat, value)
+        viewExtController.cacheWindowInsetsCompat = value
     }
 
 var View.viewWindowInsetsCompat
-    get() = getBindingTag(R.id.viewWindowInsetsCompat) as? WindowInsetsCompat
+    get() = viewExtController.viewWindowInsetsCompat
     set(value) {
-        setBindingTag(R.id.viewWindowInsetsCompat, value)
+        viewExtController.viewWindowInsetsCompat = value
     }

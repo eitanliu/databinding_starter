@@ -3,15 +3,6 @@
 package com.eitanliu.starter.extension
 
 import android.app.Application
-import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableByte
-import androidx.databinding.ObservableChar
-import androidx.databinding.ObservableDouble
-import androidx.databinding.ObservableField
-import androidx.databinding.ObservableFloat
-import androidx.databinding.ObservableInt
-import androidx.databinding.ObservableLong
-import androidx.databinding.ObservableShort
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

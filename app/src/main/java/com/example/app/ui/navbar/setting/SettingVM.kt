@@ -15,6 +15,7 @@ class SettingVM @Inject constructor(
 
     init {
         title.value = "Setting ${stateHandle.bundle}"
+        fitSystemBars.value = false
     }
 
 

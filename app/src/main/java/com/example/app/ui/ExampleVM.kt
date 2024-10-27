@@ -40,6 +40,8 @@ class ExampleVM @Inject constructor(
             else -> AppCompatDelegate.MODE_NIGHT_NO
         }
 
+    val testImage = multipleState("https://gips1.baidu.com/it/u=3874647369,3220417986&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280")
+
     init {
         title.value = "${args.arg1} ${args.arg2}"
         backVisible.value = true
@@ -58,6 +60,7 @@ class ExampleVM @Inject constructor(
             // view.toggleSoftKeyboard()
             view.rootView.apply {
                 Logcat.msg("softKeyboard $isShowSoftwareKeyboard ${view.imeInsets}")
+                // toggleSoftKeyboard()
                 if (isShowSoftwareKeyboard) {
                     hideSoftKeyboard()
                 } else {

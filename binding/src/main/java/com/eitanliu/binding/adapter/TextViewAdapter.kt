@@ -13,19 +13,28 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.TypefaceCompat
 import androidx.databinding.BindingAdapter
-import com.eitanliu.binding.R
 import com.eitanliu.binding.annotation.TextStyle
 import com.eitanliu.binding.annotation.TypefaceStyle
+import com.eitanliu.binding.controller.TextViewController
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.event.UiEventConsumer
 import com.eitanliu.binding.listener.CLICK_DELAY_DEFAULT
 import com.eitanliu.binding.listener.DebounceClickListener
 import com.eitanliu.binding.model.FontFamilyTag
 import com.eitanliu.utils.defaultTextColor
-import com.eitanliu.utils.getBindingTag
-import com.eitanliu.utils.setBindingTag
 
 class TextViewAdapter
+
+val TextView.textViewController
+    get() = viewController[TextViewController] ?: TextViewController(this).also {
+        viewController += it
+    }
+
+var TextView.fontFamilyTag
+    get() = textViewController.fontFamilyTag
+    set(value) {
+        textViewController.fontFamilyTag = value
+    }
 
 @BindingAdapter("textColor")
 fun TextView.setTextColor(@ColorRes resId: Int?) {
@@ -125,12 +134,6 @@ fun TextView.setFontChecked(
 fun TextView.setFormatText(@StringRes format: Int, vararg args: String?) {
     this.text = resources.getString(format, args)
 }
-
-var TextView.fontFamilyTag
-    get() = getBindingTag(R.id.fontFamily) as? FontFamilyTag
-    set(value) {
-        setBindingTag(R.id.fontFamily, value)
-    }
 
 /**
  * 定义了 [TextView.onClickFontListener] DataBinding 找不到事件绑定

@@ -1,4 +1,4 @@
-package com.eitanliu.utils.model
+package com.eitanliu.binding.model
 
 import androidx.core.graphics.Insets
 import androidx.core.view.WindowInsetsCompat.Type.InsetsType

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.eitanliu.utils.baseIf
@@ -105,6 +106,13 @@ object ViewBindingUtil {
         val bind = clazz.getMethod("bind", View::class.java)
         return bind.invoke(null, root) as T
     }
+
+    var ViewBinding.viewModelTag
+        get() = (root.getTag(R.id.viewModel) as? Reference<*>)?.get() as? ViewModel
+        set(value) {
+            if (this is ViewDataBinding) setVariable(BR.viewModel, value)
+            root.setTag(R.id.viewModel, WeakReference(value))
+        }
 
     inline var ViewBinding.lifecycleOwnerExt: LifecycleOwner?
         get() = findLifecycleOwner()

@@ -86,8 +86,7 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
             }
         }
         // 系统栏显示控制
-        val systemInsets = requireActivity().asTypeOrNull<BindingActivity<*, *>>()
-            ?.systemInsetsRegistry
+        val systemInsets = requireActivity().asTypeOrNull<BindingActivity<*, *>>()?.systemInsets
         viewModel.observeSystemInsets(this, systemInsets)
     }
 

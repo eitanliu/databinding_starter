@@ -1,4 +1,4 @@
-package com.eitanliu.binding.utils
+package com.eitanliu.utils
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LifecycleOwner
@@ -9,7 +9,7 @@ import com.eitanliu.binding.state.SingleLiveState
 import com.eitanliu.binding.state.SingleObservableState
 import com.eitanliu.binding.state.UiState
 
-object StateUtil {
+object UiStateUtil {
     @JvmStatic
     operator fun MutableLiveData<Unit>.invoke() {
         setValue(Unit)

@@ -29,10 +29,17 @@ fun <T, V> LiveData<T>.observe(
     init: (V.() -> Unit)? = null,
     observer: V.(T) -> Unit,
 ) {
-    owner.addCloseable(observe(view, init, observer))
+    owner.addCloseable(observeReceiver(view, init, observer))
 }
 
-private fun <T, V> LiveData<T>.observe(
+fun <T> LiveData<T>.observe(
+    owner: ViewModel,
+    observer: Observer<in T>,
+) {
+    owner.addCloseable(observeCloseable(observer))
+}
+
+fun <T, V> LiveData<T>.observeReceiver(
     view: V,
     init: (V.() -> Unit)? = null,
     observer: V.(T) -> Unit,
@@ -48,14 +55,7 @@ private fun <T, V> LiveData<T>.observe(
     }
 }
 
-fun <T> LiveData<T>.observe(
-    owner: ViewModel,
-    observer: Observer<in T>,
-) {
-    owner.addCloseable(observe(observer))
-}
-
-fun <T> LiveData<T>.observe(
+fun <T> LiveData<T>.observeCloseable(
     observer: Observer<in T>
 ): CloseableObserver<in T> {
     return object : CloseableObserver<T>(this) {

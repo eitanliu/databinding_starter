@@ -6,10 +6,10 @@ import android.view.Window
 import androidx.core.graphics.Insets
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsCompat.Type.InsetsType
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
+import com.eitanliu.binding.adapter.viewExtController
+import com.eitanliu.binding.model.FitWindowInsets
 import com.eitanliu.utils.annotation.FitInsetsMode
-import com.eitanliu.utils.model.FitWindowInsets
 
 object WindowInsetsUtil {
     @JvmOverloads
@@ -52,7 +52,7 @@ object WindowInsetsUtil {
             else -> type
         }
 
-        val cacheModel = getBindingTag(R.id.fitSystemInsets) as? FitWindowInsets
+        val cacheModel = viewExtController.fitWindowInsets
         val cacheStatus = cacheModel?.status
         val cacheMode = cacheModel?.mode
         val cacheType = cacheModel?.type
@@ -133,14 +133,11 @@ object WindowInsetsUtil {
                 }
             }
         }
-        setBindingTag(R.id.fitSystemInsets, model)
+        viewExtController.fitWindowInsets = model
     }
 
     fun View.getWindowInsetsController(
         window: Window
-    ) = getBindingTag(R.id.windowInsetsController) as? WindowInsetsControllerCompat
-        ?: WindowInsetsControllerCompat(window, this).also {
-            setBindingTag(R.id.windowInsetsController, it)
-        }
+    ) = viewExtController.getWindowInsetsController(window)
 
 }

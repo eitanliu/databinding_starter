@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="androidx.core.view.WindowInsetsCompat" />
+
+        <import type="com.eitanliu.utils.annotation.FitInsetsMode" />
 
         <variable
             name="viewModel"
@@ -92,8 +95,22 @@
                     android:layout_height="wrap_content"
                     android:text="NightModel"
                     app:onClickEvent="@{viewModel.event.nightModeClick}" />
+
+                <ImageView
+                    android:id="@+id/ivTest"
+                    android:layout_width="106dp"
+                    android:layout_height="106dp"
+                    app:image="@{viewModel.testImage}" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="#8666"
+            app:fitInsetsMode="@{FitInsetsMode.MARGIN}"
+            app:fitInsetsType="@{WindowInsetsCompat.Type.ime()}"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,7 +3,7 @@
 package com.eitanliu.starter.bundle
 
 import android.os.Bundle
-import com.eitanliu.utils.typeToken
+import com.eitanliu.utils.GsonUtil.typeToken
 
 interface BundleDelegate {
     val bundle: Bundle

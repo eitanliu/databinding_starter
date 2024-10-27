@@ -26,7 +26,7 @@ class NavBarVM @Inject constructor(
     val itemIndex = multipleState(0)
 
     init {
-        fitSystemBars.value = true
+        // fitSystemBars.value = true
     }
 
     inner class Event(

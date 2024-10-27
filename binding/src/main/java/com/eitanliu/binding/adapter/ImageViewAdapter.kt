@@ -27,13 +27,18 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.eitanliu.binding.annotation.ImageDiskCacheStrategy
 import com.eitanliu.binding.annotation.ResourcesId
-import com.eitanliu.binding.extension.cacheImage
+import com.eitanliu.binding.controller.ImageViewController
 import com.eitanliu.binding.model.CacheImage
 
 @BindingMethods(
     // BindingMethod(type = ImageView::class, attribute = "srcCompat", method = "setImageResource"),
 )
 class ImageViewAdapter
+
+val ImageView.imageViewController
+    get() = viewController[ImageViewController] ?: ImageViewController(this).also {
+        viewController += it
+    }
 
 @BindingAdapter("srcCompat")
 fun ImageView.setImageResource(@DrawableRes resId: Int?) {
@@ -112,12 +117,13 @@ fun ImageView.loadImage(
         return null
     }
 
-    if (cacheImage?.model != image) cacheImage = CacheImage(image, null)
+    if (imageViewController.cacheImage?.model != image)
+        imageViewController.cacheImage = CacheImage(image, null)
 
     fun load(): RequestBuilder<Drawable> {
         val imageListener = { result: Result<Drawable> ->
             // Log.e("LoadImage", "image $result $image")
-            cacheImage = CacheImage(image, result.getOrNull())
+            imageViewController.cacheImage = CacheImage(image, result.getOrNull())
             false
         }
 
@@ -203,12 +209,12 @@ fun Context.loadImageBuilder(
         RequestOptions().placeholder(placeholder)
             .priority(priority ?: Priority.NORMAL)
     ).run {
-        if (!checkImageEmpty(error)) error(
-            Glide.with(this@loadImageBuilder).load(error)
-        ) else this
+        if (!checkImageEmpty(error)) error(error) else this
     }.run {
-        if (!checkImageEmpty(error)) thumbnail(
-            Glide.with(this@loadImageBuilder).load(thumbnail)
+        if (!checkImageEmpty(thumbnail)) thumbnail(
+            clone().error(null as? RequestBuilder<Drawable>?)
+                .thumbnail(null as RequestBuilder<Drawable>?)
+                .load(thumbnail)
         ) else this
     }.run {
         if (skipMemoryCache == true) skipMemoryCache(true) else this
@@ -262,9 +268,10 @@ fun Context.loadBitmapBuilder(
     ).run {
         if (!checkImageEmpty(error)) error(error) else this
     }.run {
-        @Suppress("CAST_NEVER_SUCCEEDS")
-        if (!checkImageEmpty(error)) thumbnail(
-            clone().error(null as? Any).load(thumbnail)
+        if (!checkImageEmpty(thumbnail)) thumbnail(
+            clone().error(null as? RequestBuilder<Bitmap>?)
+                .thumbnail(null as RequestBuilder<Bitmap>?)
+                .load(thumbnail)
         ) else this
     }.run {
         if (skipMemoryCache == true) skipMemoryCache(true) else this

@@ -7,6 +7,10 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.view.DisplayCompat
 import androidx.fragment.app.context
+import com.eitanliu.binding.adapter.imageViewController
+import com.eitanliu.binding.adapter.viewController
+import com.eitanliu.binding.adapter.viewExtController
+import com.eitanliu.binding.controller.ViewController
 import com.eitanliu.starter.binding.BindingActivity
 import com.eitanliu.utils.Logcat
 import com.eitanliu.utils.contextTree
@@ -43,11 +47,24 @@ class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val viewController = binding.ivTest.viewController
+        val extController = binding.ivTest.viewExtController
+        val imageViewController = binding.ivTest.imageViewController
+        val controllers = viewController.fold(arrayListOf<ViewController>()) { list, controller ->
+            list.apply { add(controller) }
+        }
+        Logcat.msg("ViewController $controllers, $viewController")
+        Logcat.msg("ViewController $extController, $imageViewController")
+        // binding.ivTest.viewController += ViewController.Empty
+    }
+
     override fun attachBaseContext(newBase: Context) {
         val displayMetrics = newBase.resources.displayMetrics
         // val width = min(displayMetrics.widthPixels, displayMetrics.heightPixels)
         val mode = DisplayCompat.getMode(newBase, ContextCompat.getDisplayOrDefault(newBase))
-        val width = min(mode.physicalWidth, mode.physicalWidth)
+        val width = min(mode.physicalWidth, mode.physicalHeight)
         val designWidth = 420.0
         val designDip = width / designWidth
         val designDpi = (designDip * 160).roundToInt()

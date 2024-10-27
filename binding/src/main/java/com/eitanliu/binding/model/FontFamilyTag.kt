@@ -2,6 +2,7 @@ package com.eitanliu.binding.model
 
 import android.graphics.Typeface
 import com.eitanliu.binding.annotation.ResourcesId
+import com.eitanliu.utils.hashCodeArray
 import java.io.Serializable
 
 data class FontFamilyTag(
@@ -22,8 +23,6 @@ data class FontFamilyTag(
     }
 
     override fun hashCode(): Int {
-        var result = id ?: 0
-        result = 31 * result + (name?.hashCode() ?: 0)
-        return result
+        return hashCodeArray(id, name)
     }
 }

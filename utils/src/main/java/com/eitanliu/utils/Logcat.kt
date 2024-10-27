@@ -35,20 +35,20 @@ object Logcat {
         return "${caller.methodName}(${caller.fileName}:${caller.lineNumber})"
     }
 
-    inline fun msg(
+    fun msg(
         msg: String,
     ) = msg(msg, null, level, tag)
 
-    inline fun msg(
+    fun msg(
         msg: String, tr: Throwable?,
     ) = msg(msg, tr, level, tag)
 
-    inline fun msg(
+    fun msg(
         msg: String, tr: Throwable?,
         tag: String, @Level level: Int = Logcat.level,
     ) = msg(msg, tr, level, tag)
 
-    inline fun msg(
+    fun msg(
         msg: String, tr: Throwable?,
         @Level level: Int, tag: String = Logcat.tag,
     ) = msg(tr, level, tag) { msg }

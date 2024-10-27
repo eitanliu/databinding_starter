@@ -15,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat.Type.InsetsType
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
+import com.eitanliu.binding.controller.ViewController
+import com.eitanliu.binding.controller.ViewExtController
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.event.UiEventConsumer
 import com.eitanliu.binding.event.UiEventConsumerResult
@@ -22,6 +24,7 @@ import com.eitanliu.binding.event.UiEventResult
 import com.eitanliu.binding.listener.CLICK_DELAY_DEFAULT
 import com.eitanliu.binding.listener.DebounceClickListener
 import com.eitanliu.binding.listener.DoubleTabTouchListener
+import com.eitanliu.utils.R
 import com.eitanliu.utils.WindowInsetsUtil.fitWindowInsets
 import com.eitanliu.utils.annotation.FitInsetsMode
 import com.eitanliu.utils.bindingTags
@@ -37,6 +40,21 @@ import com.eitanliu.utils.viewWindowInsetsCompat
     BindingMethod(type = View::class, attribute = "enabled", method = "setEnabled"),
 )
 class ViewAdapter
+
+var View.viewController: ViewController
+    get() = run {
+        getTag(R.id.viewController) as? ViewController ?: ViewExtController(this).also {
+            viewController = it
+        }
+    }
+    set(value) {
+        setTag(R.id.viewController, value)
+    }
+
+val View.viewExtController
+    get() = viewController[ViewExtController] ?: ViewExtController(this).also {
+        viewController += it
+    }
 
 /**
  * 设置View的背景颜色

@@ -5,8 +5,8 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialog
 import com.eitanliu.starter.binding.listener.DialogLifecycle
-import com.eitanliu.starter.binding.listener.WeakOnCreateListener
 import com.eitanliu.starter.binding.listener.WeakOnCancelListener
+import com.eitanliu.starter.binding.listener.WeakOnCreateListener
 import com.eitanliu.starter.binding.listener.WeakOnDismissListener
 import com.eitanliu.starter.binding.listener.WeakOnShowListener
 
