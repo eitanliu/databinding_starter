@@ -14,7 +14,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethods
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -64,7 +63,7 @@ fun ImageView.setImageResource(@DrawableRes resId: Int?) {
     "imagePlaceholder",
     "resPlaceholder",
     "colorPlaceholder",
-    "priority",
+    "requestOptions",
     "skipMemoryCache",
     "diskCacheStrategy",
     "crossFade",
@@ -80,7 +79,7 @@ fun ImageView.loadImage(
     imagePlaceholder: Drawable? = null,
     @DrawableRes resPlaceholder: Int? = null,
     @ColorInt colorPlaceholder: Int? = null,
-    priority: Priority? = null,
+    requestOptions: RequestOptions? = null,
     skipMemoryCache: Boolean? = null,
     @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
     crossFade: Int? = null,
@@ -129,7 +128,7 @@ fun ImageView.loadImage(
 
         // Log.e("LoadImage", "image load $image")
         return context.loadImageBuilder(
-            image, imageError, imageThumbnail, placeholder, priority,
+            image, imageError, imageThumbnail, placeholder, requestOptions,
             skipMemoryCache, diskCacheStrategy,
             crossFade, isCrossFade, isGif, imageListener
         )
@@ -149,7 +148,7 @@ fun ImageView.loadImage(
     error: Any? = null,
     thumbnail: Any? = null,
     placeholder: Drawable? = null,
-    priority: Priority? = null,
+    requestOptions: RequestOptions? = null,
     skipMemoryCache: Boolean? = null,
     @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
     crossFade: Int? = null,
@@ -166,7 +165,7 @@ fun ImageView.loadImage(
     }
 
     val builder = context.loadImageBuilder(
-        image, error, thumbnail, placeholder, priority,
+        image, error, thumbnail, placeholder, requestOptions,
         skipMemoryCache, diskCacheStrategy,
         crossFade, isCrossFade, isGif, listener,
     )
@@ -193,7 +192,7 @@ fun Context.loadImageBuilder(
     error: Any? = null,
     thumbnail: Any? = null,
     placeholder: Drawable? = null,
-    priority: Priority? = null,
+    requestOptions: RequestOptions? = null,
     skipMemoryCache: Boolean? = null,
     @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
     crossFade: Int? = null,
@@ -206,8 +205,7 @@ fun Context.loadImageBuilder(
         @Suppress("UNCHECKED_CAST")
         if (isGif == true) asGif() as RequestBuilder<Drawable> else asDrawable()
     }.load(image).apply(
-        RequestOptions().placeholder(placeholder)
-            .priority(priority ?: Priority.NORMAL)
+        (requestOptions ?: RequestOptions()).placeholder(placeholder)
     ).run {
         if (!checkImageEmpty(error)) error(error) else this
     }.run {
@@ -254,7 +252,7 @@ fun Context.loadBitmapBuilder(
     error: Any? = null,
     thumbnail: Any? = null,
     placeholder: Drawable? = null,
-    priority: Priority? = null,
+    requestOptions: RequestOptions? = null,
     skipMemoryCache: Boolean? = null,
     @ImageDiskCacheStrategy diskCacheStrategy: Int? = null,
     crossFade: Int? = null,
@@ -263,8 +261,7 @@ fun Context.loadBitmapBuilder(
 ): RequestBuilder<Bitmap> {
 
     val builder = Glide.with(this).asBitmap().load(image).apply(
-        RequestOptions().placeholder(placeholder)
-            .priority(priority ?: Priority.NORMAL)
+        (requestOptions ?: RequestOptions()).placeholder(placeholder)
     ).run {
         if (!checkImageEmpty(error)) error(error) else this
     }.run {

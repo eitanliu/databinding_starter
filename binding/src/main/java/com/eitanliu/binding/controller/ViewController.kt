@@ -3,7 +3,11 @@ package com.eitanliu.binding.controller
 import android.view.View
 
 /**
- * reference [kotlin.coroutines.CoroutineContext]
+ * ```kotlin
+ * val viewController = imageView.viewController
+ * val extController: ViewExtController? = viewController[ViewExtController]
+ * val imageViewController: ImageViewController? = viewController[ImageViewController]
+ * ```
  */
 interface ViewController {
 

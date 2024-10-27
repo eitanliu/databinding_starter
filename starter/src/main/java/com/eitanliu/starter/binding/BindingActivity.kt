@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.SparseArray
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
@@ -25,6 +26,7 @@ import com.eitanliu.starter.binding.model.ActivityLauncherInfo
 import com.eitanliu.starter.binding.registry.ISystemInsets
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.eitanliu.utils.BarUtil.setNavBar
+import com.eitanliu.utils.asTypeOrNull
 import com.eitanliu.utils.refWeak
 import java.lang.ref.Reference
 import java.util.Random
@@ -155,7 +157,8 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
     }
 
     private fun fitWindowInsets() {
-        binding.root.fitWindowInsets(
+        val fitView = binding.root.run { parent?.asTypeOrNull<View>() ?: this }
+        fitView.fitWindowInsets(
             systemInsets.fitSystemBars.value,
             systemInsets.fitStatusBars.value,
             systemInsets.fitNavigationBars.value,
