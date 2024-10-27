@@ -6,7 +6,7 @@ import java.lang.ref.Reference
 interface BindingOwner {
     val delegate: BindingDelegate?
 
-    fun bind(delegate: BindingDelegate)
+    fun bind(delegate: BindingDelegate): BindingOwner
 
     class Impl : BindingOwner {
 
@@ -14,8 +14,9 @@ interface BindingOwner {
 
         override val delegate: BindingDelegate? get() = _ref?.get()
 
-        override fun bind(delegate: BindingDelegate) {
+        override fun bind(delegate: BindingDelegate): BindingOwner {
             _ref = delegate.refWeak()
+            return this
         }
     }
 }

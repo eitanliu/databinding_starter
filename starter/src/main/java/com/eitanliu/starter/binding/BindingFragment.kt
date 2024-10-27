@@ -8,16 +8,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.eitanliu.binding.ViewBindingUtil
-import com.eitanliu.binding.adapter.fitWindowInsets
-import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLauncherInfo
 import com.eitanliu.starter.binding.registry.IFragment
 import com.eitanliu.starter.utils.ReflectionUtil
-import com.eitanliu.utils.BarUtil.setNavBar
 import com.eitanliu.utils.asTypeOrNull
 
 abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fragment(),
@@ -90,53 +86,9 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
             }
         }
         // 系统栏显示控制
-        viewModel.lightStatusBars.observe(viewLifecycleOwner) { state ->
-            if (state == null) return@observe
-            activity?.isAppearanceLightStatusBars = state == true
-        }
-        viewModel.lightNavigationBars.observe(viewLifecycleOwner) { state ->
-            val color = viewModel.navigationBarsColor.value
-            if (color == null && state == null) return@observe
-            val isLight = state == true
-            activity?.also { act ->
-                act.window.setNavBar(isLight, color)
-            }
-        }
-        viewModel.navigationBarsColor.observe(viewLifecycleOwner) { color ->
-            val state = viewModel.lightNavigationBars.value
-            if (color == null && state == null) return@observe
-            val isLight = state == true
-            activity?.also { act ->
-                act.window.setNavBar(isLight, color)
-            }
-        }
-        viewModel.fitSystemBars.observe(viewLifecycleOwner, fixWindowInsetsObserver)
-        viewModel.fitStatusBars.observe(viewLifecycleOwner, fixWindowInsetsObserver)
-        viewModel.fitNavigationBars.observe(viewLifecycleOwner, fixWindowInsetsObserver)
-        viewModel.fitCaptionBar.observe(viewLifecycleOwner, fixWindowInsetsObserver)
-        viewModel.fitDisplayCutout.observe(viewLifecycleOwner, fixWindowInsetsObserver)
-        viewModel.fitHorizontal.observe(viewLifecycleOwner, fixWindowInsetsObserver)
-        viewModel.fitMergeType.observe(viewLifecycleOwner, fixWindowInsetsObserver)
-        viewModel.fitInsetsType.observe(viewLifecycleOwner) { fitWindowInsets() }
-        viewModel.fitInsetsMode.observe(viewLifecycleOwner) { fitWindowInsets() }
-    }
-
-    private val fixWindowInsetsObserver = Observer<Boolean?> {
-        fitWindowInsets()
-    }
-
-    private fun fitWindowInsets() {
-        binding.root.fitWindowInsets(
-            viewModel.fitSystemBars.value,
-            viewModel.fitStatusBars.value,
-            viewModel.fitNavigationBars.value,
-            viewModel.fitCaptionBar.value,
-            viewModel.fitDisplayCutout.value,
-            viewModel.fitHorizontal.value,
-            viewModel.fitMergeType.value,
-            viewModel.fitInsetsType.value,
-            viewModel.fitInsetsMode.value,
-        )
+        val systemInsets = requireActivity().asTypeOrNull<BindingActivity<*, *>>()
+            ?.systemInsetsRegistry
+        viewModel.observeSystemInsets(this, systemInsets)
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -152,6 +104,9 @@ abstract class BindingFragment<VB : ViewDataBinding, VM : BindingViewModel> : Fr
         viewModel.lightStatusBars.notifyChange()
         viewModel.lightNavigationBars.notifyChange()
         viewModel.navigationBarsColor.notifyChange()
+        viewModel.fitSystemBars.notifyChange()
+        viewModel.fitNavigationBars.notifyChange()
+        viewModel.fitInsetsType.notifyChange()
     }
 
     override fun startActivity(info: ActivityLauncherInfo) {

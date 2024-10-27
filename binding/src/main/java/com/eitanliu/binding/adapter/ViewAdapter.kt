@@ -100,16 +100,14 @@ fun View.fitWindowInsets(
 
     ViewCompat.setOnApplyWindowInsetsListener(this, { _: View, wInsets: WindowInsetsCompat ->
         viewWindowInsetsCompat = wInsets
-        val insets = listener?.onApplyWindowInsets(
-            this, windowInsets ?: wInsets
-        ) ?: windowInsets ?: wInsets
+        val insets = windowInsets ?: wInsets
         fitWindowInsets(
             insets, fitSystemBars, fitStatusBars, fitNavigationBars,
             fitCaptionBar, fitDisplayCutout, fitHorizontal,
             fitMergeType, type, mode,
         )
         cacheWindowInsetsCompat = insets
-        insets
+        listener?.onApplyWindowInsets(this, insets) ?: insets
     }.takeIf { status || hasWindowInsets })
 }
 

@@ -9,7 +9,10 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.Insets
 import androidx.core.util.containsKey
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
@@ -19,6 +22,7 @@ import com.eitanliu.binding.adapter.fitWindowInsets
 import com.eitanliu.binding.extension.isAppearanceLightStatusBars
 import com.eitanliu.starter.binding.handler.OnBackPressedHandler
 import com.eitanliu.starter.binding.model.ActivityLauncherInfo
+import com.eitanliu.starter.binding.registry.ISystemInsets
 import com.eitanliu.starter.utils.ReflectionUtil
 import com.eitanliu.utils.BarUtil.setNavBar
 import com.eitanliu.utils.refWeak
@@ -26,11 +30,15 @@ import java.lang.ref.Reference
 import java.util.Random
 
 abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : AppCompatActivity(),
-    BindingView, ActivityLauncher {
+    BindingView, ActivityLauncher, BindingDelegate {
+
+    override val bindingOwner: BindingOwner = BindingOwner.Impl().bind(this)
 
     protected lateinit var binding: VB
 
     protected lateinit var viewModel: VM
+
+    val systemInsetsRegistry get() = viewModel as ISystemInsets
 
     @Suppress("UNCHECKED_CAST")
     private val viewBindingType: Class<VB> by lazy {
@@ -102,32 +110,42 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
                 onBackPressedHandler.remove()
             }
         }
+        // viewModel.observeSystemInsets(this, systemInsetsRegistry)
         // 系统栏显示控制
-        viewModel.lightStatusBars.observe(this) { state ->
+        systemInsetsRegistry.lightStatusBars.observe(this) { state ->
             if (state == null) return@observe
             isAppearanceLightStatusBars = state == true
         }
-        viewModel.lightNavigationBars.observe(this) { state ->
-            val color = viewModel.navigationBarsColor.value
+        systemInsetsRegistry.lightNavigationBars.observe(this) { state ->
+            val color = systemInsetsRegistry.navigationBarsColor.value
             if (color == null && state == null) return@observe
             val isLight = state == true
             window.setNavBar(isLight, color)
         }
-        viewModel.navigationBarsColor.observe(this) { color ->
-            val state = viewModel.lightNavigationBars.value
+        systemInsetsRegistry.navigationBarsColor.observe(this) { color ->
+            val state = systemInsetsRegistry.lightNavigationBars.value
             if (color == null && state == null) return@observe
             val isLight = state == true
             window.setNavBar(isLight, color)
         }
-        viewModel.fitSystemBars.observe(this, fixWindowInsetsObserver)
-        viewModel.fitStatusBars.observe(this, fixWindowInsetsObserver)
-        viewModel.fitNavigationBars.observe(this, fixWindowInsetsObserver)
-        viewModel.fitCaptionBar.observe(this, fixWindowInsetsObserver)
-        viewModel.fitDisplayCutout.observe(this, fixWindowInsetsObserver)
-        viewModel.fitHorizontal.observe(this, fixWindowInsetsObserver)
-        viewModel.fitMergeType.observe(this, fixWindowInsetsObserver)
-        viewModel.fitInsetsType.observe(this) { fitWindowInsets() }
-        viewModel.fitInsetsMode.observe(this) { fitWindowInsets() }
+        systemInsetsRegistry.fitSystemBars.observe(this) {
+            ViewCompat.requestApplyInsets(binding.root.rootView)
+            fitWindowInsets()
+        }
+        systemInsetsRegistry.fitStatusBars.observe(this, fixWindowInsetsObserver)
+        systemInsetsRegistry.fitNavigationBars.observe(this) {
+            ViewCompat.requestApplyInsets(binding.root.rootView)
+            fitWindowInsets()
+        }
+        systemInsetsRegistry.fitCaptionBar.observe(this, fixWindowInsetsObserver)
+        systemInsetsRegistry.fitDisplayCutout.observe(this, fixWindowInsetsObserver)
+        systemInsetsRegistry.fitHorizontal.observe(this, fixWindowInsetsObserver)
+        systemInsetsRegistry.fitMergeType.observe(this, fixWindowInsetsObserver)
+        systemInsetsRegistry.fitInsetsType.observe(this) {
+            ViewCompat.requestApplyInsets(binding.root.rootView)
+            fitWindowInsets()
+        }
+        systemInsetsRegistry.fitInsetsMode.observe(this) { fitWindowInsets() }
     }
 
     private val fixWindowInsetsObserver = Observer<Boolean?> {
@@ -136,16 +154,32 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
 
     private fun fitWindowInsets() {
         binding.root.fitWindowInsets(
-            viewModel.fitSystemBars.value,
-            viewModel.fitStatusBars.value,
-            viewModel.fitNavigationBars.value,
-            viewModel.fitCaptionBar.value,
-            viewModel.fitDisplayCutout.value,
-            viewModel.fitHorizontal.value,
-            viewModel.fitMergeType.value,
-            viewModel.fitInsetsType.value,
-            viewModel.fitInsetsMode.value,
-        )
+            systemInsetsRegistry.fitSystemBars.value,
+            systemInsetsRegistry.fitStatusBars.value,
+            systemInsetsRegistry.fitNavigationBars.value,
+            systemInsetsRegistry.fitCaptionBar.value,
+            systemInsetsRegistry.fitDisplayCutout.value,
+            systemInsetsRegistry.fitHorizontal.value,
+            systemInsetsRegistry.fitMergeType.value,
+            systemInsetsRegistry.fitInsetsType.value,
+            systemInsetsRegistry.fitInsetsMode.value,
+            // ViewCompat.getRootWindowInsets(binding.root)
+        ) { v, wInsets ->
+            val builder = WindowInsetsCompat.Builder(wInsets)
+            val needFixNav = systemInsetsRegistry.fitSystemBars.value == true
+                    || systemInsetsRegistry.fitNavigationBars.value == true
+            val rootInsets = ViewCompat.getRootWindowInsets(binding.root)
+            val imeInsets = rootInsets!!.getInsets(WindowInsetsCompat.Type.ime())
+            val navInsets = rootInsets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            if (needFixNav) {
+                val fixImeInsets = Insets.max(Insets.subtract(imeInsets, navInsets), Insets.NONE)
+                builder.setInsets(WindowInsetsCompat.Type.ime(), fixImeInsets)
+                builder.setInsets(WindowInsetsCompat.Type.navigationBars(), Insets.NONE)
+            }
+            val insets = builder.build()
+            insets
+        }
+
     }
 
     /**
