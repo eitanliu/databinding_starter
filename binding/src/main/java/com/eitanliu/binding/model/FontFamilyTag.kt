@@ -1,12 +1,12 @@
 package com.eitanliu.binding.model
 
 import android.graphics.Typeface
-import com.eitanliu.binding.annotation.ResourcesId
+import androidx.annotation.AnyRes
 import com.eitanliu.utils.hashCodeArray
 import java.io.Serializable
 
 data class FontFamilyTag(
-    @ResourcesId val id: Int?,
+    @AnyRes val id: Int?,
     val name: String?,
     val typeface: Typeface?,
 ) : Serializable {

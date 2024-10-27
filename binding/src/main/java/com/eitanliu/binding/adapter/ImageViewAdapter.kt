@@ -25,7 +25,6 @@ import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.eitanliu.binding.annotation.ImageDiskCacheStrategy
-import com.eitanliu.binding.annotation.ResourcesId
 import com.eitanliu.binding.controller.ImageViewController
 import com.eitanliu.binding.model.CacheImage
 
@@ -308,6 +307,6 @@ fun Context.loadBitmapBuilder(
 
 fun checkImageEmpty(image: Any?): Boolean {
     return image == null || (image as? String) == ""
-            || (image as? Int) == ResourcesId.ID_NULL
+            || (image as? Int) == ResourcesCompat.ID_NULL
             || (image as? Uri) == Uri.EMPTY
 }
