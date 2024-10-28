@@ -1,0 +1,50 @@
+Subject: [PATCH] Changes UiEvent.java
+---
+Index: binding/src/main/java/com/eitanliu/binding/event/UiEvent.java
+===================================================================
+diff --git a/binding/src/main/java/com/eitanliu/binding/event/UiEvent.java b/binding/src/main/java/com/eitanliu/binding/event/UiEvent.java
+new file mode 100644
+--- /dev/null	
++++ b/binding/src/main/java/com/eitanliu/binding/event/UiEvent.java	
+@@ -0,0 +1,5 @@
++package com.eitanliu.binding.event;
++
++public interface UiEvent {
++    void invoke();
++}
+Index: binding/src/main/java/com/eitanliu/binding/event/UiEventConsumer.java
+===================================================================
+diff --git a/binding/src/main/java/com/eitanliu/binding/event/UiEventConsumer.java b/binding/src/main/java/com/eitanliu/binding/event/UiEventConsumer.java
+new file mode 100644
+--- /dev/null	
++++ b/binding/src/main/java/com/eitanliu/binding/event/UiEventConsumer.java	
+@@ -0,0 +1,5 @@
++package com.eitanliu.binding.event;
++
++public interface UiEventConsumer<T> {
++    void invoke(T value);
++}
+Index: binding/src/main/java/com/eitanliu/binding/event/UiEventResult.java
+===================================================================
+diff --git a/binding/src/main/java/com/eitanliu/binding/event/UiEventResult.java b/binding/src/main/java/com/eitanliu/binding/event/UiEventResult.java
+new file mode 100644
+--- /dev/null	
++++ b/binding/src/main/java/com/eitanliu/binding/event/UiEventResult.java	
+@@ -0,0 +1,5 @@
++package com.eitanliu.binding.event;
++
++public interface UiEventResult<T> {
++    T invoke();
++}
+Index: binding/src/main/java/com/eitanliu/binding/event/UiEventConsumerResult.java
+===================================================================
+diff --git a/binding/src/main/java/com/eitanliu/binding/event/UiEventConsumerResult.java b/binding/src/main/java/com/eitanliu/binding/event/UiEventConsumerResult.java
+new file mode 100644
+--- /dev/null	
++++ b/binding/src/main/java/com/eitanliu/binding/event/UiEventConsumerResult.java	
+@@ -0,0 +1,5 @@
++package com.eitanliu.binding.event;
++
++public interface UiEventConsumerResult<T, R> {
++    R invoke(T value);
++}
