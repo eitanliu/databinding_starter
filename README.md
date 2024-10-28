@@ -1,5 +1,7 @@
 # Databinding Starter
 
+[![](https://jitpack.io/v/eitanliu/databinding_starter.svg)](https://jitpack.io/#eitanliu/databinding_starter)  
+
 ### How to
 
 To get a Git project into your build:  
@@ -27,8 +29,8 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    // implementation("com.github.eitanliu.databinding_starter:utils:main-SNAPSHOT")
-    // implementation("com.github.eitanliu.databinding_starter:binding:main-SNAPSHOT")
-    implementation("com.github.eitanliu.databinding_starter:starter:main-SNAPSHOT")
+    // implementation("com.github.eitanliu.databinding_starter:utils:1.0.0")
+    // implementation("com.github.eitanliu.databinding_starter:binding:1.0.0")
+    implementation("com.github.eitanliu.databinding_starter:starter:1.0.0")
 }
 ```
