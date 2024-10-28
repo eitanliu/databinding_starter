@@ -4,7 +4,7 @@ import android.view.View
 
 /**
  * ```kotlin
- * val viewController = imageView.viewController
+ * val viewController = imageView.viewController + ImageViewController(imageView)
  * val extController: ViewExtController? = viewController[ViewExtController]
  * val imageViewController: ImageViewController? = viewController[ImageViewController]
  * ```
