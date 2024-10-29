@@ -10,12 +10,16 @@ import com.eitanliu.starter.binding.registry.IActivity
 import com.eitanliu.starter.binding.registry.ISystemInsets
 import com.eitanliu.starter.binding.registry.SystemInsetsRegistry
 
-open class BindingViewModel @JvmOverloads constructor(
+open class BindingViewModel(
     val stateHandle: SavedStateHandle,
     override val bindingOwner: BindingOwner = BindingOwner.Impl()
 ) : ViewModel(), LifecycleViewModel, BindingDelegate,
     IActivity by ActivityRegistry(bindingOwner),
     ISystemInsets by SystemInsetsRegistry() {
+
+    constructor(
+        savedStateHandle: SavedStateHandle
+    ) : this(savedStateHandle, BindingOwner.Impl())
 
     init {
         bindingOwner.bind(this)
