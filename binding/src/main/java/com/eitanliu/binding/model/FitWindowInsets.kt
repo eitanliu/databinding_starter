@@ -2,7 +2,7 @@ package com.eitanliu.binding.model
 
 import androidx.core.graphics.Insets
 import androidx.core.view.WindowInsetsCompat.Type.InsetsType
-import com.eitanliu.utils.annotation.FitInsetsMode
+import com.eitanliu.binding.annotation.FitInsetsMode
 
 class FitWindowInsets(
     val status: Boolean,

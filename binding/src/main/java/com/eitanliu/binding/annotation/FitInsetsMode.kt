@@ -1,4 +1,4 @@
-package com.eitanliu.utils.annotation
+package com.eitanliu.binding.annotation
 
 import androidx.annotation.IntDef
 

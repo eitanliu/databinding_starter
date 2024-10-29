@@ -1,14 +1,16 @@
 package com.eitanliu.utils
 
 import android.content.Context
+import com.blankj.utilcode.util.Utils
 
 @Suppress("StaticFieldLeak")
 object ContextProvider {
 
-    lateinit var instance: Context
-        private set
+    private var _instance: Context? = null
+    val instance: Context
+        get() = _instance ?: Utils.getApp()
 
     fun register(context: Context) {
-        instance = context
+        _instance = context
     }
 }

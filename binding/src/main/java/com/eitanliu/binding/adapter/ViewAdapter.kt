@@ -26,7 +26,7 @@ import com.eitanliu.binding.listener.DebounceClickListener
 import com.eitanliu.binding.listener.DoubleTabTouchListener
 import com.eitanliu.utils.R
 import com.eitanliu.utils.WindowInsetsUtil.fitWindowInsets
-import com.eitanliu.utils.annotation.FitInsetsMode
+import com.eitanliu.binding.annotation.FitInsetsMode
 import com.eitanliu.utils.bindingTags
 import com.eitanliu.utils.cacheWindowInsetsCompat
 import com.eitanliu.utils.setBindingTag

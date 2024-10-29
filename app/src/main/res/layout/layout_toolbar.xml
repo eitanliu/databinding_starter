@@ -6,7 +6,7 @@
 
     <data>
 
-        <import type="com.eitanliu.utils.annotation.FitInsetsMode" />
+        <import type="com.eitanliu.binding.annotation.FitInsetsMode" />
 
         <variable
             name="viewModel"

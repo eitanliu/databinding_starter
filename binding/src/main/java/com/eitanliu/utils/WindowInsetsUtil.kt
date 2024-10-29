@@ -9,7 +9,7 @@ import androidx.core.view.WindowInsetsCompat.Type.InsetsType
 import androidx.core.view.updateLayoutParams
 import com.eitanliu.binding.adapter.viewExtController
 import com.eitanliu.binding.model.FitWindowInsets
-import com.eitanliu.utils.annotation.FitInsetsMode
+import com.eitanliu.binding.annotation.FitInsetsMode
 
 object WindowInsetsUtil {
     @JvmOverloads
