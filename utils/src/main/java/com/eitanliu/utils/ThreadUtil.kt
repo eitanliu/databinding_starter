@@ -3,15 +3,12 @@ package com.eitanliu.utils
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock.sleep
-import com.eitanliu.utils.DeviceUtil.cpuCoresNumber
 import java.util.concurrent.Executors
 import java.util.concurrent.ThreadPoolExecutor
 
 object ThreadUtil {
-    val coreSize = run {
-        val cores = cpuCoresNumber
-        if (cores > 5) cores / 2 else cores
-    }
+    val coreSize get() = Runtime.getRuntime().availableProcessors()
+
 
     /**
      * 主线程
@@ -21,7 +18,7 @@ object ThreadUtil {
     /**
      * 主线程判断
      */
-    val isMainThread = Looper.myLooper() == Looper.getMainLooper()
+    val isMainThread get() = Looper.myLooper() == Looper.getMainLooper()
 
     /**
      * 仅核心线程池

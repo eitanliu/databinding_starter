@@ -1,84 +1,172 @@
-package com.eitanliu.utils;
+package com.eitanliu.utils
 
-import android.os.Binder;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Size;
-import android.util.SizeF;
-import android.util.SparseArray;
+import android.os.BaseBundle
+import android.os.Build
+import android.os.Bundle
+import android.os.IBinder
+import android.os.Parcelable
+import android.os.PersistableBundle
+import android.util.Size
+import android.util.SizeF
+import java.io.Serializable
 
-import java.io.Serializable;
-import java.util.ArrayList;
+/**
+ * [androidx.core.os.bundleOf]
+ * [androidx.core.os.persistableBundleOf]
+ */
+@Suppress("KotlinConstantConditions", "ObsoleteSdkInt", "NOTHING_TO_INLINE")
+object BundleUtils {
 
-public class BundleUtils {
+    fun Bundle.putObject(key: String?, value: Any?) {
+        when (value) {
+            null -> putString(key, null) // Any nullable type will suffice.
 
-    @SuppressWarnings({"unchecked", "rawtypes", "ConstantConditions"})
-    public static void putObject(Bundle bundle, String key, Object value) {
+            // Scalars
+            is Boolean -> putBoolean(key, value)
+            is Byte -> putByte(key, value)
+            is Char -> putChar(key, value)
+            is Double -> putDouble(key, value)
+            is Float -> putFloat(key, value)
+            is Int -> putInt(key, value)
+            is Long -> putLong(key, value)
+            is Short -> putShort(key, value)
 
-        if (value instanceof Byte) {
-            bundle.putByte(key, (Byte) value);
-        } else if (value instanceof Character) {
-            bundle.putChar(key, (Character) value);
-        } else if (value instanceof Short) {
-            bundle.putShort(key, (Short) value);
-        } else if (value instanceof Float) {
-            bundle.putFloat(key, (Float) value);
-        } else if (value instanceof CharSequence) {
-            bundle.putCharSequence(key, (CharSequence) value);
-        } else if (value instanceof Parcelable) {
-            bundle.putParcelable(key, (Parcelable) value);
-        } else if (value instanceof Size) {
-            bundle.putSize(key, (Size) value);
-        } else if (value instanceof SizeF) {
-            bundle.putSizeF(key, (SizeF) value);
-        } else if (value instanceof Parcelable[]) {
-            bundle.putParcelableArray(key, (Parcelable[]) value);
-        } else if (value instanceof ArrayList) {
-            bundle.putParcelableArrayList(key, (ArrayList) value);
-        } else if (value instanceof SparseArray) {
-            bundle.putSparseParcelableArray(key, (SparseArray) value);
-        } else if (value instanceof Serializable) {
-            bundle.putSerializable(key, (Serializable) value);
-        } else if (value instanceof byte[]) {
-            bundle.putByteArray(key, (byte[]) value);
-        } else if (value instanceof short[]) {
-            bundle.putShortArray(key, (short[]) value);
-        } else if (value instanceof char[]) {
-            bundle.putCharArray(key, (char[]) value);
-        } else if (value instanceof float[]) {
-            bundle.putFloatArray(key, (float[]) value);
-        } else if (value instanceof CharSequence[]) {
-            bundle.putCharSequenceArray(key, (CharSequence[]) value);
-        } else if (value instanceof Bundle) {
-            bundle.putBundle(key, (Bundle) value);
-        } else if (value instanceof Binder) {
-            bundle.putBinder(key, (Binder) value);
-        } else if (value == null) {
-            bundle.putString(key, null);
-        } else if (value instanceof Boolean) {
-            bundle.putBoolean(key, (Boolean) value);
-        } else if (value instanceof Integer) {
-            bundle.putInt(key, (Integer) value);
-        } else if (value instanceof Long) {
-            bundle.putLong(key, (Long) value);
-        } else if (value instanceof Double) {
-            bundle.putDouble(key, (Double) value);
-        } else if (value instanceof String) {
-            bundle.putString(key, (String) value);
-        } else if (value instanceof boolean[]) {
-            bundle.putBooleanArray(key, (boolean[]) value);
-        } else if (value instanceof int[]) {
-            bundle.putIntArray(key, (int[]) value);
-        } else if (value instanceof long[]) {
-            bundle.putLongArray(key, (long[]) value);
-        } else if (value instanceof double[]) {
-            bundle.putDoubleArray(key, (double[]) value);
-        } else if (value instanceof String[]) {
-            bundle.putStringArray(key, (String[]) value);
-        } else {
-            throw new IllegalArgumentException("Unsupported type " + value.getClass());
+            // References
+            is Bundle -> putBundle(key, value)
+            is CharSequence -> putCharSequence(key, value)
+            is Parcelable -> putParcelable(key, value)
+
+            // Scalar arrays
+            is BooleanArray -> putBooleanArray(key, value)
+            is ByteArray -> putByteArray(key, value)
+            is CharArray -> putCharArray(key, value)
+            is DoubleArray -> putDoubleArray(key, value)
+            is FloatArray -> putFloatArray(key, value)
+            is IntArray -> putIntArray(key, value)
+            is LongArray -> putLongArray(key, value)
+            is ShortArray -> putShortArray(key, value)
+
+            // Reference arrays
+            is Array<*> -> {
+                val componentType = value::class.java.componentType!!
+                @Suppress("UNCHECKED_CAST") // Checked by reflection.
+                when {
+                    Parcelable::class.java.isAssignableFrom(componentType) -> {
+                        putParcelableArray(key, value as Array<Parcelable>)
+                    }
+
+                    String::class.java.isAssignableFrom(componentType) -> {
+                        putStringArray(key, value as Array<String>)
+                    }
+
+                    CharSequence::class.java.isAssignableFrom(componentType) -> {
+                        putCharSequenceArray(key, value as Array<CharSequence>)
+                    }
+
+                    Serializable::class.java.isAssignableFrom(componentType) -> {
+                        putSerializable(key, value)
+                    }
+
+                    else -> {
+                        val valueType = componentType.canonicalName
+                        throw IllegalArgumentException(
+                            "Illegal value array type $valueType for key \"$key\""
+                        )
+                    }
+                }
+            }
+
+            // Last resort. Also we must check this after Array<*> as all arrays are serializable.
+            is Serializable -> putSerializable(key, value)
+
+            else -> {
+                if (value is IBinder) {
+                    this.putBinder(key, value)
+                } else if (Build.VERSION.SDK_INT >= 21 && value is Size) {
+                    putSize(key, value)
+                } else if (Build.VERSION.SDK_INT >= 21 && value is SizeF) {
+                    putSizeF(key, value)
+                } else {
+                    val valueType = value.javaClass.canonicalName
+                    throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
+                }
+            }
         }
+    }
 
+    fun PersistableBundle.putObject(key: String?, value: Any?) {
+        when (value) {
+            null -> putString(key, null) // Any nullable type will suffice.
+
+            // Scalars
+            is Boolean -> {
+                putBoolean(key, value)
+                if (Build.VERSION.SDK_INT >= 22) {
+                } else {
+                    throw IllegalArgumentException(
+                        "Illegal value type boolean for key \"$key\""
+                    )
+                }
+            }
+
+            is Double -> putDouble(key, value)
+            is Int -> putInt(key, value)
+            is Long -> putLong(key, value)
+
+            // References
+            is String -> putString(key, value)
+
+            // Scalar arrays
+            is BooleanArray -> {
+                if (Build.VERSION.SDK_INT >= 22) {
+                    putBooleanArray(key, value)
+                } else {
+                    throw IllegalArgumentException(
+                        "Illegal value type boolean[] for key \"$key\""
+                    )
+                }
+            }
+
+            is DoubleArray -> putDoubleArray(key, value)
+            is IntArray -> putIntArray(key, value)
+            is LongArray -> putLongArray(key, value)
+
+            // Reference arrays
+            is Array<*> -> {
+                val componentType = value::class.java.componentType!!
+                @Suppress("UNCHECKED_CAST") // Checked by reflection.
+                when {
+                    String::class.java.isAssignableFrom(componentType) -> {
+                        putStringArray(key, value as Array<String>)
+                    }
+
+                    else -> {
+                        val valueType = componentType.canonicalName
+                        throw IllegalArgumentException(
+                            "Illegal value array type $valueType for key \"$key\""
+                        )
+                    }
+                }
+            }
+
+            else -> {
+                val valueType = value.javaClass.canonicalName
+                throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
+            }
+        }
+    }
+
+    inline fun BaseBundle.toArray() = toList().toTypedArray()
+
+    inline fun BaseBundle.toList() = toMap().toList()
+
+    @Suppress("DEPRECATION")
+    fun BaseBundle.toMap(): Map<String, Any?> {
+        val state: MutableMap<String, Any?> = HashMap()
+        for (key in keySet()) {
+            state[key] = this[key]
+        }
+        return state
     }
 
 }

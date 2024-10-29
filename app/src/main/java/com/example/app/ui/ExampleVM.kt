@@ -13,12 +13,12 @@ import com.eitanliu.binding.state.multipleState
 import com.eitanliu.binding.state.singleState
 import com.eitanliu.starter.binding.BindingViewModel
 import com.eitanliu.utils.Logcat
+import com.eitanliu.utils.SavedStateHandleUtil.bundle
 import com.eitanliu.utils.hideSoftKeyboard
 import com.eitanliu.utils.imeInsets
 import com.eitanliu.utils.isShowSoftwareKeyboard
+import com.eitanliu.utils.not
 import com.eitanliu.utils.showSoftKeyboard
-import com.example.app.extension.bundle
-import com.example.app.extension.not
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -40,7 +40,8 @@ class ExampleVM @Inject constructor(
             else -> AppCompatDelegate.MODE_NIGHT_NO
         }
 
-    val testImage = multipleState("https://gips1.baidu.com/it/u=3874647369,3220417986&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280")
+    val testImage =
+        multipleState("https://gips1.baidu.com/it/u=3874647369,3220417986&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280")
 
     init {
         title.value = "${args.arg1} ${args.arg2}"

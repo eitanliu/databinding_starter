@@ -8,7 +8,7 @@ import com.eitanliu.binding.event.debounceEvent
 import com.eitanliu.binding.state.singleState
 import com.eitanliu.starter.binding.BindingViewModel
 import com.eitanliu.starter.binding.startActivity
-import com.example.app.extension.bundle
+import com.eitanliu.utils.SavedStateHandleUtil.bundle
 import com.example.app.ui.ExampleActivity
 import com.example.app.ui.ExampleArgs
 import com.example.app.ui.navbar.NavBarActivity

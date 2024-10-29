@@ -5,7 +5,7 @@ package com.eitanliu.starter.extension
 import android.os.Bundle
 import com.eitanliu.starter.bundle.BundleDelegate
 import com.eitanliu.starter.bundle.newBundleDelegate
-import com.eitanliu.utils.BundleUtils
+import com.eitanliu.utils.BundleUtils.putObject
 
 class BundleExt
 
@@ -15,4 +15,4 @@ inline fun <reified R : BundleDelegate> Bundle.toBundleDelegate() =
 
 inline fun Bundle?.orEmpty() = this ?: Bundle()
 
-inline fun Bundle.putObject(key: String, value: Any?) = BundleUtils.putObject(this, key, value)
+inline operator fun Bundle.set(key: String, value: Any?) = putObject(key, value)

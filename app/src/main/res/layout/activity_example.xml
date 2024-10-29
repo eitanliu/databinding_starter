@@ -16,9 +16,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#6666"
         app:fitInsetsMode="@{FitInsetsMode.MARGIN}"
-        app:fitInsetsType="@{WindowInsetsCompat.Type.ime()}"
-        android:background="#6666">
+        app:fitInsetsType="@{WindowInsetsCompat.Type.ime()}">
 
         <include
             android:id="@+id/laToolbar"
@@ -29,10 +29,10 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constrainedHeight="true"
             app:layout_constraintTop_toBottomOf="@+id/laToolbar"
             app:layout_constraintVertical_bias="0">
 
@@ -79,25 +79,30 @@
                         app:onClickEvent="@{viewModel.event.fitHorizontalClick}" />
                 </LinearLayout>
 
-                <Button
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="LightStatusBar"
-                    app:debounce="@{false}"
-                    app:onClickEvent="@{viewModel.event.lightStatusBar}" />
+                    android:layout_height="wrap_content">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="LightNavBar"
-                    app:debounce="@{false}"
-                    app:onClickEvent="@{viewModel.event.lightNavBar}" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LightStatusBar"
+                        app:debounce="@{false}"
+                        app:onClickEvent="@{viewModel.event.lightStatusBar}" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="NightModel"
-                    app:onClickEvent="@{viewModel.event.nightModeClick}" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LightNavBar"
+                        app:debounce="@{false}"
+                        app:onClickEvent="@{viewModel.event.lightNavBar}" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NightModel"
+                        app:onClickEvent="@{viewModel.event.nightModeClick}" />
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/ivTest"

@@ -8,8 +8,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsCompat.Type.InsetsType
 import androidx.core.view.updateLayoutParams
 import com.eitanliu.binding.adapter.viewExtController
-import com.eitanliu.binding.model.FitWindowInsets
 import com.eitanliu.binding.annotation.FitInsetsMode
+import com.eitanliu.binding.model.FitWindowInsets
 
 object WindowInsetsUtil {
     @JvmOverloads

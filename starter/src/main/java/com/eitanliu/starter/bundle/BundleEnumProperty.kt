@@ -1,7 +1,7 @@
 package com.eitanliu.starter.bundle
 
 import android.os.Bundle
-import com.eitanliu.starter.extension.putObject
+import com.eitanliu.utils.BundleUtils.putObject
 import kotlin.reflect.KProperty
 
 open class BundleEnumProperty<T : Enum<T>>(

@@ -2,7 +2,6 @@
 
 package com.eitanliu.utils
 
-import android.app.ActivityManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Resources
@@ -11,6 +10,7 @@ import android.util.TypedValue
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.util.TypedValueCompat
+import com.blankj.utilcode.util.AppUtils
 import kotlin.math.roundToInt
 
 class ContextExt
@@ -29,20 +29,7 @@ fun Context.baseIf(predicate: (context: Context) -> Boolean): Context? {
     return null
 }
 
-val Context.isAppForeground: Boolean
-    get() {
-        val am = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-
-        @Suppress("DEPRECATION")
-        val tasks = am.getRunningTasks(1)
-        if (tasks.isNotEmpty()) {
-            val topActivity = tasks[0].topActivity
-            if (topActivity?.packageName == packageName) {
-                return true
-            }
-        }
-        return false
-    }
+val Context.isAppForeground: Boolean get() = AppUtils.isAppForeground()
 
 inline fun Context.color(@ColorRes id: Int, theme: Resources.Theme? = null) =
     resources.color(id, theme)

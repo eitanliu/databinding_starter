@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.eitanliu.binding.event.bindingEvent
 import com.eitanliu.starter.binding.FragmentViewModel
 import com.eitanliu.starter.binding.startActivity
-import com.example.app.extension.bundle
+import com.eitanliu.utils.SavedStateHandleUtil.bundle
 import com.example.app.ui.ExampleActivity
 import javax.inject.Inject
 

@@ -8,11 +8,11 @@ import com.eitanliu.binding.extension.observe
 import com.eitanliu.starter.binding.FragmentViewModel
 import com.eitanliu.starter.binding.startActivity
 import com.eitanliu.utils.Logcat
+import com.eitanliu.utils.SavedStateHandleUtil.bundle
 import com.eitanliu.utils.imeInsets
 import com.eitanliu.utils.isShowSoftwareKeyboard
+import com.eitanliu.utils.not
 import com.eitanliu.utils.toggleSoftKeyboard
-import com.example.app.extension.bundle
-import com.example.app.extension.not
 import com.example.app.ui.ExampleActivity
 import javax.inject.Inject
 
