@@ -6,6 +6,9 @@ import androidx.core.view.SoftwareKeyboardControllerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.eitanliu.binding.ViewLifecycleOwner
 import com.eitanliu.binding.model.FitWindowInsets
 
@@ -56,6 +59,20 @@ class ViewExtController(
         window: Window
     ) = windowInsetsControllerCompat ?: WindowInsetsControllerCompat(window, view).also {
         windowInsetsControllerCompat = it
+    }
+
+    fun observe(observer: View.OnAttachStateChangeListener) {
+        val lifecycle = viewLifecycleOwner.lifecycle
+        lifecycle.addObserver(object : LifecycleEventObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                if (event == Lifecycle.Event.ON_START) {
+                    observer.onViewAttachedToWindow(view)
+                } else if (event == Lifecycle.Event.ON_DESTROY) {
+                    observer.onViewDetachedFromWindow(view)
+                    source.lifecycle.removeObserver(this)
+                }
+            }
+        })
     }
 
 }

@@ -18,8 +18,8 @@ open class BindingViewModel(
     ISystemInsets by SystemInsetsRegistry() {
 
     constructor(
-        savedStateHandle: SavedStateHandle
-    ) : this(savedStateHandle, BindingOwner.Impl())
+        stateHandle: SavedStateHandle
+    ) : this(stateHandle, BindingOwner.Impl())
 
     init {
         bindingOwner.bind(this)
