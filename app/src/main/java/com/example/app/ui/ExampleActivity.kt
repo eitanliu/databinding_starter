@@ -4,12 +4,15 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.DisplayCompat
 import androidx.fragment.app.context
+import androidx.lifecycle.LifecycleOwner
 import com.eitanliu.binding.adapter.imageViewController
 import com.eitanliu.binding.adapter.viewController
 import com.eitanliu.binding.adapter.viewExtController
+import com.eitanliu.binding.controller.AttachStateChangeListener
 import com.eitanliu.binding.controller.ViewController
 import com.eitanliu.starter.binding.BindingActivity
 import com.eitanliu.utils.Logcat
@@ -45,6 +48,29 @@ class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
         viewModel.state.testState.observe(this) {
             recreate()
         }
+        testViewAttach()
+    }
+
+    private fun testViewAttach() {
+        binding.root.viewExtController.observe(object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(v: View) {
+                Logcat.msg("$v")
+            }
+
+            override fun onViewDetachedFromWindow(v: View) {
+                Logcat.msg("$v")
+            }
+        })
+        binding.root.viewExtController.viewLifecycleOwner.observe(object :
+            AttachStateChangeListener {
+            override fun onAttachedState(owner: LifecycleOwner) {
+                Logcat.msg("${owner.lifecycle.currentState}")
+            }
+
+            override fun onDetachedState(owner: LifecycleOwner) {
+                Logcat.msg("${owner.lifecycle.currentState}")
+            }
+        })
     }
 
     override fun onResume() {

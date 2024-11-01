@@ -6,20 +6,14 @@ import androidx.core.view.SoftwareKeyboardControllerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import com.eitanliu.binding.ViewLifecycleOwner
 import com.eitanliu.binding.model.FitWindowInsets
 
 class ViewExtController(
     override val view: View
-) : ViewController, View.OnAttachStateChangeListener {
+) : ViewLifecycleController() {
     companion object Key : ViewController.Key<ViewExtController>
 
     override val key: ViewController.Key<*> = Key
-
-    val viewLifecycleOwner: ViewLifecycleOwner = ViewLifecycleOwner.Impl()
 
     var fitWindowInsets: FitWindowInsets? = null
 
@@ -41,38 +35,21 @@ class ViewExtController(
 
 
     init {
-        view.addOnAttachStateChangeListener(this)
-        if (view.isAttachedToWindow) {
-            viewLifecycleOwner.onAttachedLifecycle()
-        }
+        initAttachLifecycle()
     }
 
     override fun onViewAttachedToWindow(v: View) {
-        viewLifecycleOwner.onAttachedLifecycle()
+        viewLifecycleOwner.dispatchAttachedLifecycle()
     }
 
     override fun onViewDetachedFromWindow(v: View) {
-        viewLifecycleOwner.onDetachedLifecycle()
+        viewLifecycleOwner.dispatchDetachedLifecycle()
     }
 
     fun getWindowInsetsController(
         window: Window
     ) = windowInsetsControllerCompat ?: WindowInsetsControllerCompat(window, view).also {
         windowInsetsControllerCompat = it
-    }
-
-    fun observe(observer: View.OnAttachStateChangeListener) {
-        val lifecycle = viewLifecycleOwner.lifecycle
-        lifecycle.addObserver(object : LifecycleEventObserver {
-            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-                if (event == Lifecycle.Event.ON_START) {
-                    observer.onViewAttachedToWindow(view)
-                } else if (event == Lifecycle.Event.ON_DESTROY) {
-                    observer.onViewDetachedFromWindow(view)
-                    source.lifecycle.removeObserver(this)
-                }
-            }
-        })
     }
 
 }
