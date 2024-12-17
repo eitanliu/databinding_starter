@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.dagger.hilt.android)
     kotlin("kapt")
 }
@@ -95,7 +96,7 @@ dependencies {
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.work.ktx)
     implementation(libs.androidx.work.multiprocess)
 
@@ -104,7 +105,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.lottie)
     implementation(libs.glide)
-    kapt(libs.glide.compiler)
+    ksp(libs.glide.compiler)
     annotationProcessor(libs.glide.compiler)
     implementation(libs.glide.transformations)
     implementation(libs.okhttp)

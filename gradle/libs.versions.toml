@@ -1,6 +1,7 @@
 [versions]
 agp = "8.5.1"
-kotlin = "2.0.10"
+kotlin = "2.0.21"
+kotlin-ksp = "2.0.21-1.0.28"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -168,7 +169,7 @@ mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
 glide-transformations = { group = "jp.wasabeef", name = "glide-transformations", version.ref = "glide-transformations" }
 okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
@@ -185,8 +186,9 @@ binding-collection-adapter-viewpager2 = { group = "me.tatarka.bindingcollectiona
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-perf-plugin" }
 imgCompress-plugin = { id = "img-compressor", version.ref = "imgCompress-plugin" }

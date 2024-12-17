@@ -1,7 +1,8 @@
 apply(from = rootProject.file("gradle/maven_publish.gradle.kts"))
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 val jvmVersion = "11"
