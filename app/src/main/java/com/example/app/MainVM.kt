@@ -50,7 +50,9 @@ class MainVM @Inject constructor(
         // 二次返回退出
         val onBackPressed = debounceEvent(DELAY_BACK_TIME) {
             onBackPressedEnableDelay(DELAY_BACK_TIME)
-            ToastUtils.showShort("back again to exit")
+            if (onBackPressedEnable.value == false) {
+                ToastUtils.showShort("back again to exit")
+            }
         }
 
         val exampleClick = bindingEvent {

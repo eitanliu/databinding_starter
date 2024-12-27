@@ -92,7 +92,7 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.android.compiler)
+    ksp(libs.dagger.hilt.android.compiler)
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

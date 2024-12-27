@@ -57,7 +57,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    implementation(libs.dagger.hilt.android)
+    // implementation(libs.dagger.hilt.android)
     // kapt(libs.dagger.hilt.android.compiler)
 
     ////// framework //////
