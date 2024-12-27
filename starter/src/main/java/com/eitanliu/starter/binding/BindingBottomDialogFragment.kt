@@ -74,12 +74,16 @@ abstract class BindingBottomDialogFragment<VB : ViewDataBinding, VM : BindingVie
         return binding.root
     }
 
-    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
+    protected open fun createViewBinding(parent: ViewGroup? = null) = run {
+        ViewBindingUtil.inflate(viewBindingType, layoutInflater, null, false)
+    }
+
+    protected open fun createViewModel() = ViewModelProvider(this)[viewModelType]
 
     private fun ensureBinding(parent: ViewGroup? = null) {
         binding = if (bindLayoutId != ResourcesCompat.ID_NULL) {
             DataBindingUtil.inflate(layoutInflater, bindLayoutId, parent, false)
-        } else ViewBindingUtil.inflate(viewBindingType, layoutInflater, null, false)
+        } else createViewBinding(parent)
         viewModel = createViewModel()
         binding.setVariable(bindVariableId, viewModel)
         binding.lifecycleOwner = this

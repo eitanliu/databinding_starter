@@ -74,12 +74,16 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
         viewModel.uiMode.value = resources.configuration.uiMode
     }
 
-    open fun createViewModel() = ViewModelProvider(this)[viewModelType]
+    protected open fun createViewBinding() = run {
+        ViewBindingUtil.inflate(viewBindingType, layoutInflater, null, false)
+    }
 
-    private fun ensureBinding() {
+    protected open fun createViewModel() = ViewModelProvider(this)[viewModelType]
+
+    protected open fun ensureBinding() {
         binding = if (bindLayoutId != ResourcesCompat.ID_NULL) {
             DataBindingUtil.setContentView(this, bindLayoutId)
-        } else ViewBindingUtil.inflate(viewBindingType, layoutInflater, null, false).apply {
+        } else createViewBinding().apply {
             setContentView(root)
         }
         viewModel = createViewModel()
