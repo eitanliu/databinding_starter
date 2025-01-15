@@ -26,7 +26,7 @@ lifecycle-ktx = "2.8.6"
 activity = "1.9.2"
 appcompat = "1.7.0"
 
-dagger-hilt = "2.54"
+dagger-hilt = "2.55"
 hilt = "1.2.0"
 hilt-work = "1.0.0"
 hilt-navigation = "1.0.0"
