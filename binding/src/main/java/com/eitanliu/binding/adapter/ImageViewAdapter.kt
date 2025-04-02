@@ -220,11 +220,13 @@ fun Context.loadImageBuilder(
             ImageDiskCacheStrategy.convert(diskCacheStrategy)
         ) else this
     }.run {
-        if (isCrossFade == true) transition(DrawableTransitionOptions.withCrossFade(
-            DrawableCrossFadeFactory.Builder(crossFade.takeIf {
-                it != null && it > 0
-            } ?: 300).setCrossFadeEnabled(true)
-        )) else this
+        if (isCrossFade == true) transition(
+            DrawableTransitionOptions.withCrossFade(
+                DrawableCrossFadeFactory.Builder(
+                    crossFade.takeIf { it != null && it > 0 } ?: 300
+                ).setCrossFadeEnabled(true)
+            ),
+        ) else this
     }.run {
         if (listener != null) listener(object : RequestListener<Drawable> {
             override fun onLoadFailed(
@@ -232,14 +234,14 @@ fun Context.loadImageBuilder(
             ): Boolean {
                 return listener.invoke(
                     Result.failure(e ?: NullPointerException("Glide LoadFailed"))
-                ) ?: false
+                ) == true
             }
 
             override fun onResourceReady(
                 resource: Drawable, model: Any, target: Target<Drawable>?,
                 dataSource: DataSource, isFirstResource: Boolean
             ): Boolean {
-                return listener.invoke(Result.success(resource)) ?: false
+                return listener.invoke(Result.success(resource)) == true
             }
         }) else this
     }
@@ -276,11 +278,13 @@ fun Context.loadBitmapBuilder(
             ImageDiskCacheStrategy.convert(diskCacheStrategy)
         ) else this
     }.run {
-        if (isCrossFade == true) transition(BitmapTransitionOptions.withCrossFade(
-            DrawableCrossFadeFactory.Builder(crossFade.takeIf {
-                it != null && it > 0
-            } ?: 300).setCrossFadeEnabled(true)
-        )) else this
+        if (isCrossFade == true) transition(
+            BitmapTransitionOptions.withCrossFade(
+                DrawableCrossFadeFactory.Builder(crossFade.takeIf {
+                    it != null && it > 0
+                } ?: 300).setCrossFadeEnabled(true)
+            ),
+        ) else this
     }.run {
         if (listener != null) listener(object : RequestListener<Bitmap> {
             override fun onLoadFailed(
@@ -291,14 +295,14 @@ fun Context.loadBitmapBuilder(
             ): Boolean {
                 return listener.invoke(
                     Result.failure(e ?: NullPointerException("Glide LoadFailed"))
-                ) ?: false
+                ) == true
             }
 
             override fun onResourceReady(
                 resource: Bitmap, model: Any, target: Target<Bitmap>?,
                 dataSource: DataSource, isFirstResource: Boolean
             ): Boolean {
-                return listener.invoke(Result.success(resource)) ?: false
+                return listener.invoke(Result.success(resource)) == true
             }
         }) else this
     }
