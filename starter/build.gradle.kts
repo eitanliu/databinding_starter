@@ -11,7 +11,7 @@ val jvmVersion = "11"
 
 android {
     namespace = "com.eitanliu.starter"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 23

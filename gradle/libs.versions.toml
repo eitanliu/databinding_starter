@@ -1,11 +1,12 @@
 [versions]
 agp = "8.5.2"
-kotlin = "2.1.0"
-kotlin-ksp = "2.1.0-1.0.28"
+kotlin = "2.1.20"
+kotlin-ksp = "2.1.20-1.0.32"
+kotlinx-coroutines = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-desugar-jdk-libs = "2.1.4"
+desugar-jdk-libs = "2.1.5"
 multidex = "2.0.1"
 
 ### plugin
@@ -22,9 +23,9 @@ javapoet = "1.13.0"
 
 ### jetpack
 core = "1.13.1"
-lifecycle-ktx = "2.8.6"
-activity = "1.9.2"
+activity = "1.9.3"
 appcompat = "1.7.0"
+lifecycle-ktx = "2.8.7"
 
 dagger-hilt = "2.55"
 hilt = "1.2.0"
@@ -33,13 +34,13 @@ hilt-navigation = "1.0.0"
 
 room = "2.6.1"
 work = "2.9.1"
-media3 = "1.4.1"
+media3 = "1.6.0"
 
 material = "1.12.0"
 emoji2 = "1.5.0"
 palette = "1.0.0"
-constraintlayout = "2.1.4"
-coordinatorlayout = "1.2.0"
+constraintlayout = "2.2.1"
+coordinatorlayout = "1.3.0"
 recyclerview = "1.3.2"
 recyclerview-selection = "1.1.0"
 cardview = "2.1.4"
@@ -58,12 +59,12 @@ google-scanning = "17.3.0"
 billing = "6.2.0"
 
 ### framework
-mmkv = "1.3.3"
-gson = "2.10.1"
+mmkv = "2.1.0"
+gson = "2.11.0"
 lottie = "6.2.0"
 glide = "4.16.0"
 glide-transformations = "4.3.0"
-okio = "3.0.0"
+okio = "3.9.0"
 okhttp = "4.12.0"
 retrofit = "2.9.0"
 
@@ -73,13 +74,21 @@ blankjUtils = "1.31.1"
 binding-collection-adapter = "4.0.0"
 
 [libraries]
+
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-stdlib-jdk7 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "kotlin" }
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+
 ### test
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+junit = { module = "junit:junit", version.ref = "junit" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 
 ### plugin
-imgCompress-plugin = { group = "io.github.duking666", name = "ImgCompressPlugin", version.ref = "imgCompress-plugin" }
+imgCompress-plugin = { module = "io.github.duking666:ImgCompressPlugin", version.ref = "imgCompress-plugin" }
 # https://github.com/bytedance/ByteX
 #aabresguard-plugin = { module = "com.bytedance.android:aabresguard-plugin", version.ref = "aabresguard-plugin" }
 # https://repo1.maven.org/maven2/io/github/bumptechlab/aabresguard-plugin/maven-metadata.xml
@@ -90,14 +99,15 @@ javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 
 ### build
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk-libs" }
-androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
+androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 
 ### jetpack
-androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }
-androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-core = { module = "androidx.core:core", version.ref = "core" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core" }
+androidx-activity = { module = "androidx.activity:activity", version.ref = "activity" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime", version.ref = "lifecycle-ktx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }
 
 # https://dagger.dev/hilt
 # https://developer.android.com/training/dependency-injection/hilt-android
@@ -115,73 +125,73 @@ hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", 
 # https://developer.android.com/develop/ui/compose/libraries#hilt
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt" }
 
-androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
-androidx-work-multiprocess = { group = "androidx.work", name = "work-multiprocess", version.ref = "work" }
-androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
-androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
-androidx-media3-exoplayer-hls = { group = "androidx.media3", name = "media3-exoplayer-hls", version.ref = "media3" }
-androidx-media3-exoplayer-dash = { group = "androidx.media3", name = "media3-exoplayer-dash", version.ref = "media3" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+androidx-work-multiprocess = { module = "androidx.work:work-multiprocess", version.ref = "work" }
+androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+androidx-media3-exoplayer-hls = { module = "androidx.media3:media3-exoplayer-hls", version.ref = "media3" }
+androidx-media3-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "media3" }
 
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-emoji2 = { group = "androidx.emoji2", name = "emoji2", version.ref = "emoji2" }
-androidx-emoji2-views = { group = "androidx.emoji2", name = "emoji2-views", version.ref = "emoji2" }
-androidx-emoji2-views-helper = { group = "androidx.emoji2", name = "emoji2-views-helper", version.ref = "emoji2" }
-androidx-palette = { group = "androidx.palette", name = "palette", version.ref = "palette" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-androidx-coordinatorlayout = { group = "androidx.coordinatorlayout", name = "coordinatorlayout", version.ref = "coordinatorlayout" }
-androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
-androidx-recyclerview-selection = { group = "androidx.recyclerview", name = "recyclerview-selection", version.ref = "recyclerview-selection" }
-androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
-androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
-androidx-drawerlayout = { group = "androidx.drawerlayout", name = "drawerlayout", version.ref = "drawerlayout" }
-androidx-slidingpanelayout = { group = "androidx.slidingpanelayout", name = "slidingpanelayout", version.ref = "slidingpanelayout" }
-androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+androidx-emoji2 = { module = "androidx.emoji2:emoji2", version.ref = "emoji2" }
+androidx-emoji2-views = { module = "androidx.emoji2:emoji2-views", version.ref = "emoji2" }
+androidx-emoji2-views-helper = { module = "androidx.emoji2:emoji2-views-helper", version.ref = "emoji2" }
+androidx-palette = { module = "androidx.palette:palette", version.ref = "palette" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-coordinatorlayout = { module = "androidx.coordinatorlayout:coordinatorlayout", version.ref = "coordinatorlayout" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+androidx-recyclerview-selection = { module = "androidx.recyclerview:recyclerview-selection", version.ref = "recyclerview-selection" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
+androidx-drawerlayout = { module = "androidx.drawerlayout:drawerlayout", version.ref = "drawerlayout" }
+androidx-slidingpanelayout = { module = "androidx.slidingpanelayout:slidingpanelayout", version.ref = "slidingpanelayout" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 ### firebase
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
-firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "firebase" }
-firebase-config-ktx = { group = "com.google.firebase", name = "firebase-config-ktx", version.ref = "firebase" }
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebase" }
-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase" }
-firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version.ref = "firebase" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebase" }
+firebase-config-ktx = { module = "com.google.firebase:firebase-config-ktx", version.ref = "firebase" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebase" }
+firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase" }
 
 ### gms
-play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "gms" }
-play-services-basement = { group = "com.google.android.gms", name = "play-services-basement", version.ref = "gms" }
-play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "gms" }
-play-services-tasks = { group = "com.google.android.gms", name = "play-services-tasks", version.ref = "gms" }
-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "gms" }
-play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "gms-ads" }
-play-services-ads-identifier = { group = "com.google.android.gms", name = "play-services-ads-identifier", version.ref = "gms-ads" }
+play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "gms" }
+play-services-basement = { module = "com.google.android.gms:play-services-basement", version.ref = "gms" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "gms" }
+play-services-tasks = { module = "com.google.android.gms:play-services-tasks", version.ref = "gms" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "gms" }
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "gms-ads" }
+play-services-ads-identifier = { module = "com.google.android.gms:play-services-ads-identifier", version.ref = "gms-ads" }
 
 ### google
-play-review = { group = "com.google.android.play", name = "review", version.ref = "play-review" }
-play-review-ktx = { group = "com.google.android.play", name = "review-ktx", version.ref = "play-review" }
-google-ump = { group = "com.google.android.ump", name = "user-messaging-platform", version.ref = "google-ump" }
-google-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "google-scanning" }
-billing = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
+play-review = { module = "com.google.android.play:review", version.ref = "play-review" }
+play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "play-review" }
+google-ump = { module = "com.google.android.ump:user-messaging-platform", version.ref = "google-ump" }
+google-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "google-scanning" }
+billing = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 
 ### framework
-mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }
-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-glide-compiler = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
-glide-transformations = { group = "jp.wasabeef", name = "glide-transformations", version.ref = "glide-transformations" }
-okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+mmkv = { module = "com.tencent:mmkv", version.ref = "mmkv" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
+glide-transformations = { module = "jp.wasabeef:glide-transformations", version.ref = "glide-transformations" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 
 ### third party
-xxPermissions = { group = "com.github.getActivity", name = "XXPermissions", version.ref = "xxPermissions" }
-blankjUtils = { group = "com.blankj", name = "utilcodex", version.ref = "blankjUtils" }
-binding-collection-adapter = { group = "me.tatarka.bindingcollectionadapter2", name = "bindingcollectionadapter", version.ref = "binding-collection-adapter" }
-binding-collection-adapter-recyclerview = { group = "me.tatarka.bindingcollectionadapter2", name = "bindingcollectionadapter-recyclerview", version.ref = "binding-collection-adapter" }
-binding-collection-adapter-viewpager2 = { group = "me.tatarka.bindingcollectionadapter2", name = "bindingcollectionadapter-viewpager2", version.ref = "binding-collection-adapter" }
+xxPermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxPermissions" }
+blankjUtils = { module = "com.blankj:utilcodex", version.ref = "blankjUtils" }
+binding-collection-adapter = { module = "me.tatarka.bindingcollectionadapter2:bindingcollectionadapter", version.ref = "binding-collection-adapter" }
+binding-collection-adapter-recyclerview = { module = "me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview", version.ref = "binding-collection-adapter" }
+binding-collection-adapter-viewpager2 = { module = "me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-viewpager2", version.ref = "binding-collection-adapter" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }

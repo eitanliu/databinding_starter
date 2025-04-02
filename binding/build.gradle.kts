@@ -10,7 +10,7 @@ val jvmVersion = "11"
 
 android {
     namespace = "com.eitanliu.binding"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 23
@@ -46,7 +46,7 @@ dependencies {
 
     api(project(":utils"))
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)

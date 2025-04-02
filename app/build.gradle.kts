@@ -61,20 +61,12 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        force(libs.okio)
-        force(libs.okhttp)
-        force(libs.androidx.core)
-        force(libs.androidx.core.ktx)
-        force(libs.androidx.recyclerview)
-    }
-}
-
 dependencies {
 
     implementation(project(":binding"))
     implementation(project(":starter"))
+
+    implementation(libs.kotlinx.coroutines.core)
 
     ////// test //////
     testImplementation(libs.junit)
@@ -85,9 +77,9 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.androidx.multidex)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
 

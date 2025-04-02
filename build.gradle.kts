@@ -18,4 +18,19 @@ println("System.props ===> ${System.getProperties()}")
 
 allprojects {
     println("Project.props $project ===> ${project.properties}")
+    configurations.all {
+        resolutionStrategy {
+            force(libs.okio)
+            force(libs.okhttp)
+            force(libs.androidx.core)
+            force(libs.androidx.core.ktx)
+            force(libs.androidx.recyclerview)
+            force(libs.kotlin.stdlib)
+            force(libs.kotlin.stdlib.jdk7)
+            force(libs.kotlin.stdlib.jdk8)
+            force(libs.kotlinx.coroutines.core)
+            // force(libs.kotlinx.coroutines.core.jvm)
+            // force(libs.kotlinx.coroutines.android)
+        }
+    }
 }
