@@ -1,4 +1,4 @@
-apply(from = rootProject.file("gradle/maven_publish.gradle.kts"))
+apply(from = rootProject.file("gradle/publish_jitpack.gradle.kts"))
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
