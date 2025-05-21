@@ -1,35 +1,10 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package androidx.fragment.app
 
-import android.content.Context
-import androidx.activity.ComponentDialog
-import androidx.core.app.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
 
 class BindingLifecycleOwnerExt
-
-@Suppress("RestrictedApi")
-val LifecycleOwner.context: Context?
-    get() {
-        return when (this) {
-            is ComponentActivity -> {
-                this
-            }
-
-            is Fragment -> {
-                context
-            }
-
-            is FragmentViewLifecycleOwner -> {
-                fragment?.context
-            }
-
-            is ComponentDialog -> {
-                context
-            }
-
-            else -> null
-        }
-    }
 
 val LifecycleOwner.childFragmentManager: FragmentManager?
     get() {
@@ -68,6 +43,14 @@ val LifecycleOwner.parentFragmentManager: FragmentManager?
             else -> null
         }
     }
+
+inline fun LifecycleOwner.isFragment(): Boolean {
+    return this is Fragment
+}
+
+inline fun LifecycleOwner.isFragmentView(): Boolean {
+    return this is FragmentViewLifecycleOwner
+}
 
 fun LifecycleOwner.asFragment(): Fragment? {
     return when (this) {

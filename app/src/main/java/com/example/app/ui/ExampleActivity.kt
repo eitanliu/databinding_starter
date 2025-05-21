@@ -7,13 +7,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.DisplayCompat
-import androidx.fragment.app.context
 import androidx.lifecycle.LifecycleOwner
 import com.eitanliu.binding.adapter.imageViewController
 import com.eitanliu.binding.adapter.viewController
 import com.eitanliu.binding.adapter.viewExtController
 import com.eitanliu.binding.controller.AttachStateChangeListener
 import com.eitanliu.binding.controller.ViewController
+import com.eitanliu.binding.extension.context
 import com.eitanliu.starter.binding.BindingActivity
 import com.eitanliu.utils.Logcat
 import com.eitanliu.utils.contextTree
