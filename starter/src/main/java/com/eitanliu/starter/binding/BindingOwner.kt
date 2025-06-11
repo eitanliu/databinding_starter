@@ -4,18 +4,24 @@ import com.eitanliu.utils.refWeak
 import java.lang.ref.Reference
 
 interface BindingOwner {
-    val delegate: BindingDelegate?
+    val host: BindingHost?
 
-    fun bind(delegate: BindingDelegate): BindingOwner
+    fun bind(host: BindingHost): BindingOwner
 
     class Impl : BindingOwner {
 
-        private var _ref: Reference<BindingDelegate>? = null
+        constructor()
 
-        override val delegate: BindingDelegate? get() = _ref?.get()
+        constructor(host: BindingHost) {
+            bind(host)
+        }
 
-        override fun bind(delegate: BindingDelegate): BindingOwner {
-            _ref = delegate.refWeak()
+        private var _ref: Reference<BindingHost>? = null
+
+        override val host: BindingHost? get() = _ref?.get()
+
+        override fun bind(host: BindingHost): BindingOwner {
+            _ref = host.refWeak()
             return this
         }
     }

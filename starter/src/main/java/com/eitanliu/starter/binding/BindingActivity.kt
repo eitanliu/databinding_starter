@@ -32,13 +32,18 @@ import java.lang.ref.Reference
 import java.util.Random
 
 abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : AppCompatActivity(),
-    BindingView, ActivityLauncher, BindingDelegate {
+    BindingView, ActivityLauncher, BindingHost {
 
-    override val bindingOwner: BindingOwner = BindingOwner.Impl().bind(this)
+    @Suppress("LeakingThis")
+    override val bindingOwner: BindingOwner = BindingOwner.Impl(this)
 
     protected lateinit var binding: VB
 
     protected lateinit var viewModel: VM
+
+    open val isBindingInitialized get() = ::binding.isInitialized
+
+    open val isViewModelInitialized get() = ::viewModel.isInitialized
 
     val systemInsets: ISystemInsets get() = viewModel
 
@@ -71,7 +76,9 @@ abstract class BindingActivity<VB : ViewDataBinding, VM : BindingViewModel> : Ap
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        viewModel.uiMode.value = resources.configuration.uiMode
+        if (isViewModelInitialized) {
+            viewModel.uiMode.value = resources.configuration.uiMode
+        }
     }
 
     protected open fun createViewBinding() = run {
