@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.DisplayCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.LifecycleOwner
 import com.eitanliu.binding.adapter.imageViewController
 import com.eitanliu.binding.adapter.viewController
@@ -41,6 +43,15 @@ class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
         resources.configuration.orientation
         val display = ContextCompat.getDisplayOrDefault(this)
         display.rotation
+
+        ViewCompat.setWindowInsetsAnimationCallback(
+            binding.root,
+            TranslateDeferringInsetsAnimationCallback(
+                view = binding.root,
+                persistentInsetTypes = WindowInsetsCompat.Type.systemBars(),
+                deferredInsetTypes = WindowInsetsCompat.Type.ime()
+            )
+        )
     }
 
     override fun observeActivityUiState() {

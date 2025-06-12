@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.view.ViewCompat
 import com.eitanliu.binding.adapter.viewExtController
 
 class ViewExt
@@ -203,7 +204,7 @@ inline val View.imeInsets
     get() = rootWindowInsetsCompat?.imeInsets
 
 val View.rootWindowInsetsCompat
-    get() = viewExtController.rootWindowInsetsCompat
+    get() = ViewCompat.getRootWindowInsets(this)
 
 var View.cacheWindowInsetsCompat
     get() = viewExtController.cacheWindowInsetsCompat

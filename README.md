@@ -34,3 +34,8 @@ dependencies {
     implementation("com.github.eitanliu.databinding_starter:starter:1.0.0")
 }
 ```
+
+### WindowInsetsAnimation
+
+[Control and animate the software keyboard](https://developer.android.com/develop/ui/views/layout/sw-keyboard)  
+[WindowInsetsAnimation](https://github.com/android/user-interface-samples/tree/main/WindowInsetsAnimation)  

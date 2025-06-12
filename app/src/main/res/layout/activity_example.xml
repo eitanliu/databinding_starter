@@ -17,8 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#6666"
-        app:fitInsetsMode="@{FitInsetsMode.MARGIN}"
-        app:fitInsetsType="@{WindowInsetsCompat.Type.ime()}">
+        app:fitInsetsMode="@{FitInsetsMode.MARGIN}">
 
         <include
             android:id="@+id/laToolbar"
@@ -116,6 +115,9 @@
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:background="#8666"
+            app:fitInsetsMode="@{FitInsetsMode.MARGIN}"
+            app:fitNavigationBars="@{true}"
+            app:fitMergeType="@{true}"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

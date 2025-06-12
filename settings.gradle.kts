@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 include(":app")
 include(":utils")
 include(":binding")
