@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.Display
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -170,25 +171,35 @@ class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
 
     override fun attachBaseContext(newBase: Context) {
         val conf = updateConfiguration(newBase)
-        val context = newBase.createConfigurationContext(conf)
-        return super.attachBaseContext(context)
+        // Plan 1：使用 Context.createConfigurationContext
+        // val context = newBase.createConfigurationContext(conf)
+        // return super.attachBaseContext(context)
+        // Plan 2：使用 Configuration.updateFrom
+        newBase.resources.configuration.updateFrom(conf)
+        return super.attachBaseContext(newBase)
     }
 
-    private fun updateConfiguration(originContext: Context): Configuration {
-        val displayMetrics = originContext.resources.displayMetrics
+    private fun updateConfiguration(context: Context): Configuration {
+        val displayMetrics = context.resources.displayMetrics
         // val width = min(displayMetrics.widthPixels, displayMetrics.heightPixels)
-        val mode = DisplayCompat.getMode(originContext, ContextCompat.getDisplayOrDefault(originContext))
+        val display = ContextCompat.getDisplayOrDefault(context)
+        val mode = DisplayCompat.getMode(context, display)
         val width = min(mode.physicalWidth, mode.physicalHeight)
+        val resources = context.resources
+        val configuration = resources.configuration
         val designWidth = 420.0
-        val designDip = width / designWidth
-        val designDpi = (designDip * 160).roundToInt()
-        val conf = Configuration(originContext.resources.configuration)
-        val differDip = designDip - displayMetrics.density
-        Logcat.msg("width $width, differDip $designDip - ${displayMetrics.density} = $differDip", Logcat.E)
+        val designDesign = width / designWidth
+        val designDpi = (designDesign * 160).roundToInt()
+        val newConfiguration = Configuration(configuration)
+        val differDip = designDesign - displayMetrics.density
+        Logcat.msg("Display $display")
+        Logcat.msg("DisplayMetrics $${DisplayMetrics.DENSITY_DEFAULT}, ${DisplayMetrics.DENSITY_DEVICE_STABLE}; $displayMetrics")
+        Logcat.msg("width $width, differ density $designDesign - ${displayMetrics.density} = $differDip")
+        Logcat.msg("width $width, differ dpi $designDpi - ${configuration.densityDpi} = ${designDpi - configuration.densityDpi}")
         // 避免差异过大，超过指定系数使用系统默认值
         if (abs(differDip) < 0.6) {
-            conf.densityDpi = designDpi
+            newConfiguration.densityDpi = designDpi
         }
-        return conf
+        return newConfiguration
     }
 }

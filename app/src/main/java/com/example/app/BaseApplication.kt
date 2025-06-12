@@ -29,7 +29,7 @@ open class BaseApplication : MultiDexApplication() {
     }
 
     open fun beforeCreate() {
-        Logcat.level = Logcat.W
+        Logcat.level = Logcat.I
         MMKV.initialize(this)
     }
 
