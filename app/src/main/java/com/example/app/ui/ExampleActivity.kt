@@ -1,9 +1,12 @@
 package com.example.app.ui
 
 import android.content.Context
+import android.content.ContextParams
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
+import android.view.Display
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.DisplayCompat
@@ -86,6 +89,10 @@ class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
 
     override fun onResume() {
         super.onResume()
+
+        binding.root.context.contextTree {
+            Logcat.msg("$it", Logcat.E)
+        }
         val viewController = binding.ivTest.viewController
         val extController = binding.ivTest.viewExtController
         val imageViewController = binding.ivTest.imageViewController
@@ -97,20 +104,91 @@ class ExampleActivity : BindingActivity<ActivityExampleBinding, ExampleVM>() {
         // binding.ivTest.viewController += ViewController.Empty
     }
 
+    override fun getTheme(): Resources.Theme {
+        return super.getTheme()
+    }
+
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration?) {
+        Logcat.msg("applyOverrideConfiguration $overrideConfiguration", Logcat.E)
+        super.applyOverrideConfiguration(overrideConfiguration)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        Logcat.msg("onConfigurationChanged", Logcat.E)
+        super.onConfigurationChanged(newConfig)
+    }
+
+    override fun createConfigurationContext(overrideConfiguration: Configuration): Context {
+        Logcat.msg("createConfigurationContext $overrideConfiguration", Logcat.E)
+        return super.createConfigurationContext(overrideConfiguration)
+    }
+
+    override fun createContext(contextParams: ContextParams): Context {
+        Logcat.msg("createContext $contextParams", Logcat.E)
+        return super.createContext(contextParams)
+    }
+
+    override fun createAttributionContext(attributionTag: String?): Context {
+        Logcat.msg("createAttributionContext $attributionTag", Logcat.E)
+        return super.createAttributionContext(attributionTag)
+    }
+
+    override fun createContextForSplit(splitName: String?): Context {
+        Logcat.msg("createContextForSplit $splitName", Logcat.E)
+        return super.createContextForSplit(splitName)
+    }
+
+    override fun createPackageContext(packageName: String?, flags: Int): Context {
+        Logcat.msg("createPackageContext $packageName, $flags", Logcat.E)
+        return super.createPackageContext(packageName, flags)
+    }
+
+    override fun createDeviceProtectedStorageContext(): Context {
+        Logcat.msg("createDeviceProtectedStorageContext", Logcat.E)
+        return super.createDeviceProtectedStorageContext()
+    }
+
+    override fun createDeviceContext(deviceId: Int): Context {
+        Logcat.msg("createDeviceContext $deviceId", Logcat.E)
+        return super.createDeviceContext(deviceId)
+    }
+
+    override fun createDisplayContext(display: Display): Context {
+        Logcat.msg("createDisplayContext $display", Logcat.E)
+        return super.createDisplayContext(display)
+    }
+
+    override fun createWindowContext(type: Int, options: Bundle?): Context {
+        Logcat.msg("createWindowContext $type, $options", Logcat.E)
+        return super.createWindowContext(type, options)
+    }
+
+    override fun createWindowContext(display: Display, type: Int, options: Bundle?): Context {
+        Logcat.msg("createWindowContext Display $display, $type, $options", Logcat.E)
+        return super.createWindowContext(display, type, options)
+    }
+
     override fun attachBaseContext(newBase: Context) {
-        val displayMetrics = newBase.resources.displayMetrics
+        val conf = updateConfiguration(newBase)
+        val context = newBase.createConfigurationContext(conf)
+        return super.attachBaseContext(context)
+    }
+
+    private fun updateConfiguration(originContext: Context): Configuration {
+        val displayMetrics = originContext.resources.displayMetrics
         // val width = min(displayMetrics.widthPixels, displayMetrics.heightPixels)
-        val mode = DisplayCompat.getMode(newBase, ContextCompat.getDisplayOrDefault(newBase))
+        val mode = DisplayCompat.getMode(originContext, ContextCompat.getDisplayOrDefault(originContext))
         val width = min(mode.physicalWidth, mode.physicalHeight)
         val designWidth = 420.0
         val designDip = width / designWidth
         val designDpi = (designDip * 160).roundToInt()
-        val conf = Configuration(newBase.resources.configuration)
+        val conf = Configuration(originContext.resources.configuration)
         val differDip = designDip - displayMetrics.density
-        Logcat.msg("width $width, differDip $designDip - ${displayMetrics.density} = $differDip")
+        Logcat.msg("width $width, differDip $designDip - ${displayMetrics.density} = $differDip", Logcat.E)
         // 避免差异过大，超过指定系数使用系统默认值
-        if (abs(differDip) < 0.6) conf.densityDpi = designDpi
-        val context = newBase.createConfigurationContext(conf)
-        return super.attachBaseContext(context)
+        if (abs(differDip) < 0.6) {
+            conf.densityDpi = designDpi
+        }
+        return conf
     }
 }

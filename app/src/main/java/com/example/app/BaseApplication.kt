@@ -3,6 +3,7 @@ package com.example.app
 import android.content.Context
 import androidx.multidex.MultiDexApplication
 import com.eitanliu.utils.ContextProvider
+import com.eitanliu.utils.Logcat
 import com.tencent.mmkv.MMKV
 import dagger.hilt.android.HiltAndroidApp
 
@@ -28,6 +29,7 @@ open class BaseApplication : MultiDexApplication() {
     }
 
     open fun beforeCreate() {
+        Logcat.level = Logcat.W
         MMKV.initialize(this)
     }
 

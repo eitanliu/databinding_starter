@@ -1,5 +1,5 @@
 package com.eitanliu.starter.binding
 
-interface BindingDelegate {
+interface BindingHost {
     val bindingOwner: BindingOwner
 }

@@ -13,7 +13,7 @@ import com.eitanliu.starter.binding.registry.SystemInsetsRegistry
 open class BindingViewModel(
     val stateHandle: SavedStateHandle,
     override val bindingOwner: BindingOwner = BindingOwner.Impl()
-) : ViewModel(), LifecycleViewModel, BindingDelegate,
+) : ViewModel(), LifecycleViewModel, BindingHost,
     IActivity by ActivityRegistry(bindingOwner),
     ISystemInsets by SystemInsetsRegistry() {
 
@@ -22,11 +22,14 @@ open class BindingViewModel(
     ) : this(stateHandle, BindingOwner.Impl())
 
     init {
+        @Suppress("LeakingThis")
         bindingOwner.bind(this)
     }
 
-    override val event = Event(this)
-    override val state = State(this)
+    @Suppress("LeakingThis")
+    override val event: Event = Event(this)
+    @Suppress("LeakingThis")
+    override val state: State = State(this)
 
     override fun onDestroy(owner: LifecycleOwner) {
         owner.lifecycle.removeObserver(this)

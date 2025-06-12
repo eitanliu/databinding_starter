@@ -3,13 +3,13 @@ package com.eitanliu.starter.binding.registry
 import com.eitanliu.binding.event.UiEvent
 import com.eitanliu.binding.state.MultipleUiState
 import com.eitanliu.starter.binding.ActivityLauncher
-import com.eitanliu.starter.binding.BindingDelegate
+import com.eitanliu.starter.binding.BindingHost
 import com.eitanliu.starter.binding.model.ActivityLauncherInfo
 
 /**
  * Activity 操作
  */
-interface IActivity : ActivityLauncher, BindingDelegate {
+interface IActivity : ActivityLauncher, BindingHost {
     val activity: IActivity get() = this
     val event: Event
     val state: State

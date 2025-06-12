@@ -36,11 +36,12 @@ object Logcat {
     }
 
     fun msg(
-        msg: String,
+        msg: String, @Level level: Int = Logcat.level,
     ) = msg(msg, null, level, tag)
 
     fun msg(
-        msg: String, tr: Throwable?,
+        msg: String, tr: Throwable? = null,
+        @Level level: Int = Logcat.level,
     ) = msg(msg, tr, level, tag)
 
     fun msg(
