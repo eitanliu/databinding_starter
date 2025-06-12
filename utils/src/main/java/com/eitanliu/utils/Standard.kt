@@ -3,8 +3,8 @@
 package com.eitanliu.utils
 
 
-inline fun hashCodeArray(vararg array: Any?): Int {
-    return array.fold(0) { acc, obj ->
+inline fun hashCodeArray(vararg array: Any?, initial: Int = 1): Int {
+    return array.fold(initial) { acc, obj ->
         31 * acc + obj.hashCode()
     }
 }

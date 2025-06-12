@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 apply(from = rootProject.file("gradle/publish_jitpack.gradle.kts"))
 plugins {
     alias(libs.plugins.android.library)
@@ -35,12 +37,36 @@ android {
         targetCompatibility = JavaVersion.toVersion(jvmVersion)
     }
 
-    kotlinOptions {
-        jvmTarget = jvmVersion
-    }
-
     viewBinding { enable = true }
     dataBinding { enable = true }
+}
+
+kotlin {
+    sourceSets.all {
+        languageSettings.apply {
+            optIn("androidx.compose.material3.ExperimentalMaterial3Api")
+            optIn("kotlin.ExperimentalStdlibApi")
+            optIn("kotlin.experimental.ExperimentalNativeApi")
+            optIn("kotlin.native.runtime.NativeRuntimeApi")
+            optIn("kotlin.time.ExperimentalTime")
+            // 2.1.2
+            optIn("kotlin.concurrent.atomics.ExperimentalAtomicApi")
+            optIn("kotlin.uuid.ExperimentalUuidApi")
+
+            optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            optIn("kotlinx.coroutines.DelicateCoroutinesApi")
+            optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+        }
+    }
+
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(jvmVersion)
+        freeCompilerArgs.addAll(
+            "-Xwhen-guards",
+            "-Xnon-local-break-continue",
+            "-Xmulti-dollar-interpolation"
+        )
+    }
 }
 
 dependencies {
