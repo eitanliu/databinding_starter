@@ -29,7 +29,20 @@ android {
         }
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = rootProject.file("debug.jks")
+            storePassword = "debug1"
+            keyAlias = "debug"
+            keyPassword = "debug1"
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
